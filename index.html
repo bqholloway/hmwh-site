@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>He Man Woman Haters Club</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Graduate&display=swap">
+<style>
+/* Layout: grayscale wireframe. Sticky masthead + tab bar, one view per tab, content column max 1080px. Home is a newspaper front page: lead story, headline stack, right rail. */
+:root{
+  --bg:#f3f3f1; --panel:#ffffff; --ink:#1d1e1c; --muted:#6b6d68; --line:#d6d7d3; --soft:#e8e8e5; --mark:#3a3b38; --faint:#b9bab5;
+  --body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --head:"IBM Plex Serif",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --felt:#6e1f2b; --felt-edge:#4f141e; --on-felt:#f3e9d6; --felt-gold:#e0b456; --brass:#99691a;
+  --display:"Graduate","Rockwell",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#151614; --panel:#1d1e1c; --ink:#e9eae6; --muted:#9a9c96; --line:#33352f; --soft:#262724; --mark:#d6d7d2; --faint:#4b4d48; --felt:#7f2633; --felt-edge:#57161f; --brass:#d4a446; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151614; --panel:#1d1e1c; --ink:#e9eae6; --muted:#9a9c96; --line:#33352f; --soft:#262724; --mark:#d6d7d2; --faint:#4b4d48; --felt:#7f2633; --felt-edge:#57161f; --brass:#d4a446; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
+.top-in{position:relative;max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px 0;display:grid;gap:8px}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand b{font-weight:700;font-size:1.05rem;letter-spacing:.02em}
+.brand span{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.tag{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;border:1px dashed var(--faint);color:var(--muted);padding:1px 7px;border-radius:3px;margin-left:auto}
+nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{all:unset;cursor:pointer;padding:9px 12px 11px;font-weight:500;font-size:.92rem;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+nav button[aria-selected="true"],nav button.parent-on{color:var(--ink);border-bottom-color:var(--mark)}
+nav button:focus-visible{outline:2px solid var(--mark);outline-offset:-2px}
+.menu{position:absolute;top:100%;z-index:6;background:var(--panel);border:1px solid var(--line);border-radius:4px;box-shadow:0 8px 24px rgba(0,0,0,.12);display:grid;min-width:190px;padding:4px}
+.menu button{all:unset;cursor:pointer;padding:10px 12px;border-radius:3px;display:grid;gap:1px}
+.menu button small{color:var(--muted);font-size:.76rem}
+.menu button:hover,.menu button:focus-visible{background:var(--soft)}
+.menu button[aria-current="true"]{font-weight:600}
+main{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.view{display:grid;gap:36px}
+h1,h2,h3{margin:0;text-wrap:balance;line-height:1.2}
+h1{font-size:1.7rem;font-weight:700}
+h2{font-size:1.2rem;font-weight:600}
+h3{font-size:1rem;font-weight:600}
+.eyebrow{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.lede{color:var(--muted);margin:6px 0 0;max-width:64ch}
+section{display:grid;gap:14px;min-width:0}
+.head{display:grid;gap:4px}
+.head p{margin:0;color:var(--muted);max-width:66ch;font-size:.92rem}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:4px}
+.note{font-family:var(--mono);font-size:.76rem;color:var(--muted);border-left:2px dashed var(--faint);padding:2px 0 2px 10px;margin:0;max-width:72ch}
+.ph{border:1.5px dashed var(--faint);border-radius:4px;color:var(--muted);display:grid;place-items:center;text-align:center;padding:18px;font-family:var(--mono);font-size:.78rem;background:repeating-linear-gradient(135deg,transparent 0 10px,var(--soft) 10px 11px)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.linkbtn{all:unset;cursor:pointer;font-weight:600;font-size:.88rem;border-bottom:1px solid currentColor}
+.linkbtn:focus-visible{outline:2px solid var(--mark);outline-offset:3px}
+
+/* HOME */
+.mast{display:grid;gap:4px;border-bottom:3px double var(--line);padding-bottom:14px;text-align:center}
+.mast .paper{font-family:var(--head);font-size:clamp(1.6rem,5vw,2.6rem);font-weight:700;letter-spacing:.01em;line-height:1.05}
+.mast .dateline{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 18px;font-family:var(--mono);font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.scorebar{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.score{flex:none;display:grid;gap:2px;padding:8px 12px;min-width:170px;font-size:.82rem}
+.score .row{display:flex;justify-content:space-between;gap:10px}
+.score .row.l{color:var(--muted)}
+.score .row span:first-child{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.score .wkl{font-family:var(--mono);font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.front{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:start}
+.stories{display:grid;gap:22px;min-width:0}
+.lead{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.lead .ph{aspect-ratio:4/3;max-width:100%}
+.lead h2{font-family:var(--head);font-size:clamp(1.35rem,3vw,1.9rem);line-height:1.15;font-weight:700}
+.lead p{margin:0;color:var(--muted)}
+.lead .txt{display:grid;gap:10px;align-content:start;min-width:0}
+.pill{display:inline-block;font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;border:1px solid var(--mark);padding:1px 7px;border-radius:2px;justify-self:start}
+.meta{font-family:var(--mono);font-size:.72rem;color:var(--muted);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px}
+.story{display:grid;gap:6px;padding:14px 0;border-bottom:1px solid var(--line);min-width:0}
+.story h3{font-family:var(--head);font-size:1.08rem;line-height:1.25;font-weight:600}
+.story p{margin:0;color:var(--muted);font-size:.9rem}
+.rail{display:grid;gap:20px;min-width:0}
+.rail .box{padding:14px}
+.rail h2{font-size:.95rem;margin-bottom:8px}
+.mini{width:100%;border-collapse:collapse;font-size:.85rem;min-width:0}
+.mini td{padding:5px 2px;border-bottom:1px solid var(--line);text-align:right}
+.mini td:nth-child(2){text-align:left;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mini td:first-child{text-align:left;width:1.6rem;color:var(--muted);font-family:var(--mono)}
+.mini tr.cut td{border-bottom:2px dashed var(--mark)}
+.mini tr:last-child td{border-bottom:0}
+.mu-mini{display:grid;gap:8px;font-size:.84rem}
+.mu-mini div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px}
+.mu-mini span:nth-of-type(odd){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mu-mini span:nth-of-type(even){font-family:var(--mono);color:var(--muted);font-size:.78rem}
+.mu-mini div+div{border-top:1px solid var(--line);padding-top:8px}
+@media (max-width:880px){.front{grid-template-columns:1fr}}
+@media (max-width:600px){.lead{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+
+/* Rafters */
+.rafters-sec{border-top:3px solid var(--brass);padding-top:18px}
+.rafters-sec .head h2{font-family:var(--display);font-weight:400;font-size:1.5rem}
+.rafters-sec .eyebrow{color:var(--brass)}
+.rafters{display:grid;grid-template-columns:repeat(12,minmax(78px,1fr));gap:8px;overflow-x:auto;padding-bottom:6px}
+.banner{background:var(--felt);color:var(--on-felt);clip-path:polygon(0 0,100% 0,100% 86%,50% 100%,0 86%);padding:12px 6px 28px;text-align:center;display:grid;gap:5px;align-content:start;min-height:170px;box-shadow:inset 0 0 0 3px var(--felt-edge)}
+.banner .yr{font-family:var(--display);font-size:1.15rem;line-height:1;color:var(--felt-gold)}
+.banner .champ{font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:.78rem;line-height:1.15;overflow-wrap:anywhere}
+.banner .tname{font-size:.7rem;opacity:.85;line-height:1.2;overflow-wrap:anywhere}
+.banner.live{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 2px var(--faint)}
+.banner.live .yr{color:var(--muted)}
+.raft-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+@media (prefers-reduced-motion:no-preference){.banner{transition:transform .2s}.banner:hover{transform:translateY(3px)}}
+
+/* Trophy case */
+.trophies{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.trophy{display:grid;gap:10px;padding:14px;align-content:start;min-width:0}
+.trophy .ph{aspect-ratio:3/4;max-width:100%;padding:8px}
+.trophy .rank{font-family:var(--mono);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.trophy h3{font-family:var(--head);font-size:1rem;line-height:1.2}
+.trophy ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;border-top:1px solid var(--line);padding-top:8px}
+.trophy li{display:grid;grid-template-columns:3.2ch minmax(0,1fr);gap:8px;font-size:.84rem}
+.trophy li .y{font-family:var(--mono);color:var(--muted)}
+.trophy li b{display:block;font-weight:600}
+.trophy li small{color:var(--muted);overflow-wrap:anywhere}
+.trophy li.tbd{color:var(--muted)}
+@media (max-width:900px){.trophies{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}}
+
+/* Bump chart */
+.chart-wrap{overflow-x:auto;padding:12px 8px 6px}
+.chart-wrap svg{display:block;min-width:680px;width:100%;height:auto}
+.chart-wrap text{font-family:var(--mono)}
+.line{fill:none;stroke:var(--faint);stroke-width:3;transition:stroke .15s,opacity .15s}
+.dot{fill:var(--panel);stroke:var(--faint);stroke-width:2.5}
+.team-g{cursor:pointer}
+.team-g.on .line{stroke:var(--mark);stroke-width:4}
+.team-g.on .dot{stroke:var(--mark)}
+.chart.has-on .team-g:not(.on){opacity:.28}
+.chip{display:flex;flex-wrap:wrap;gap:6px}
+.chip button{all:unset;cursor:pointer;font-size:.8rem;padding:4px 10px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+.chip button[aria-pressed="true"]{background:var(--mark);color:var(--panel);border-color:var(--mark)}
+.chip button:disabled{opacity:.45;cursor:not-allowed}
+.chip button:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+
+/* Power rankings */
+.pr{list-style:none;margin:0;padding:0}
+.pr li{display:grid;grid-template-columns:2.4rem 3rem minmax(0,1fr) auto;gap:4px 14px;align-items:start;padding:14px 16px;border-bottom:1px solid var(--line)}
+.pr li:last-child{border-bottom:0}
+.pr .rk{font-family:var(--mono);font-size:1.5rem;font-weight:600;line-height:1}
+.pr .mv{font-family:var(--mono);font-size:.78rem;color:var(--muted);padding-top:4px}
+.pr .who{min-width:0}
+.pr .who b{display:block;overflow-wrap:anywhere}
+.pr .who small{color:var(--muted)}
+.pr .rec{font-family:var(--mono);text-align:right;white-space:nowrap}
+.pr .rec small{display:block;color:var(--muted);font-size:.75rem}
+.pr .blurb{grid-column:3 / -1;margin:0;font-size:.9rem;color:var(--muted)}
+.pr .blurb i{display:block;border:1px dashed var(--faint);border-radius:3px;padding:6px 9px;margin-top:6px;font-style:normal;font-family:var(--mono);font-size:.74rem}
+@media (max-width:560px){.pr li{grid-template-columns:2rem minmax(0,1fr) auto}.pr .mv{display:none}.pr .blurb{grid-column:2 / -1}}
+
+/* Tables */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;min-width:600px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:500}
+tbody tr:last-child td{border-bottom:0}
+td.t{white-space:normal;min-width:180px}
+td.t small{display:block;color:var(--muted)}
+.bar{display:inline-block;height:8px;background:var(--mark);border-radius:2px;vertical-align:middle}
+.bar.neg{background:var(--faint)}
+.luck-cell{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.yrpick{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.yrpick label{font-size:.85rem;color:var(--muted)}
+select{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);min-width:0}
+
+/* H2H */
+.pick{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:end}
+.pick label{display:grid;gap:4px;font-size:.8rem;color:var(--muted)}
+.pick select{width:100%}
+.vs{font-family:var(--mono);color:var(--muted);padding-bottom:10px}
+.h2h{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;padding:22px 18px;text-align:center}
+.h2h .big{font-family:var(--mono);font-size:2.4rem;font-weight:600;line-height:1}
+.h2h small{display:block;color:var(--muted);font-size:.8rem;margin-top:4px}
+.grid-m td,.grid-m th{text-align:center;padding:7px 6px;min-width:44px}
+.grid-m th:first-child,.grid-m td:first-child{text-align:left;min-width:120px}
+.grid-m td.self{background:var(--soft)}
+.games{list-style:none;margin:0;padding:0;font-size:.9rem}
+.games li{display:flex;justify-content:space-between;gap:12px;padding:8px 16px;border-bottom:1px solid var(--line)}
+.games li:last-child{border-bottom:0}
+
+/* Pick'em */
+.pk{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.mu{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px}
+.mu .wk{grid-column:1/-1;font-family:var(--mono);font-size:.7rem;color:var(--muted);display:flex;justify-content:space-between}
+.mu button{all:unset;cursor:pointer;border:1px solid var(--line);border-radius:4px;padding:10px;display:grid;gap:2px;min-width:0}
+.mu button b{font-size:.88rem;overflow-wrap:anywhere}
+.mu button small{font-family:var(--mono);color:var(--muted);font-size:.72rem}
+.mu button[aria-pressed="true"]{border-color:var(--mark);box-shadow:inset 0 0 0 1.5px var(--mark)}
+.mu button:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+.mu.gotw{border:2px solid var(--brass);box-shadow:0 0 0 3px color-mix(in srgb,var(--brass) 18%,transparent)}
+.gotw-tag{display:inline-flex;gap:6px;align-items:center;font-family:var(--mono);font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;background:var(--brass);color:var(--panel);padding:2px 7px;border-radius:2px}
+.mu-mini .x2{grid-column:1/-1;justify-self:start}
+.btn{all:unset;cursor:pointer;background:var(--mark);color:var(--panel);font-weight:600;padding:10px 16px;border-radius:4px;justify-self:start}
+.btn:focus-visible{outline:2px solid var(--mark);outline-offset:3px}
+.status{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+
+/* Existing pages + videos */
+.existing{display:grid;gap:14px;padding:18px}
+.existing ul{margin:0;padding-left:18px;color:var(--muted);font-size:.92rem;display:grid;gap:4px}
+.existing a{color:var(--ink);font-weight:600}
+.vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.vid{display:grid;gap:8px}
+.vid .ph{aspect-ratio:16/9;max-width:100%}
+.vid b{font-size:.92rem}
+.vid small{color:var(--muted);font-family:var(--mono);font-size:.74rem}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+@media (max-width:560px){.pick{grid-template-columns:1fr}.vs{display:none}.h2h .big{font-size:1.9rem}}
+@media (prefers-reduced-motion:reduce){.line{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in" id="topin">
+    <div class="brand"><b>HE MAN WOMAN HATERS CLUB</b><span>hmwh.men</span><span class="tag">Wireframe</span></div>
+    <nav aria-label="Site sections" id="nav"></nav>
+    <div class="menu" id="statsmenu" hidden></div>
+  </div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <div class="view" id="v-home" hidden>
+    <div class="mast">
+      <div class="paper">The Club Gazette</div>
+      <div class="dateline"><span>Thursday, October 22, 2026</span><span>Week 7 kicks off tonight</span><span>Through Week 6</span></div>
+    </div>
+
+    <section aria-label="Week 6 scores">
+      <div class="scorebar" id="scorebar"></div>
+    </section>
+
+    <div class="front">
+      <div class="stories">
+        <article class="lead" id="lead"></article>
+        <div class="grid2" id="storygrid"></div>
+        <p class="note">Headlines are written by the update runs from rules: every completed trade, the biggest upset by projection, the biggest blowout, new records, clinches and eliminations, preseason-vs-now. You can edit or pin any headline before it posts.</p>
+      </div>
+      <aside class="rail">
+        <div class="box">
+          <h2>Standings</h2>
+          <table class="mini" id="ministand"></table>
+          <p class="note" style="margin-top:10px">Dashed line = playoff cut (top 5)</p>
+        </div>
+        <div class="box">
+          <h2>Week 7 matchups</h2>
+          <div class="mu-mini" id="minimu"></div>
+          <button class="linkbtn" type="button" data-go="pickem" style="margin-top:12px">Make your picks →</button>
+        </div>
+        <div class="box">
+          <h2>Latest video</h2>
+          <div class="ph" style="aspect-ratio:16/9;max-width:100%">YouTube thumbnail</div>
+          <p style="margin:8px 0 0;font-size:.88rem"><b>Prelude: Field Goal Forest</b><br><span style="color:var(--muted);font-size:.8rem">2026</span></p>
+        </div>
+      </aside>
+    </div>
+
+    <section class="rafters-sec" aria-labelledby="h-raft">
+      <div class="head"><div class="eyebrow">The Rafters</div><h2 id="h-raft">Champions</h2></div>
+      <div class="rafters" id="rafters"></div>
+      <div class="raft-foot"><span class="status" id="raftnote"></span><button class="linkbtn" type="button" data-go="history">Full league history →</button></div>
+    </section>
+  </div>
+
+  <!-- POWER RANKINGS -->
+  <div class="view" id="v-rankings" hidden>
+    <div>
+      <div class="eyebrow">Updates Fri / Mon / Tue</div>
+      <h1 id="week-h">Power Rankings</h1>
+      <p class="lede">The standings chart and the weekly rankings with a roast line for every team.</p>
+    </div>
+    <section aria-labelledby="h-bump">
+      <div class="head"><div class="eyebrow">Standings progression</div><h2 id="h-bump">Week over week</h2>
+        <p>Rank after each week, using full records with bonus wins and points for as the tiebreaker. Tap a team to follow its line.</p></div>
+      <div class="chip" id="chips" role="group" aria-label="Highlight a team"></div>
+      <div class="box chart-wrap"><svg id="bump" class="chart" role="img" aria-label="Standings rank by week for all ten teams"></svg></div>
+      <p class="note">Week 0 is your preseason coaches poll, entered by hand. Avatars, team colors and the stadium background replace these gray circles in the design pass.</p>
+    </section>
+    <section aria-labelledby="h-pr">
+      <div class="head"><div class="eyebrow">Week 6</div><h2 id="h-pr">The rankings</h2>
+        <p>Ordered by standings here. In the real build you can override the order and the Tuesday run writes a roast line for each team.</p></div>
+      <ol class="pr box" id="pr"></ol>
+    </section>
+  </div>
+
+  <!-- HEAD-TO-HEAD -->
+  <div class="view" id="v-h2h" hidden>
+    <div><div class="eyebrow">Statistics</div><h1>Head-to-Head</h1>
+      <p class="lede">Pick any two owners to see who owns who. Tracked by owner, so it follows people across every team name.</p></div>
+    <section aria-label="Pick two owners">
+      <div class="pick">
+        <label for="ra">Owner<select id="ra"></select></label>
+        <div class="vs">vs</div>
+        <label for="rb">Owner<select id="rb"></select></label>
+      </div>
+      <div class="box h2h" id="h2h"></div>
+      <div class="box"><ul class="games" id="h2h-games"></ul></div>
+      <p class="note">Wireframe has 2025 and 2026 regular seasons loaded. The build adds every season back to 2015, plus playoffs, streaks and biggest blowout per pairing.</p>
+    </section>
+    <section aria-labelledby="h-mx">
+      <div class="head"><h2 id="h-mx">The full grid</h2><p>Row owner's record against each column owner, 2025–2026.</p></div>
+      <div class="box tw"><table class="grid-m" id="matrix"></table></div>
+    </section>
+  </div>
+
+  <!-- LUCK -->
+  <div class="view" id="v-luck" hidden>
+    <div><div class="eyebrow">Statistics</div><h1>Luck</h1>
+      <p class="lede">All-play record pretends every team played all nine others every week. Compare it to the head-to-head record to see who got lucky with the schedule.</p></div>
+    <section aria-label="Luck by season">
+      <div class="yrpick"><label for="luckyr">Season</label><select id="luckyr"></select><span class="status" id="luckinfo"></span></div>
+      <div class="box tw"><table id="luck"></table></div>
+      <p class="note">Luck = actual head-to-head wins minus expected wins from all-play %. Bonus results are left out since they don't depend on schedule. Opp. avg = average score of the opponents each team faced. Seasons before 2025 load in the build.</p>
+    </section>
+  </div>
+
+  <!-- PICK'EM -->
+  <div class="view" id="v-pickem" hidden>
+    <div><div class="eyebrow">Weekly pick'em</div><h1>Week 7 picks</h1>
+      <p class="lede">Pick a winner in every matchup. Each correct pick is worth 1 point, and the Game of the Week is worth 2. Picks lock at each team's first kickoff and get scored with Tuesday's update.</p></div>
+    <div class="split">
+      <section aria-labelledby="h-pk">
+        <h2 id="h-pk">This week's matchups</h2>
+        <div class="pk" id="pk"></div>
+        <button class="btn" id="pk-save" type="button">Save picks</button>
+        <p class="status" id="pk-status" aria-live="polite">0 of 5 picked · 6 points available</p>
+      </section>
+      <section aria-labelledby="h-pkb">
+        <h2 id="h-pkb">Season leaderboard</h2>
+        <div class="ph" style="min-height:220px">Leaderboard: owner · points · correct picks · Game of the Week record<br>Fills in once picks are stored</div>
+        <p class="note">You're signed in through Cloudflare Access, so the site already knows who's picking. Picks get stored in a free Cloudflare database. In this wireframe, Save does nothing.</p>
+        <p class="note">Game of the Week is picked automatically: the matchup whose two teams have the best combined standings rank going into the week. Ties go to the game with the higher-ranked team.</p>
+      </section>
+    </div>
+  </div>
+
+  <!-- LEAGUE HISTORY -->
+  <div class="view" id="v-history" hidden>
+    <div><div class="eyebrow">Already built</div><h1>League History</h1>
+      <p class="lede">Your existing Record Book moves in as this tab, unchanged except for the shared header.</p></div>
+    <div class="box existing">
+      <ul><li>Championship banners, 2015 to now</li><li>All-time owner ledger with expandable team-name history</li><li>Season records and the top 10 single-week scores</li><li>Season-by-season archive</li></ul>
+      <a href="https://claude.ai/code/artifact/3a07c408-e501-442f-b9c1-9b8214baa548" target="_blank" rel="noopener">Open the current Record Book ↗</a>
+    </div>
+    <p class="note">Auto-update: the Tuesday run refreshes the 2026 row, the owner totals and the top 10 highs.</p>
+
+    <section aria-labelledby="h-bowls">
+      <div class="head"><div class="eyebrow">Trophy case · since 2025</div><h2 id="h-bowls">Bowl Games</h2>
+        <p>Every bowl winner by season, in order of prestige.</p></div>
+      <div class="trophies" id="trophies"></div>
+      <p class="note">Trophy photos drop into the dashed frames once you send them.</p>
+    </section>
+  </div>
+
+  <!-- TRADES -->
+  <div class="view" id="v-trades" hidden>
+    <div><div class="eyebrow">Already built</div><h1>Trade Ledger</h1>
+      <p class="lede">All 23 completed 2026 trades scored by FantasyCalc, plus the team leaderboard. Moves in as this tab.</p></div>
+    <div class="box existing">
+      <ul><li>Every trade with both sides' players and values</li><li>Winner, loser and margin per trade</li><li>Net value leaderboard by team</li></ul>
+      <a href="https://claude.ai/code/artifact/f6a42aa9-1bd3-4e00-ab52-a6834239cc35" target="_blank" rel="noopener">Open the current Trade Ledger ↗</a>
+    </div>
+    <p class="note">The current ledger runs inside Claude. For the website it gets rebuilt as a plain page from the same trade data, which the update runs add to as new trades clear review.</p>
+  </div>
+
+  <!-- VIDEOS -->
+  <div class="view" id="v-videos" hidden>
+    <div><div class="eyebrow">Video vault</div><h1>League videos</h1>
+      <p class="lede">Every roast and prelude in one place, newest season first.</p></div>
+    <div class="chip" id="vyrs" role="group" aria-label="Filter by season"></div>
+    <div class="vids" id="vids"></div>
+    <p class="note">Each card links to an unlisted YouTube video. Thumbnails come from YouTube automatically once you send the links.</p>
+  </div>
+</main>
+
+<script>
+fetch('data/site.json',{cache:'no-store'}).then(r=>r.json()).then(main).catch(e=>{document.querySelector('main').textContent='Could not load league data. Refresh to try again.'});
+function main(D){
+const CUR = D.seasons[String(D.current)], LW = D.lastWeek;
+const T = Object.fromEntries(CUR.teams.map(t=>[t.id,t]));
+const short = (n,k=22) => n.length>k ? n.slice(0,k-1)+'…' : n;
+const ordinal = n => {const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])};
+const RANK = Object.fromEntries(CUR.teams.map(t=>[t.id,t.weeks.at(-1).rank]));
+const GOTW = (()=>{let best=0,bs=[99,99];D.wk7.forEach(([a,b],i)=>{const k=[RANK[a]+RANK[b],Math.min(RANK[a],RANK[b])];if(k[0]<bs[0]||(k[0]===bs[0]&&k[1]<bs[1])){bs=k;best=i}});return best})();
+const mk = (tag,cls,txt) => {const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
+
+/* ---------- Nav with Statistics dropdown ---------- */
+const NAV=[
+  {id:'home',label:'Home'},
+  {id:'rankings',label:'Power Rankings'},
+  {id:'pickem',label:"Pick'em"},
+  {id:'stats',label:'Statistics ▾',children:[{id:'h2h',label:'Head-to-Head',sub:'Owner vs owner records'},{id:'luck',label:'Luck',sub:'All-play vs actual, by season'}]},
+  {id:'history',label:'League History'},
+  {id:'trades',label:'Trades'},
+  {id:'videos',label:'Videos'}];
+const VIEWS=['home','rankings','pickem','h2h','luck','history','trades','videos'];
+const nav=document.getElementById('nav'), menu=document.getElementById('statsmenu'), topin=document.getElementById('topin');
+let statsBtn;
+NAV.forEach(n=>{
+  const b=mk('button',null,n.label);b.type='button';b.id='tab-'+n.id;
+  if(n.children){
+    statsBtn=b;b.setAttribute('aria-haspopup','true');b.setAttribute('aria-expanded','false');
+    b.onclick=e=>{e.stopPropagation();menu.hidden?openMenu():closeMenu()};
+    n.children.forEach(c=>{const m=mk('button');m.type='button';m.dataset.id=c.id;m.append(mk('span',null,c.label),mk('small',null,c.sub));m.onclick=()=>{closeMenu();show(c.id)};menu.appendChild(m)});
+  } else b.onclick=()=>show(n.id);
+  nav.appendChild(b);
+});
+function openMenu(){const r=statsBtn.getBoundingClientRect(),p=topin.getBoundingClientRect();menu.style.left=Math.max(8,Math.min(r.left-p.left,p.width-200))+'px';menu.hidden=false;statsBtn.setAttribute('aria-expanded','true');menu.querySelector('button').focus()}
+function closeMenu(){menu.hidden=true;statsBtn.setAttribute('aria-expanded','false')}
+document.addEventListener('click',e=>{if(!menu.hidden&&!menu.contains(e.target))closeMenu()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!menu.hidden){closeMenu();statsBtn.focus()}});
+nav.addEventListener('scroll',()=>{if(!menu.hidden)closeMenu()});
+function show(id){
+  VIEWS.forEach(v=>document.getElementById('v-'+v).hidden=v!==id);
+  NAV.forEach(n=>{const b=document.getElementById('tab-'+n.id);const on=n.id===id||(n.children&&n.children.some(c=>c.id===id));b.setAttribute('aria-selected',on);b.classList.toggle('parent-on',!!(n.children&&on))});
+  menu.querySelectorAll('button').forEach(m=>m.setAttribute('aria-current',m.dataset.id===id));
+  window.scrollTo(0,0);
+  try{localStorage.setItem('hmwh-tab',id)}catch(e){}
+}
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
+let start='home';const hs=(location.hash||'').slice(1);
+if(VIEWS.includes(hs))start=hs;else{try{const s=localStorage.getItem('hmwh-tab');if(VIEWS.includes(s))start=s}catch(e){}}
+show(start);
+
+/* ---------- HOME ---------- */
+(function(){
+  // score bar
+  const sb=document.getElementById('scorebar');
+  CUR.games.filter(g=>g.wk===LW).forEach(g=>{
+    const w=g.hp>g.ap?[g.h,g.hp,g.a,g.ap]:[g.a,g.ap,g.h,g.hp];
+    const d=mk('div','box score');d.append(mk('span','wkl',`Week ${LW} · Final`));
+    [[w[0],w[1],''],[w[2],w[3],'l']].forEach(([id,p,c])=>{const r=mk('div','row '+c);r.append(mk('span',null,T[id].name),mk('span','num',p.toFixed(2)));d.appendChild(r)});
+    sb.appendChild(d);
+  });
+  // lead + stories
+  const H=D.headlines, lead=H.find(h=>h.lead), rest=H.filter(h=>!h.lead);
+  const L=document.getElementById('lead');
+  L.append(mk('div','ph','Team avatar or player photo'));
+  const tx=mk('div','txt');const meta=mk('div','meta');meta.append(mk('span','pill',lead.tag),mk('span',null,lead.date));
+  tx.append(meta,mk('h2',null,lead.h),mk('p',null,lead.d));
+  const more=mk('button','linkbtn','See the full trade →');more.type='button';more.onclick=()=>show('trades');tx.appendChild(more);
+  L.appendChild(tx);
+  const grid=document.getElementById('storygrid');
+  rest.forEach(h=>{const a=mk('article','story');const m=mk('div','meta');m.append(mk('span','pill',h.tag),mk('span',null,h.date));a.append(m,mk('h3',null,h.h),mk('p',null,h.d));grid.appendChild(a)});
+  // mini standings
+  const st=[...CUR.teams].sort((a,b)=>a.weeks.at(-1).rank-b.weeks.at(-1).rank), tb=document.getElementById('ministand');
+  st.forEach((t,i)=>{const tr=mk('tr',i===4?'cut':'');tr.append(mk('td',null,i+1),mk('td',null,t.name),mk('td','num',`${t.w}-${t.l}`));tb.appendChild(tr)});
+  // rafters
+  const rf=document.getElementById('rafters');
+  D.champs.forEach(c=>{const b=mk('div','banner'+(c.complete?'':' live'));b.append(mk('div','yr',c.y),mk('div','champ',c.complete?c.owner:'TBD'),mk('div','tname',c.complete?c.name:'In progress'));rf.appendChild(b)});
+  const cnt={};D.champs.filter(c=>c.complete).forEach(c=>cnt[c.owner]=(cnt[c.owner]||0)+1);
+  const multi=Object.entries(cnt).filter(([,n])=>n>1).sort((a,b)=>b[1]-a[1]).map(([o,n])=>`${o} ${n}`).join(' · ');
+  document.getElementById('raftnote').textContent=`Multiple titles: ${multi}`;
+  // mini matchups
+  const mm=document.getElementById('minimu');
+  D.wk7.forEach(([a,b,pa,pb],i)=>{const d=mk('div');if(i===GOTW)d.appendChild(mk('div','gotw-tag x2','2× Game of the Week'));d.append(mk('span',null,T[a].name),mk('span',null,pa.toFixed(1)),mk('span',null,T[b].name),mk('span',null,pb.toFixed(1)));mm.appendChild(d)});
+})();
+
+/* ---------- Bowl games ---------- */
+(function(){
+  const box=document.getElementById('trophies'),rk=['Top prize','2nd','3rd','4th','5th'];
+  const years=[];for(let y=D.current;y>=2025;y--)years.push(String(y));
+  D.bowls.forEach((b,i)=>{
+    const c=mk('article','box trophy');c.append(mk('div','ph','Trophy photo'),mk('div','rank',rk[i]),mk('h3',null,b.name));
+    const ul=mk('ul');
+    years.forEach(y=>{const w=b.w[y];const li=mk('li',w?'':'tbd');li.appendChild(mk('span','y',y));const d=mk('div');
+      if(w){d.append(mk('b',null,w.owner),mk('small',null,w.team))}else d.textContent='TBD';li.appendChild(d);ul.appendChild(li)});
+    c.appendChild(ul);box.appendChild(c);
+  });
+})();
+
+/* ---------- Bump chart ---------- */
+(function(){
+  const svg=document.getElementById('bump'), NS='http://www.w3.org/2000/svg';
+  const W=1000,H=470,L=46,R=150,TP=40,B=16, cols=13;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const x=w=>L+(W-L-R)*w/(cols-1), y=r=>TP+(H-TP-B)*(r-1)/9;
+  const el=(n,a,p=svg)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e};
+  for(let w=0;w<cols;w++){el('line',{x1:x(w),x2:x(w),y1:TP-14,y2:H-B+6,stroke:'var(--soft)','stroke-width':1});const t=el('text',{x:x(w),y:20,'text-anchor':'middle','font-size':12,fill:w<=LW?'var(--ink)':'var(--faint)'});t.textContent=w===0?'Poll':'W'+w}
+  for(let r=1;r<=10;r++){el('line',{x1:L-6,x2:W-R+10,y1:y(r),y2:y(r),stroke:'var(--line)','stroke-dasharray':'2 5'});const t=el('text',{x:L-14,y:y(r)+4,'text-anchor':'end','font-size':12,fill:'var(--muted)'});t.textContent=r}
+  for(let r=1;r<=10;r++) el('circle',{cx:x(0),cy:y(r),r:9,fill:'none',stroke:'var(--faint)','stroke-dasharray':'3 3'});
+  const groups={};
+  CUR.teams.forEach(t=>{
+    const g=el('g',{class:'team-g',tabindex:0,role:'button','aria-label':`${t.name}, ${t.w}-${t.l}`});
+    el('path',{class:'line',d:'M'+t.weeks.map((wk,i)=>`${x(i+1)},${y(wk.rank)}`).join('L')},g);
+    t.weeks.forEach((wk,i)=>{const c=el('circle',{class:'dot',cx:x(i+1),cy:y(wk.rank),r:6},g);el('title',{},c).textContent=`${t.name} · Week ${i+1}: ${wk.pts.toFixed(2)} pts, ${wk.rec}, rank ${wk.rank}`});
+    const last=t.weeks.at(-1);el('text',{x:x(LW)+14,y:y(last.rank)+4,'font-size':12,fill:'var(--ink)'},g).textContent=`${last.rec}  ${short(t.name)}`;
+    g.addEventListener('click',()=>toggle(t.id));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle(t.id)}});
+    groups[t.id]=g;
+  });
+  const chips=document.getElementById('chips');
+  [...CUR.teams].sort((a,b)=>a.weeks.at(-1).rank-b.weeks.at(-1).rank).forEach(t=>{const b=mk('button',null,short(t.name));b.type='button';b.dataset.id=t.id;b.setAttribute('aria-pressed','false');b.onclick=()=>toggle(t.id);chips.appendChild(b)});
+  let on=null;
+  function toggle(id){on=on===id?null:id;svg.classList.toggle('has-on',on!==null);Object.entries(groups).forEach(([k,g])=>{g.classList.toggle('on',+k===on);if(+k===on)svg.appendChild(g)});chips.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.id===on))}
+})();
+
+/* ---------- Power rankings ---------- */
+(function(){
+  const ol=document.getElementById('pr');
+  const opp={};CUR.games.filter(g=>g.wk===LW).forEach(g=>{opp[g.h]={o:g.a,me:g.hp,them:g.ap};opp[g.a]={o:g.h,me:g.ap,them:g.hp}});
+  [...CUR.teams].sort((a,b)=>a.weeks.at(-1).rank-b.weeks.at(-1).rank).forEach(t=>{
+    const now=t.weeks.at(-1),prev=t.weeks.at(-2),d=prev.rank-now.rank,g=opp[t.id];
+    const li=mk('li');
+    const who=mk('div','who');who.append(mk('b',null,t.name),mk('small',null,t.owner));
+    const rec=mk('div','rec');rec.append(mk('span',null,`${t.w}-${t.l}`),mk('small',null,`${t.pf.toFixed(1)} PF`));
+    const bl=mk('p','blurb');bl.append(mk('span',null,`Week ${LW}: ${g.me>g.them?'beat':'lost to'} ${T[g.o].name}, ${g.me.toFixed(2)}–${g.them.toFixed(2)}. ${ordinal(now.wrank)}-highest score, ${now.wrank<=5?'bonus win':'bonus loss'}.`),mk('i',null,'Roast line for this team · written by the Tuesday run'));
+    li.append(mk('div','rk num',now.rank),mk('div','mv',d>0?`▲ ${d}`:d<0?`▼ ${-d}`:'—'),who,rec,bl);
+    ol.appendChild(li);
+  });
+})();
+
+/* ---------- Head-to-Head (owner = franchise slot; same owners in 2025–2026) ---------- */
+(function(){
+  const ALL=Object.values(D.seasons).flatMap(s=>s.games);
+  const O=D.owners, ids=Object.keys(O).map(Number).sort((a,b)=>O[a].localeCompare(O[b]));
+  const ra=document.getElementById('ra'), rb=document.getElementById('rb');
+  ids.forEach(id=>[ra,rb].forEach(s=>{const o=mk('option',null,O[id]);o.value=id;s.appendChild(o)}));
+  ra.value=8; rb.value=7;
+  const rec=(a,b)=>{let w=0,l=0,games=[];ALL.forEach(g=>{let me,them;if(g.h===a&&g.a===b){me=g.hp;them=g.ap}else if(g.a===a&&g.h===b){me=g.ap;them=g.hp}else return;me>them?w++:l++;games.push({y:g.y,wk:g.wk,me,them})});games.sort((p,q)=>q.y-p.y||q.wk-p.wk);return{w,l,games}};
+  function draw(){
+    const a=+ra.value,b=+rb.value,box=document.getElementById('h2h'),ul=document.getElementById('h2h-games');box.replaceChildren();ul.replaceChildren();
+    if(a===b){const p=mk('p',null,'Pick two different owners.');p.style.cssText='grid-column:1/-1;margin:0;color:var(--muted)';box.appendChild(p);return}
+    const r=rec(a,b);
+    const side=(id,n)=>{const d=mk('div');d.append(mk('div','big num',n),mk('small',null,O[id]));return d};
+    const mid=mk('div','num','2025–26');mid.style.color='var(--muted)';
+    box.append(side(a,r.w),mid,side(b,r.l));
+    if(!r.games.length){const li=mk('li');li.append(mk('span',null,'No meetings in loaded seasons'),mk('span','num','—'));ul.appendChild(li)}
+    r.games.forEach(g=>{const li=mk('li');li.append(mk('span',null,`${g.y} · Week ${g.wk} · ${g.me>g.them?O[a]:O[b]} won`),mk('span','num',`${g.me.toFixed(2)}–${g.them.toFixed(2)}`));ul.appendChild(li)});
+  }
+  ra.onchange=rb.onchange=draw;draw();
+  const m=document.getElementById('matrix'),thead=mk('thead'),hr=mk('tr');hr.appendChild(mk('th',null,'Owner'));
+  ids.forEach(id=>{const th=mk('th',null,O[id].split(' ')[0]);th.title=O[id];hr.appendChild(th)});thead.appendChild(hr);
+  const tb=mk('tbody');ids.forEach(r=>{const tr=mk('tr');tr.appendChild(mk('td',null,O[r]));ids.forEach(c=>{if(r===c){tr.appendChild(mk('td','self'));return}const x=rec(r,c);tr.appendChild(mk('td','num',x.w+x.l?`${x.w}-${x.l}`:'·'))});tb.appendChild(tr)});
+  m.append(thead,tb);
+})();
+
+/* ---------- Luck with season picker ---------- */
+(function(){
+  const sel=document.getElementById('luckyr'), info=document.getElementById('luckinfo');
+  for(let y=D.current;y>=2015;y--){const o=mk('option',null,D.seasons[y]?String(y):`${y} (in build)`);o.value=y;o.disabled=!D.seasons[y];sel.appendChild(o)}
+  sel.value=D.current;
+  function draw(){
+    const S=D.seasons[sel.value];
+    info.textContent=S.year===D.current?`Through Week ${LW}`:`Regular season, ${S.weeks} weeks`;
+    const rows=S.teams.map(t=>{const g=t.h2hw+t.h2hl,ap=t.apw/(t.apw+t.apl),exp=ap*g;return{t,ap,exp,luck:t.h2hw-exp}}).sort((a,b)=>b.luck-a.luck);
+    const max=Math.max(...rows.map(r=>Math.abs(r.luck)))||1;
+    const tb=document.getElementById('luck');tb.replaceChildren();
+    const th=mk('thead'),hr=mk('tr');['Team','All-play','All-play %','H2H record','Expected W','Opp. avg','Luck'].forEach(h=>hr.appendChild(mk('th',null,h)));th.appendChild(hr);
+    const body=mk('tbody');
+    rows.forEach(r=>{const tr=mk('tr');const td=mk('td','t',r.t.name);td.appendChild(mk('small',null,r.t.owner));tr.appendChild(td);
+      [`${r.t.apw}-${r.t.apl}`,`${(r.ap*100).toFixed(0)}%`,`${r.t.h2hw}-${r.t.h2hl}`,r.exp.toFixed(1),r.t.sos.toFixed(1)].forEach(v=>tr.appendChild(mk('td','num',v)));
+      const lc=mk('td'),wrap=mk('span','luck-cell'),bar=mk('span','bar'+(r.luck<0?' neg':''));bar.style.width=Math.round(Math.abs(r.luck)/max*60)+'px';
+      wrap.append(bar,mk('span','num',(r.luck>=0?'+':'')+r.luck.toFixed(1)));lc.appendChild(wrap);tr.appendChild(lc);body.appendChild(tr)});
+    tb.append(th,body);
+  }
+  sel.onchange=draw;draw();
+})();
+
+/* ---------- Pick'em ---------- */
+(function(){
+  const box=document.getElementById('pk'),st=document.getElementById('pk-status'),picks={};
+  const pts=i=>i===GOTW?2:1, total=D.wk7.reduce((s,_,i)=>s+pts(i),0);
+  const order=[GOTW,...D.wk7.map((_,i)=>i).filter(i=>i!==GOTW)];
+  const upd=()=>{const n=Object.keys(picks).length;st.textContent=`${n} of 5 picked · ${total} points available`};
+  order.forEach(i=>{const [a,b,pa,pb]=D.wk7[i];
+    const d=mk('div','box mu'+(i===GOTW?' gotw':''));const wk=mk('div','wk');
+    if(i===GOTW){wk.append(mk('span','gotw-tag','2× Game of the Week'),mk('span',null,`#${RANK[a]} vs #${RANK[b]}`))}
+    else wk.append(mk('span',null,`#${RANK[a]} vs #${RANK[b]} · 1 pt`),mk('span',null,'Locks at first kickoff'));
+    d.appendChild(wk);
+    [[a,pa],[b,pb]].forEach(([id,p])=>{const t=T[id];const bt=mk('button');bt.type='button';bt.setAttribute('aria-pressed','false');bt.append(mk('b',null,t.name),mk('small',null,`${t.w}-${t.l} · proj ${p.toFixed(1)}`));
+      bt.onclick=()=>{picks[i]=id;d.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===bt));upd()};d.appendChild(bt)});
+    box.appendChild(d);
+  });
+  document.getElementById('pk-save').onclick=()=>{const n=Object.keys(picks).length;st.textContent=n<5?`Pick all 5 matchups first (${n} of 5)`:'Wireframe only: picks are not saved yet'};
+})();
+
+/* ---------- Videos ---------- */
+(function(){
+  const V=[{y:2026,t:'Prelude: Field Goal Forest',k:'Prelude'},{y:2026,t:'2026 Draft Roast',k:'Roast'},{y:2025,t:'2025 Prelude',k:'Prelude'},{y:2025,t:'2025 Draft Roast',k:'Roast'},{y:2024,t:'2024 Prelude',k:'Prelude'},{y:2024,t:'2024 Draft Roast',k:'Roast'}];
+  const yrs=document.getElementById('vyrs'),grid=document.getElementById('vids');let cur='All';
+  ['All',...new Set(V.map(v=>v.y))].forEach(y=>{const b=mk('button',null,y);b.type='button';b.setAttribute('aria-pressed',y===cur);b.onclick=()=>{cur=y;yrs.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));draw()};yrs.appendChild(b)});
+  function draw(){grid.replaceChildren();V.filter(v=>cur==='All'||v.y===cur).forEach(v=>{const d=mk('div','vid');d.append(mk('div','ph','YouTube thumbnail'),mk('b',null,v.t),mk('small',null,`${v.y} · ${v.k}`));grid.appendChild(d)})}
+  draw();
+})();
+}
+</script>
+</body>
+</html>
