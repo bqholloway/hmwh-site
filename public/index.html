@@ -310,7 +310,7 @@ table.lb{min-width:0}
     <section aria-labelledby="h-bump">
       <div class="head"><div class="eyebrow">Standings progression</div><h2 id="h-bump">Week over week</h2>
         <p>Rank after each week, using full records with bonus wins and points for as the tiebreaker. Tap a team to follow its line.</p></div>
-      <div class="chip" id="chips" role="group" aria-label="Highlight a team"></div>
+      <div class="yrpick"><label for="bump-yr">Season</label><select id="bump-yr"></select></div>
       <div class="box chart-wrap"><svg id="bump" class="chart" role="img" aria-label="Standings rank by week for all ten teams"></svg></div>
       <p class="note">Poll = the preseason coaches poll. Team avatars and the stadium background come in the design pass.</p>
     </section>
@@ -532,10 +532,11 @@ show(start);
     g.addEventListener('click',()=>toggle(t.id));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle(t.id)}});
     groups[t.id]=g;
   });
-  const chips=document.getElementById('chips');
-  [...CUR.teams].sort((a,b)=>a.weeks.at(-1).rank-b.weeks.at(-1).rank).forEach(t=>{const b=mk('button');const sw=mk('span','sw');sw.style.background=(D.colors||{})[t.id]||'var(--faint)';b.append(sw,short(t.name));b.type='button';b.dataset.id=t.id;b.setAttribute('aria-pressed','false');b.onclick=()=>toggle(t.id);chips.appendChild(b)});
+  const ysel=document.getElementById('bump-yr');
+  for(let y=D.current;y>=2015;y--){const o=mk('option',null,y===D.current?String(y):`${y} (coming soon)`);o.value=y;o.disabled=y!==D.current;ysel.appendChild(o)}
+  ysel.value=D.current;
   let on=null;
-  function toggle(id){on=on===id?null:id;svg.classList.toggle('has-on',on!==null);Object.entries(groups).forEach(([k,g])=>{g.classList.toggle('on',+k===on);if(+k===on)svg.appendChild(g)});chips.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.id===on))}
+  function toggle(id){on=on===id?null:id;svg.classList.toggle('has-on',on!==null);Object.entries(groups).forEach(([k,g])=>{g.classList.toggle('on',+k===on);if(+k===on)svg.appendChild(g)})}
 })();
 
 /* ---------- Power rankings ---------- */
