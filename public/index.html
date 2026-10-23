@@ -458,7 +458,7 @@ table.lb{min-width:0}
 
   <!-- TRADES -->
   <div class="view" id="v-trades" hidden>
-    <div><div class="eyebrow">Trade ledger</div><h1>Trades</h1>
+    <div><h1>Trades</h1>
       <p class="lede" id="tr-lede"></p></div>
 
     <div class="tr-mode" role="group" aria-label="Value trades at">
@@ -916,9 +916,7 @@ show(start);
   }
   let ROWS=[];
   function lede(){
-    $('tr-lede').textContent=mode==='day'
-      ?`All ${TV.length} completed 2026 trades, each side valued with FantasyCalc on the day the trade went through.`
-      :`All ${TV.length} completed 2026 trades, each side valued with ${TR.source} as of ${new Date(TR.asOf+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric'})}.`;
+    $('tr-lede').textContent='All completed trades in the 2026 season. Each side is valued with FantasyCalc. Toggle between trade values as of the trade day, or current value. Inspiration credit to Buzzo.';
   }
   function refresh(){view();ROWS=totals();lede();kpis(ROWS);table(ROWS);sync();
     $('tr-now').setAttribute('aria-pressed',String(mode==='now'));$('tr-day').setAttribute('aria-pressed',String(mode==='day'));}
