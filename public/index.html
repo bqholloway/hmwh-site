@@ -134,6 +134,7 @@ section{display:grid;gap:14px;min-width:0}
 .chart-wrap{overflow-x:auto;padding:12px 8px 6px}
 .chart-wrap svg{display:block;min-width:680px;width:100%;height:auto}
 .chart-wrap text{font-family:var(--mono)}
+.hit{fill:none;stroke:transparent;stroke-width:16;pointer-events:stroke}
 .case{fill:none;stroke:var(--ink);stroke-opacity:.45;stroke-width:6;stroke-linejoin:round}
 .line{fill:none;stroke-width:3.5;stroke-linejoin:round;transition:opacity .15s}
 .dot{stroke:var(--ink);stroke-opacity:.6;stroke-width:1.5}
@@ -307,9 +308,7 @@ table.lb{min-width:0}
       <h1 id="week-h">Power Rankings</h1>
       <p class="lede">Where every team stands after each week, and how they got there.</p>
     </div>
-    <section aria-labelledby="h-bump">
-      <div class="head"><div class="eyebrow">Standings progression</div><h2 id="h-bump">Week over week</h2>
-        <p>Rank after each week, using full records with bonus wins and points for as the tiebreaker. Tap a team to follow its line.</p></div>
+    <section aria-label="Standings by week">
       <div class="yrpick"><label for="bump-yr">Season</label><select id="bump-yr"></select></div>
       <div class="box chart-wrap"><svg id="bump" class="chart" role="img" aria-label="Standings rank by week for all ten teams"></svg></div>
       <p class="note">Poll = the preseason coaches poll. Team avatars and the stadium background come in the design pass.</p>
@@ -525,18 +524,21 @@ show(start);
     const pts=[...(p0?[[x(0),y(p0)]]:[]),...t.weeks.map((wk,i)=>[x(i+1),y(wk.rank)])];
     const g=el('g',{class:'team-g',tabindex:0,role:'button','aria-label':`${t.name}, ${t.w}-${t.l}`});
     const d='M'+pts.map(p=>p.join(',')).join('L');
-    el('path',{class:'case',d},g);el('path',{class:'line',d,stroke:col},g);
+    el('path',{class:'hit',d},g);el('path',{class:'case',d},g);el('path',{class:'line',d,stroke:col},g);
     if(p0){const c=el('circle',{class:'dot',cx:x(0),cy:y(p0),r:6,fill:col},g);el('title',{},c).textContent=`${t.name} · Preseason coaches poll: #${p0}`}
     t.weeks.forEach((wk,i)=>{const c=el('circle',{class:'dot',cx:x(i+1),cy:y(wk.rank),r:6,fill:col},g);el('title',{},c).textContent=`${t.name} · Week ${i+1}: ${wk.pts.toFixed(2)} pts, ${wk.rec}, rank ${wk.rank}`});
     const last=t.weeks.at(-1);el('text',{x:x(LW)+14,y:y(last.rank)+4,'font-size':12,fill:'var(--ink)'},g).textContent=`${last.rec}  ${short(t.name)}`;
-    g.addEventListener('click',()=>toggle(t.id));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle(t.id)}});
+    g.addEventListener('click',()=>toggle(t.id));g.addEventListener('mouseenter',()=>hover(t.id));g.addEventListener('mouseleave',()=>hover(null));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle(t.id)}});
     groups[t.id]=g;
   });
   const ysel=document.getElementById('bump-yr');
   for(let y=D.current;y>=2015;y--){const o=mk('option',null,y===D.current?String(y):`${y} (coming soon)`);o.value=y;o.disabled=y!==D.current;ysel.appendChild(o)}
   ysel.value=D.current;
   let on=null;
-  function toggle(id){on=on===id?null:id;svg.classList.toggle('has-on',on!==null);Object.entries(groups).forEach(([k,g])=>{g.classList.toggle('on',+k===on);if(+k===on)svg.appendChild(g)})}
+  let hov=null;
+  function paint(){const id=hov??on;svg.classList.toggle('has-on',id!==null);Object.entries(groups).forEach(([k,g])=>g.classList.toggle('on',+k===id))}
+  function hover(id){hov=id;paint()}
+  function toggle(id){on=on===id?null:id;if(on!==null)svg.appendChild(groups[on]);paint()}
 })();
 
 /* ---------- Power rankings ---------- */
