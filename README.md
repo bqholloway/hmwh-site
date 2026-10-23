@@ -7,6 +7,9 @@ The He Man Woman Haters Club league site, served by Cloudflare Pages behind Clou
 
 Deployed with `npx wrangler deploy`. `wrangler.jsonc` serves `public/` as static assets and runs `src/worker.js` for `/api/*`.
 
+## Trades
+- `public/data/trades.json` holds every completed 2026 trade with both sides' players and FantasyCalc values. The update runs add new trades once they clear review and re-score them.
+
 ## Pick'em
 - `public/data/pickem.json` is the schedule: the current week, when picks open and lock, the five games, which one is the 2x Game of the Week, and each game's winner once it's final. The Tuesday update writes the next week's games and fills in last week's winners.
 - Picks are stored in a Durable Object (SQLite) called `League`. Each member links their login to one team the first time they visit; the Groundskeeper (`ADMIN_EMAILS`) can undo a link and can save picks before a week opens.
