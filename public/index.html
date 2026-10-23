@@ -751,6 +751,17 @@ table.lb{min-width:0}
   </div>
 </main>
 
+<dialog id="welcome" class="lore-dlg" aria-labelledby="wl-h">
+  <form id="wl-form" method="dialog">
+    <h2 id="wl-h">Welcome to the club</h2>
+    <p class="status">First time here? Pick your team. This links your login to it for the whole season, and it's how Pick'em knows who you are.</p>
+    <label>Your team<select id="wl-sel" required></select></label>
+    <p class="status" id="wl-msg" role="status" aria-live="polite"></p>
+    <div class="lore-actions"><button class="btn" type="submit" id="wl-go">This is my team</button></div>
+    <p class="status">Picked the wrong one? Ask Bradley to undo it.</p>
+  </form>
+</dialog>
+
 <script>
 fetch('data/site.json',{cache:'no-store'}).then(r=>r.json()).then(main).catch(e=>{document.querySelector('main').textContent='Could not load league data. Refresh to try again.'});
 function main(D){
@@ -872,6 +883,33 @@ show(start);
       if(w){d.append(mk('b',null,w.owner),mk('small',null,w.team))}else d.textContent='TBD';li.appendChild(d);ul.appendChild(li)});
     c.appendChild(ul);box.appendChild(c);
   });
+})();
+
+/* ---------- First-visit welcome: pick your team ---------- */
+(function(){
+  const dlg=document.getElementById('welcome');if(!dlg||!dlg.showModal)return;
+  const sel=document.getElementById('wl-sel'),msg=document.getElementById('wl-msg'),go=document.getElementById('wl-go');
+  dlg.addEventListener('cancel',e=>e.preventDefault());
+  fetch('/api/state',{credentials:'same-origin'}).then(r=>r.ok&&(r.headers.get('content-type')||'').includes('json')?r.json():null).catch(()=>null).then(S=>{
+    if(!S||S.mySlot)return;
+    const open=Object.keys(D.owners).map(Number).filter(n=>!(S.claimed||[]).includes(n)).sort((a,b)=>D.owners[a].localeCompare(D.owners[b]));
+    if(!open.length)return;
+    sel.replaceChildren();
+    const ph=mk('option',null,'Choose your team…');ph.value='';ph.disabled=true;ph.selected=true;sel.appendChild(ph);
+    open.forEach(n=>{const o=mk('option',null,`${D.owners[n]} · ${T[n]?T[n].name:'Team '+n}`);o.value=n;sel.appendChild(o)});
+    dlg.showModal();
+  });
+  document.getElementById('wl-form').onsubmit=async e=>{
+    e.preventDefault();if(!sel.value){msg.textContent='Pick your team to continue.';return}
+    go.disabled=true;msg.textContent='Saving…';
+    try{
+      const r=await fetch('/api/claim',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({slot:+sel.value})});
+      const d=await r.json().catch(()=>null);
+      if(r.ok){dlg.close();location.reload();return}
+      msg.textContent=(d&&d.error)||'Could not save that. Try again.';
+    }catch(x){msg.textContent='Could not reach the server. Try again.'}
+    go.disabled=false;
+  };
 })();
 
 /* ---------- Lore timeline + submissions ---------- */
