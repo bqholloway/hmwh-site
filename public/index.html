@@ -155,6 +155,10 @@ section{display:grid;gap:14px;min-width:0}
 .pr{list-style:none;margin:0;padding:0}
 .pr li{display:grid;grid-template-columns:2.4rem 3rem minmax(0,1fr) auto;gap:4px 14px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
 .pr li:last-child{border-bottom:0}
+.pr li.playin{background:var(--soft)}
+.pr li.cut{display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:0;height:0;position:relative;overflow:visible}
+.pr li.cut::before,.pr li.cut::after{content:"";flex:1;border-top:2px dashed var(--mark)}
+.pr li.cut span{font-family:var(--mono);font-size:.66rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--mark);background:var(--panel);padding:2px 8px;border:1px solid var(--mark);border-radius:2px;line-height:1.4;transform:translateY(0)}
 .pr .rk{font-family:var(--mono);font-size:1.5rem;font-weight:600;line-height:1}
 .pr .mv.up{color:var(--up);font-weight:600}
 .pr .mv.down{color:var(--down);font-weight:600}
@@ -317,8 +321,8 @@ table.lb{min-width:0}
       <p class="note">Poll = the preseason coaches poll. Team avatars and the stadium background come in the design pass.</p>
     </section>
     <section aria-labelledby="h-pr">
-      <div class="head"><div class="eyebrow" id="pr-week"></div><h2 id="h-pr">The rankings</h2>
-        <p>Ranked by record, including bonus wins. Arrows show movement from the week before.</p></div>
+      <div class="head"><div class="eyebrow" id="pr-week"></div><h2 id="h-pr">The Standings</h2>
+        <p>Ranked by record, including bonus wins. Arrows show movement from the week before. Shaded rows are the play-in spots.</p></div>
       <ol class="pr box" id="pr"></ol>
     </section>
   </div>
@@ -550,11 +554,12 @@ show(start);
   const opp={};CUR.games.filter(g=>g.wk===LW).forEach(g=>{opp[g.h]={o:g.a,me:g.hp,them:g.ap};opp[g.a]={o:g.h,me:g.ap,them:g.hp}});
   [...CUR.teams].sort((a,b)=>a.weeks.at(-1).rank-b.weeks.at(-1).rank).forEach(t=>{
     const now=t.weeks.at(-1),prev=t.weeks.at(-2),d=prev.rank-now.rank,g=opp[t.id];
-    const li=mk('li');
+    const li=mk('li',now.rank===4||now.rank===5?'playin':'');
     const who=mk('div','who');who.append(mk('b',null,t.name),mk('small',null,t.owner));
     const rec=mk('div','rec');rec.append(mk('span',null,`${t.w}-${t.l}`),mk('small',null,`${t.pf.toFixed(1)} PF`));
     li.append(mk('div','rk num',now.rank),mk('div',d>0?'mv up':d<0?'mv down':'mv',d>0?`▲ ${d}`:d<0?`▼ ${-d}`:'—'),who,rec);
     ol.appendChild(li);
+    if(now.rank===5){const cut=mk('li','cut');cut.setAttribute('aria-label','Playoff line');cut.appendChild(mk('span',null,'Playoff Line'));ol.appendChild(cut)}
   });
 })();
 
