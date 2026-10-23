@@ -76,7 +76,13 @@ section{display:grid;gap:14px;min-width:0}
 .front{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:start}
 .stories{display:grid;gap:22px;min-width:0}
 .lead{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;padding-bottom:22px;border-bottom:1px solid var(--line)}
-.lead .ph{aspect-ratio:4/3;max-width:100%}
+.lead .art{position:relative;min-height:220px;border:1.5px dashed var(--faint);border-radius:4px;background:repeating-linear-gradient(135deg,transparent 0 10px,var(--soft) 10px 11px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;justify-items:center;gap:8px;padding:18px 14px 40px;overflow:hidden}
+.lead .art .face{display:grid;justify-items:center;gap:8px;min-width:0;text-align:center}
+.lead .art .ring{width:min(130px,26vw);aspect-ratio:1;border-radius:50%;border:5px solid var(--faint);box-shadow:0 0 0 1px var(--faint),inset 0 0 0 1px var(--faint);background:var(--panel);display:grid;place-items:center;font-family:var(--mono);font-size:.66rem;color:var(--muted);text-align:center;padding:10px;max-width:100%}
+.lead .art .nm{font-weight:700;font-size:.85rem;line-height:1.2;overflow-wrap:anywhere}
+.lead .art .ow{font-size:.74rem;color:var(--muted)}
+.lead .art .mid{font-family:var(--mono);font-weight:700;font-size:1.4rem;color:var(--mark)}
+.lead .art .cap{position:absolute;left:0;right:0;bottom:0;padding:8px 12px;font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:center;border-top:1px dashed var(--faint);background:var(--panel)}
 .lead h2{font-family:var(--head);font-size:clamp(1.35rem,3vw,1.9rem);line-height:1.15;font-weight:700}
 .lead p{margin:0;color:var(--muted)}
 .lead .txt{display:grid;gap:10px;align-content:start;min-width:0}
@@ -110,7 +116,8 @@ section{display:grid;gap:14px;min-width:0}
   .front .rail-mu{grid-area:mu;align-self:center}
 }
 @media (max-width:880px){.front{grid-template-columns:1fr}}
-@media (max-width:600px){.lead{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+.lead .art{min-height:0}
+@media (max-width:600px){.lead{grid-template-columns:1fr}.lead .art{min-height:220px}.grid2{grid-template-columns:1fr}}
 
 /* Rafters */
 .rafters-sec{border-top:3px solid var(--brass);padding-top:18px}
@@ -603,7 +610,13 @@ show(start);
   // lead + stories
   const H=D.headlines, lead=H.find(h=>h.lead), rest=H.filter(h=>!h.lead).slice(0,6);
   const L=document.getElementById('lead');
-  L.append(mk('div','ph','Team avatar or player photo'));
+  const art=mk('div','art');art.setAttribute('aria-hidden','true');
+  const ids=(lead.teams&&lead.teams.length?lead.teams:[lead.team]).filter(Boolean).slice(0,2);
+  ids.forEach((id,i)=>{const t=T[id];const f=mk('div','face');const r=mk('div','ring',t?t.owner.split(' ')[0]+' headshot':'Headshot');r.style.borderColor=(D.colors||{})[id]||'var(--faint)';
+    f.append(r,mk('div','nm',t?t.name:''),mk('div','ow',t?t.owner:''));art.appendChild(f);if(i===0&&ids.length>1)art.appendChild(mk('div','mid',lead.tag==='Trade'?'⇄':'VS'))});
+  if(ids.length===1)art.style.gridTemplateColumns='1fr';
+  art.appendChild(mk('div','cap',lead.tag==='Trade'?'Trade graphic · owner headshots go here':'Headline graphic · owner headshots go here'));
+  L.append(art);
   const tx=mk('div','txt');const meta=mk('div','meta');meta.append(mk('span','pill',lead.tag),mk('span',null,lead.date));
   tx.append(meta,mk('h2',null,lead.h),mk('p',null,lead.d));
   const more=mk('button','linkbtn','See the full trade →');more.type='button';more.onclick=()=>show('trades');tx.appendChild(more);
