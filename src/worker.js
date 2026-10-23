@@ -84,10 +84,7 @@ export default {
 
     try {
       if (url.pathname === "/api/state" && request.method === "GET") {
-        const st = await buildState(league, cfg, week, email, admin);
-        st.build = "admin-fix-2";
-        st.adminsConfigured = admins.length;
-        return json(st);
+        return json(await buildState(league, cfg, week, email, admin));
       }
 
       if (url.pathname === "/api/claim" && request.method === "POST") {

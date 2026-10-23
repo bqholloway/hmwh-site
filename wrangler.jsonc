@@ -11,7 +11,9 @@
   },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["League"] }],
   "vars": {
-    "ADMIN_EMAILS": "bquholl@gmail.com,bqholloway@gmail.com"
+    "ADMIN_EMAILS": "bquholl@gmail.com,bqholloway@gmail.com",
+    "ACCESS_TEAM": "hmwh-login",
+    "ACCESS_AUD": "abdd9af00b2197447a18f32bf65edcdc5aa4716bca2bca0a0e282f3664eb8a4a"
   },
   "workers_dev": false,
   "preview_urls": false
