@@ -6,7 +6,6 @@ body{background:transparent!important}
 .wrap>header .eyebrow,.wrap>header h1,.wrap>header .lede{display:none}
 </style>
 <meta name="robots" content="noindex,nofollow">
-<script>(function(){function ap(){try{var t=localStorage.getItem('hmwh-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else document.documentElement.removeAttribute('data-theme')}catch(e){}}ap();window.addEventListener('storage',function(e){if(e.key==='hmwh-theme')ap()})})();</script>
 </head><body>
 <title>HMWHC Record Book</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -15,21 +14,13 @@ body{background:transparent!important}
 <style>
 /* Layout: a varsity record book. Felt championship banners hang across the top, then the all-time owner ledger, records, and a season-by-season archive. */
 :root{
-  --bg:#eceeea; --panel:#f7f8f5; --ink:#1b211e; --muted:#5a6560; --line:#cdd3cf;
-  --brass:#99691a; --felt:#6e1f2b; --on-felt:#f3e9d6; --felt-gold:#e0b456; --felt-edge:#4f141e;
-  --good:#2f6b45; --bad:#9a3a2e;
+  --bg:#111513; --panel:#192019; --ink:#e7ebe8; --muted:#97a39c; --line:#2b3430;
+  --brass:#d4a446; --felt:#7f2633; --on-felt:#f3e9d6; --felt-gold:#e0b456; --felt-edge:#57161f;
+  --good:#6fbf8c; --bad:#e08a7c; color-scheme:dark;
   --display:"Graduate","Rockwell","Georgia",serif;
   --body:"Barlow","Helvetica Neue",Arial,sans-serif;
   --data:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#111513; --panel:#192019; --ink:#e7ebe8; --muted:#97a39c; --line:#2b3430;
-  --brass:#d4a446; --felt:#7f2633; --on-felt:#f3e9d6; --felt-edge:#57161f;
-  --good:#6fbf8c; --bad:#e08a7c; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#111513; --panel:#192019; --ink:#e7ebe8; --muted:#97a39c; --line:#2b3430;
-  --brass:#d4a446; --felt:#7f2633; --on-felt:#f3e9d6; --felt-edge:#57161f;
-  --good:#6fbf8c; --bad:#e08a7c; color-scheme:dark}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
 .wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 64px;display:grid;gap:56px}
 h1,h2{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:.01em}

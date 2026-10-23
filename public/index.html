@@ -8,22 +8,18 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Graduate&display=swap">
-<script>try{var t=localStorage.getItem('hmwh-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <style>
 /* Layout: grayscale wireframe. Sticky masthead + tab bar, one view per tab, content column max 1080px. Home is a newspaper front page: lead story, headline stack, right rail. */
 :root{
-  --bg:#f3f3f1; --panel:#ffffff; --ink:#1d1e1c; --muted:#6b6d68; --line:#d6d7d3; --soft:#e8e8e5; --mark:#3a3b38; --faint:#b9bab5;
+  --bg:#151614; --panel:#1d1e1c; --ink:#e9eae6; --muted:#9a9c96; --line:#33352f; --soft:#262724; --mark:#d6d7d2; --faint:#4b4d48;
   --body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
   --head:"IBM Plex Serif",Georgia,serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-  --up:#1f7a3e; --down:#b3261e;
-  --felt:#6e1f2b; --felt-edge:#4f141e; --on-felt:#f3e9d6; --felt-gold:#e0b456; --brass:#99691a;
+  --up:#5cc583; --down:#f07a6e;
+  --felt:#7f2633; --felt-edge:#57161f; --on-felt:#f3e9d6; --felt-gold:#e0b456; --brass:#d4a446;
   --display:"Graduate","Rockwell",Georgia,serif;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#151614; --panel:#1d1e1c; --ink:#e9eae6; --muted:#9a9c96; --line:#33352f; --soft:#262724; --mark:#d6d7d2; --faint:#4b4d48; --felt:#7f2633; --felt-edge:#57161f; --brass:#d4a446; --up:#5cc583; --down:#f07a6e; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#151614; --panel:#1d1e1c; --ink:#e9eae6; --muted:#9a9c96; --line:#33352f; --soft:#262724; --mark:#d6d7d2; --faint:#4b4d48; --felt:#7f2633; --felt-edge:#57161f; --brass:#d4a446; --up:#5cc583; --down:#f07a6e; color-scheme:dark}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 [hidden]{display:none!important}
@@ -41,9 +37,6 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
 .top-in{position:relative;max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px 0;display:grid;gap:8px}
 .brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-.themebtn{all:unset;cursor:pointer;font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;border:1px solid var(--line);color:var(--ink);padding:1px 9px;border-radius:3px;margin-left:8px;background:var(--panel)}
-.themebtn:hover{border-color:var(--mark)}
-.themebtn:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
 .brand b{font-weight:700;font-size:1.05rem;letter-spacing:.02em}
 .brand span{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
 .tag{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;border:1px dashed var(--faint);color:var(--muted);padding:1px 7px;border-radius:3px;margin-left:auto}
@@ -502,7 +495,7 @@ table.lb{min-width:0}
 <body>
 <header class="top">
   <div class="top-in" id="topin">
-    <div class="brand"><b>HE MAN WOMAN HATERS CLUB</b><span>hmwh.men</span><span class="tag">Wireframe</span><button type="button" class="themebtn" id="themebtn"></button></div>
+    <div class="brand"><b>HE MAN WOMAN HATERS CLUB</b><span>hmwh.men</span><span class="tag">Wireframe</span></div>
     <nav aria-label="Site sections" id="nav"></nav>
     <div class="menu" id="statsmenu" hidden></div>
   </div>
@@ -768,16 +761,6 @@ const ordinal = n => {const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%1
 const RANK = Object.fromEntries(CUR.teams.map(t=>[t.id,t.weeks.at(-1).rank]));
 const GOTW = (()=>{let best=0,bs=[99,99];D.wk7.forEach(([a,b],i)=>{const k=[RANK[a]+RANK[b],Math.min(RANK[a],RANK[b])];if(k[0]<bs[0]||(k[0]===bs[0]&&k[1]<bs[1])){bs=k;best=i}});return best})();
 const mk = (tag,cls,txt) => {const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
-
-/* ---------- Light / dark toggle ---------- */
-(function(){
-  const b=document.getElementById('themebtn'),root=document.documentElement,mq=window.matchMedia('(prefers-color-scheme:dark)');
-  const cur=()=>root.getAttribute('data-theme')||(mq.matches?'dark':'light');
-  const paint=()=>{const d=cur()==='dark';b.textContent=d?'☀ Light':'☾ Dark';b.setAttribute('aria-label',d?'Switch to light mode':'Switch to dark mode')};
-  b.onclick=()=>{const n=cur()==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('hmwh-theme',n)}catch(e){}paint()};
-  mq.addEventListener&&mq.addEventListener('change',paint);
-  paint();
-})();
 
 /* ---------- Nav with Statistics dropdown ---------- */
 const NAV=[
