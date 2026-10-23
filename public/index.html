@@ -151,7 +151,7 @@ section{display:grid;gap:14px;min-width:0}
 
 /* Power rankings */
 .pr{list-style:none;margin:0;padding:0}
-.pr li{display:grid;grid-template-columns:2.4rem 3rem minmax(0,1fr) auto;gap:4px 14px;align-items:start;padding:14px 16px;border-bottom:1px solid var(--line)}
+.pr li{display:grid;grid-template-columns:2.4rem 3rem minmax(0,1fr) auto;gap:4px 14px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
 .pr li:last-child{border-bottom:0}
 .pr .rk{font-family:var(--mono);font-size:1.5rem;font-weight:600;line-height:1}
 .pr .mv{font-family:var(--mono);font-size:.78rem;color:var(--muted);padding-top:4px}
@@ -548,8 +548,7 @@ show(start);
     const li=mk('li');
     const who=mk('div','who');who.append(mk('b',null,t.name),mk('small',null,t.owner));
     const rec=mk('div','rec');rec.append(mk('span',null,`${t.w}-${t.l}`),mk('small',null,`${t.pf.toFixed(1)} PF`));
-    const bl=mk('p','blurb');bl.append(mk('span',null,`Week ${LW}: ${g.me>g.them?'beat':'lost to'} ${T[g.o].name}, ${g.me.toFixed(2)}–${g.them.toFixed(2)}. ${ordinal(now.wrank)}-highest score, ${now.wrank<=5?'bonus win':'bonus loss'}.`));
-    li.append(mk('div','rk num',now.rank),mk('div','mv',d>0?`▲ ${d}`:d<0?`▼ ${-d}`:'—'),who,rec,bl);
+    li.append(mk('div','rk num',now.rank),mk('div','mv',d>0?`▲ ${d}`:d<0?`▼ ${-d}`:'—'),who,rec);
     ol.appendChild(li);
   });
 })();
