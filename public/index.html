@@ -8,6 +8,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Graduate&display=swap">
+<link rel="icon" type="image/png" href="img/favicon.png">
 <style>
 /* Layout: grayscale wireframe. Sticky masthead + tab bar, one view per tab, content column max 1080px. Home is a newspaper front page: lead story, headline stack, right rail. */
 :root{
@@ -37,6 +38,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
 .top-in{position:relative;max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px 0;display:grid;gap:8px}
 .brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand .logo{height:34px;width:auto;align-self:center;margin-right:-2px}
+.wl-logo{display:block;margin:0 auto 4px;height:84px;width:auto}
 .brand b{font-weight:700;font-size:1.05rem;letter-spacing:.02em}
 .brand span{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
 .tag{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;border:1px dashed var(--faint);color:var(--muted);padding:1px 7px;border-radius:3px;margin-left:auto}
@@ -495,7 +498,7 @@ table.lb{min-width:0}
 <body>
 <header class="top">
   <div class="top-in" id="topin">
-    <div class="brand"><b>HE MAN WOMAN HATERS CLUB</b><span>hmwh.men</span><span class="tag">Wireframe</span></div>
+    <div class="brand"><img src="img/hmwh-logo.png" alt="HMWHC logo" class="logo"><b>HE MAN WOMAN HATERS CLUB</b><span>hmwh.men</span><span class="tag">Wireframe</span></div>
     <nav aria-label="Site sections" id="nav"></nav>
     <div class="menu" id="statsmenu" hidden></div>
   </div>
@@ -753,7 +756,7 @@ table.lb{min-width:0}
 
 <dialog id="welcome" class="lore-dlg" aria-labelledby="wl-h">
   <form id="wl-form" method="dialog">
-    <h2 id="wl-h">Welcome to the Lunchroom</h2>
+    <img src="img/hmwh-logo.png" alt="" class="wl-logo"><h2 id="wl-h" style="text-align:center">Welcome to the Lunchroom</h2>
     <p class="status">First time here? Pick your team. This links your login to it for the whole season, and it's how Pick'em knows who you are.</p>
     <label>Your team<select id="wl-sel" required></select></label>
     <p class="status" id="wl-msg" role="status" aria-live="polite"></p>
