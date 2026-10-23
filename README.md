@@ -10,8 +10,10 @@ Deployed with `npx wrangler deploy`. `wrangler.jsonc` serves `public/` as static
 ## Head-to-Head
 - `public/data/h2h.json` holds every game since 2015 (regular season, playoffs and consolation) plus each season's owner and team name per franchise slot. Records count regular season and playoffs. Pulled from ESPN via Flaim and checked against each season's final standings. The update runs append each new week.
 
+## Draft Results
+- `public/data/draft.json` holds every pick from completed drafts (2025 and 2024 so far) with each player's year-end points under league scoring, from ESPN via Flaim. Each pick gets pts over or under expected: the k-th player taken at a position that season is expected to score what the k-th best drafted player at that position scored, and anyone below waiver-wire level (12th QB, 28th RB, 34th WR, 13th TE, 11th K that season) counts as waiver level. Team totals sum their picks. No letter grades. Add a season once its playoffs end.
+
 ## Trades
-- `public/data/draft.json` holds every pick from completed drafts (2025 and 2024 so far) with each player's year-end points under league scoring, from ESPN via Flaim. Grades are "points over slot": the k-th player taken at a position is expected to score like the k-th best drafted player at that position, and anyone below waiver-wire level (12th QB, 28th RB, 34th WR, 13th TE, 11th K) counts as waiver level. Team grades sum pick values and curve them across the league. Add a season once its playoffs end.
 - `public/data/trades.json` holds every completed 2026 trade with both sides' players and FantasyCalc values. The update runs add new trades once they clear review and re-score them.
 
 ## Pick'em

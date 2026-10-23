@@ -279,23 +279,20 @@ td.luck-td.neg .num{color:var(--down)}
 .luck-cell{display:flex;align-items:center;gap:8px;justify-content:flex-end}
 .yrpick{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .yrpick label{font-size:.85rem;color:var(--muted)}
-/* Draft grades */
-.dr-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
-.dr-card{all:unset;box-sizing:border-box;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:12px 14px;display:grid;grid-template-columns:auto 1fr auto;gap:2px 12px;align-items:center;transition:border-color .15s,opacity .15s}
-.dr-card:hover{border-color:var(--faint)}
-.dr-card:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
-.dr-card[aria-pressed="true"]{border-color:var(--mark);box-shadow:inset 0 0 0 1px var(--mark)}
-.dr-cards.focus .dr-card[aria-pressed="false"]{opacity:.55}
-.dr-card .rk{font-family:var(--mono);font-size:.75rem;color:var(--muted);grid-row:1/3}
-.dr-card .who{min-width:0}
-.dr-card .who b{display:block;overflow-wrap:anywhere}
-.dr-card .who small{display:block;color:var(--muted);font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dr-card .gr{grid-row:1/3;grid-column:3;font-size:1.7rem;font-weight:700;line-height:1;min-width:2.2ch;text-align:right}
-.dr-card .tot{grid-column:1/-1;font-family:var(--mono);font-size:.82rem;margin-top:8px}
-.dr-card .tot.pos{color:var(--up)} .dr-card .tot.neg{color:var(--down)}
-.dr-card .bw{grid-column:1/-1;font-size:.8rem;color:var(--muted);display:grid;gap:1px}
-.dr-card .bw span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.gr.A,.gr.Ap{color:var(--up)} .gr.F,.gr.D{color:var(--down)} .gr.B,.gr.Bp{color:color-mix(in srgb,var(--up) 70%,var(--ink))}
+/* Draft value */
+#dr-tbl thead th button{all:unset;cursor:pointer}
+#dr-tbl thead th button:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+#dr-tbl thead th button::after{content:" ↕";color:var(--faint)}
+#dr-tbl thead th[aria-sort="descending"] button::after{content:" ▾";color:var(--brass)}
+#dr-tbl thead th[aria-sort="ascending"] button::after{content:" ▴";color:var(--brass)}
+#dr-tbl thead th[aria-sort]{color:var(--ink)}
+#dr-tbl tbody tr{cursor:pointer}
+#dr-tbl tbody tr:hover td{background:var(--soft)}
+#dr-tbl tbody tr.on td{background:var(--soft);font-weight:600}
+#dr-tbl td.drp{text-align:left;white-space:normal;min-width:150px;font-size:.86rem}
+#dr-tbl td.drp small{display:block;color:var(--muted);font-family:var(--mono);font-size:.74rem}
+#dr-tbl .pos,.dr-list .pos,.dr-detail .pos{color:var(--up);font-weight:700}
+#dr-tbl .neg,.dr-list .neg,.dr-detail .neg{color:var(--down);font-weight:700}
 .dr-split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media (max-width:720px){.dr-split{grid-template-columns:1fr}}
 .dr-list{list-style:none;margin:0;padding:0}
@@ -303,33 +300,35 @@ td.luck-td.neg .num{color:var(--down)}
 .dr-list li:last-child{border-bottom:0}
 .dr-list b{overflow-wrap:anywhere}
 .dr-list small{grid-column:1;color:var(--muted);font-size:.8rem}
-.dr-list .num{grid-row:1/3;grid-column:2;align-self:center;font-weight:700}
-.dr-list .num.pos{color:var(--up)} .dr-list .num.neg{color:var(--down)}
-.dr-legend{display:flex;flex-wrap:wrap;gap:6px;font-family:var(--mono);font-size:.72rem}
-.dr-legend span{padding:2px 9px;border-radius:3px;border:1px solid var(--line)}
-.dr-legend .kp{border-style:dashed;color:var(--muted)}
-.dr-legend .g-A,.dr-board td button.g-A{background:color-mix(in srgb,var(--up) 34%,var(--panel))}
-.dr-legend .g-B,.dr-board td button.g-B{background:color-mix(in srgb,var(--up) 15%,var(--panel))}
-.dr-legend .g-C,.dr-board td button.g-C{background:var(--panel)}
-.dr-legend .g-D,.dr-board td button.g-D{background:color-mix(in srgb,var(--down) 15%,var(--panel))}
-.dr-legend .g-F,.dr-board td button.g-F{background:color-mix(in srgb,var(--down) 34%,var(--panel))}
-table.dr-board{min-width:1180px;table-layout:fixed}
-.dr-board th,.dr-board td{padding:3px;text-align:left;white-space:normal;border-bottom:0}
-.dr-board thead th{padding:8px 6px;text-transform:none;letter-spacing:0;font-family:var(--body);font-size:.78rem;color:var(--ink);font-weight:600;line-height:1.25;vertical-align:bottom}
-.dr-board thead th small{display:block;color:var(--muted);font-weight:400;font-size:.72rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dr-board th.rd{width:46px;font-family:var(--mono);font-size:.72rem;color:var(--muted);font-weight:500;text-align:center}
-.dr-board td button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:0 4px;width:100%;min-height:52px;padding:6px 7px;border-radius:3px;border:1px solid var(--line);font-size:.78rem;line-height:1.25;transition:opacity .15s}
-.dr-board td button:focus-visible{outline:2px solid var(--mark);outline-offset:1px}
-.dr-board td button[aria-pressed="true"]{outline:2px solid var(--mark);outline-offset:1px}
+.dr-list .num{grid-row:1/3;grid-column:2;align-self:center}
+.dr-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.dr-legend{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.dr-legend span{padding:2px 9px;border-radius:3px;border:1px solid var(--line);color:var(--ink)}
+.dr-legend .kp{border-style:dashed;border-color:var(--mark)}
+.dr-teampick{display:none;gap:8px;align-items:center;font-size:.85rem;color:var(--muted)}
+table.dr-board{min-width:0;table-layout:fixed}
+.dr-board th,.dr-board td{padding:2px;text-align:left;white-space:normal;border-bottom:0}
+.dr-board thead th{padding:6px 4px;text-transform:none;letter-spacing:0;font-family:var(--body);font-size:.74rem;color:var(--ink);font-weight:600;line-height:1.2;vertical-align:bottom;overflow:hidden}
+.dr-board thead th small{display:block;color:var(--muted);font-weight:400;font-size:.68rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dr-board th.rd{width:30px;font-family:var(--mono);font-size:.66rem;color:var(--muted);font-weight:500;text-align:center;padding:0}
+.dr-board td button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;width:100%;min-height:50px;padding:5px 6px;border-radius:3px;border:1px solid var(--line);font-size:.72rem;line-height:1.25;background:var(--panel);transition:opacity .15s}
+.dr-board td button:focus-visible,.dr-board td button[aria-pressed="true"]{outline:2px solid var(--mark);outline-offset:1px}
 .dr-board td button b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dr-board td button i{font-style:normal;font-family:var(--mono);font-weight:700;font-size:.74rem}
-.dr-board td button small{grid-column:1/-1;font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+.dr-board td button small{font-family:var(--mono);font-size:.64rem;color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.dr-board td button i{font-style:normal;font-family:var(--mono);font-size:.66rem;font-weight:700}
+.dr-board td button i.pos{color:var(--up)} .dr-board td button i.neg{color:var(--down)}
 .dr-board td button.kp{border-style:dashed;border-color:var(--mark)}
-.dr-board.focus td button.off{opacity:.25}
+.dr-board.focus td button.off{opacity:.28}
 .dr-board th.on{box-shadow:inset 0 -2px 0 var(--mark)}
 .dr-detail{padding:12px 16px;font-size:.92rem;color:var(--muted)}
 .dr-detail b{color:var(--ink)}
-.dr-detail .pos{color:var(--up);font-weight:700} .dr-detail .neg{color:var(--down);font-weight:700}
+@media (max-width:760px){
+  .dr-teampick{display:flex}
+  .dr-board th.rd{width:44px}
+  .dr-board td button{font-size:.86rem;min-height:0;grid-template-columns:minmax(0,1fr) auto;gap:0 10px;padding:8px 10px}
+  .dr-board td button small{font-size:.74rem}
+  .dr-board td button i{grid-row:1/3;grid-column:2;align-self:center;font-size:.8rem}
+}
 select{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);min-width:0}
 
 /* H2H */
@@ -534,15 +533,15 @@ table.lb{min-width:0}
     </section>
   </div>
 
-  <!-- DRAFT GRADES -->
+  <!-- DRAFT VALUE -->
   <div class="view" id="v-draft" hidden>
-    <div><div class="eyebrow">Statistics</div><h1>Draft Grades</h1>
-      <p class="lede">Every pick graded on what the player actually scored that season, under our league's scoring. Completed seasons only.</p></div>
+    <div><div class="eyebrow">Statistics</div><h1>Draft Results</h1>
+      <p class="lede">Every pick measured against what its draft spot should have produced that season, in fantasy points under our league's scoring. Completed seasons only.</p></div>
     <div class="yrpick"><label for="dr-yr">Season</label><select id="dr-yr"></select><span class="status" id="dr-info"></span></div>
 
-    <section aria-labelledby="h-drcard">
-      <div class="head"><h2 id="h-drcard">Report cards</h2><p>Ranked by total points gained over what each draft slot usually returns. Click a team to light up its picks on the board.</p></div>
-      <div class="dr-cards" id="dr-cards"></div>
+    <section aria-labelledby="h-drtbl">
+      <div class="head"><h2 id="h-drtbl">Points over expected, by team</h2><p>Total is the sum of every pick's pts over or under expected. Click a column to sort, or a team to light up its picks on the board.</p></div>
+      <div class="box tw"><table id="dr-tbl"></table></div>
     </section>
 
     <div class="dr-split">
@@ -557,17 +556,20 @@ table.lb{min-width:0}
     </div>
 
     <section aria-labelledby="h-drboard">
-      <div class="head"><h2 id="h-drboard">The board</h2><p>Columns follow the first-round order. Click any pick for the full story.</p></div>
-      <div class="dr-legend" aria-hidden="true"><span class="g-A">A</span><span class="g-B">B</span><span class="g-C">C</span><span class="g-D">D</span><span class="g-F">F</span><span class="kp">Keeper</span></div>
+      <div class="head"><h2 id="h-drboard">The board</h2><p>Columns follow the first-round order. Each pick shows where he was taken and where he finished at his position among drafted players, then his pts over or under expected. Click a pick for the full story.</p></div>
+      <div class="dr-bar">
+        <div class="dr-legend" aria-hidden="true"><span id="dr-lg-pos">+ pts</span><span id="dr-lg-neg">− pts</span><span class="kp">Keeper</span>Shade gets deeper the bigger the gap</div>
+        <label class="dr-teampick" for="dr-team">Team<select id="dr-team"></select></label>
+      </div>
       <div class="box dr-detail" id="dr-detail" aria-live="polite"></div>
-      <div class="box tw"><table class="dr-board" id="dr-board"></table></div>
+      <table class="dr-board" id="dr-board"></table>
     </section>
 
     <div class="box luck-explain">
-      <h2>How the grades work</h2>
-      <p>Take every player drafted at a position and sort them by year-end points. <b>The 5th running back taken should score like the 5th-best drafted running back.</b> That's the slot's expected score. A pick's value is how far he beat or missed it.</p>
-      <p>Anyone who finished below a waiver-wire starter counts as that starter, since you could have picked one up. So a late flier who busts costs you nothing, and a first-rounder who busts costs you the full gap. <span id="dr-repl"></span></p>
-      <p>A team's grade is the sum of its picks' value, curved against the rest of the league. Keepers count in the round they were kept. A player traded after the draft still counts for the team that drafted him.</p>
+      <h2>How expected points work</h2>
+      <p>Take every player drafted at a position that season and sort them by year-end points. <b>The 5th running back taken is expected to score what the 5th-best drafted running back scored.</b> So every draft spot gets its own expected number, built from that year's actual results. The +/- is how many points the pick beat or missed it by.</p>
+      <p>Anyone who finished below a waiver-wire starter counts as that starter, since you could have picked one up. So a late flier who busts costs 0 pts, and a first-rounder who busts costs the full gap. <span id="dr-repl"></span></p>
+      <p>Keepers count in the round they were kept. A player traded after the draft still counts for the team that drafted him. Injuries count: year-end points are year-end points.</p>
     </div>
   </div>
 
@@ -672,7 +674,7 @@ const NAV=[
   {id:'home',label:'Home'},
   {id:'rankings',label:'Power Rankings'},
   {id:'pickem',label:"Pick'em"},
-  {id:'stats',label:'Statistics ▾',children:[{id:'h2h',label:'Head-to-Head',sub:'Owner vs owner records'},{id:'luck',label:'Luck',sub:'All-play vs actual, by season'},{id:'draft',label:'Draft Grades',sub:'Every pick vs year-end points'}]},
+  {id:'stats',label:'Statistics ▾',children:[{id:'h2h',label:'Head-to-Head',sub:'Owner vs owner records'},{id:'luck',label:'Luck',sub:'All-play vs actual, by season'},{id:'draft',label:'Draft Results',sub:'Each pick vs. expected points'}]},
   {id:'history',label:'League History'},
   {id:'trades',label:'Trades'},
   {id:'videos',label:'Videos'}];
@@ -970,74 +972,96 @@ show(start);
   }).catch(()=>{info.textContent='Season data couldn\'t be loaded. Refresh to try again.'});
 })();
 
-/* ---------- Draft grades (data/draft.json) ---------- */
+/* ---------- Draft results (data/draft.json) ---------- */
 (function(){
   const $=id=>document.getElementById(id);
-  const sel=$('dr-yr'), info=$('dr-info'), cards=$('dr-cards'), board=$('dr-board'), det=$('dr-detail');
-  let DR=null, focus=null, picked=null;
-  const sgn=v=>(v>=0?'+':'−')+Math.abs(Math.round(v));
+  const sel=$('dr-yr'), info=$('dr-info'), tbl=$('dr-tbl'), board=$('dr-board'), det=$('dr-detail'), tsel=$('dr-team');
+  const narrow=matchMedia('(max-width:760px)');
+  let DR=null, focus=null, picked=null, sortK='v', sortDir=-1, mobileTeam=null;
+  const pts=v=>(v>0.5?'+':v<-0.5?'−':'')+Math.abs(Math.round(v))+' pts';
   const cls=v=>v>=0.5?'pos':v<=-0.5?'neg':'';
-  const rp=p=>p==null?'—':(Math.round(p*10)/10).toString();
+  const rp=p=>(Math.round(p*10)/10).toString();
   const pk=q=>`${q.r}.${String(((q.o-1)%10)+1).padStart(2,'0')}`;
   const POSN={QB:'quarterback',RB:'running back',WR:'receiver',TE:'tight end',K:'kicker'};
-  function S(){return DR.seasons[sel.value]}
-  function owner(s){const t=S().teams.find(t=>t.s===s);return t?t.o:'Team '+s}
+  const S=()=>DR.seasons[sel.value];
+  const owner=s=>{const t=S().teams.find(t=>t.s===s);return t?t.o:'Team '+s};
+  const shade=(v,max)=>{if(Math.abs(v)<0.5)return '';const k=Math.min(1,Math.abs(v)/max);return `color-mix(in srgb, var(--${v>0?'up':'down'}) ${Math.round(8+k*34)}%, var(--panel))`};
   function detail(q){
-    if(!q){det.innerHTML='';det.append(mk('span',null,'Pick a cell on the board to see how that pick graded.'));return}
     det.replaceChildren();
+    if(!q){det.append('Click a pick on the board to see how it measured up.');return}
     const Sx=S(), R=Sx.repl[q.pos];
-    const top=mk('div');top.append(mk('b',null,`Round ${q.r}, pick ${((q.o-1)%10)+1}`),document.createTextNode(` (#${q.o} overall) · ${owner(q.s)} ${q.k?'kept':'took'} `),mk('b',null,q.n||'an unidentified player'),document.createTextNode(q.pos?` (${q.pos})`:''));
+    const top=mk('div');top.append(mk('b',null,`Round ${q.r}, pick ${((q.o-1)%10)+1}`),` (#${q.o} overall) · ${owner(q.s)} ${q.k?'kept':'took'} `,mk('b',null,q.n||'an unidentified player'),q.pos?` (${q.pos})`:'');
     det.appendChild(top);
-    if(!q.pos){det.appendChild(mk('div',null,'Dropped before Week 1 and not in ESPN\'s season data, so this pick isn\'t graded.'));return}
-    const sl=mk('div');
-    sl.textContent=`${ordinal(q.dr)} ${POSN[q.pos]} taken. Finished ${ordinal(q.fr)} of the ${Sx.posN[q.pos]} drafted, with ${rp(q.pts)} points. That slot usually returns ${rp(q.exp)}; a waiver-wire ${q.pos} scored about ${Math.round(R)}.`;
-    const vv=mk('div');vv.append(document.createTextNode('Value: '),mk('span',cls(q.v),sgn(q.v)+' pts'),document.createTextNode(` · Grade ${q.g}`));
-    det.append(sl,vv);
+    if(!q.pos){det.appendChild(mk('div',null,'Dropped before Week 1 and missing from ESPN\'s season data, so this pick isn\'t counted.'));return}
+    det.appendChild(mk('div',null,`${ordinal(q.dr)} ${POSN[q.pos]} taken. Finished ${ordinal(q.fr)} of the ${Sx.posN[q.pos]} drafted, with ${rp(q.pts)} points. Expected for that spot: ${rp(q.exp)}. A waiver-wire ${q.pos} scored about ${Math.round(R)}.`));
+    const vv=mk('div');vv.append('Result: ',mk('span',cls(q.v),pts(q.v)),' vs. expected');det.appendChild(vv);
   }
-  function draw(){
+  function rows(){
     const Sx=S();
-    info.textContent=`${Sx.picks.length} picks · ${Sx.picks.filter(q=>q.k).length} keepers`;
-    $('dr-repl').textContent=`Waiver-wire level in ${sel.value}: QB ${Math.round(Sx.repl.QB)}, RB ${Math.round(Sx.repl.RB)}, WR ${Math.round(Sx.repl.WR)}, TE ${Math.round(Sx.repl.TE)}, K ${Math.round(Sx.repl.K)} points (12th QB, 28th RB, 34th WR, 13th TE, 11th K).`;
-    // report cards
-    cards.replaceChildren();cards.classList.toggle('focus',focus!=null);
-    Sx.teams.forEach(t=>{
-      const b=mk('button','dr-card');b.type='button';b.setAttribute('aria-pressed',focus===t.s);
-      const best=Sx.picks.find(q=>q.o===t.best), worst=Sx.picks.find(q=>q.o===t.worst);
-      const w=mk('div','who');w.append(mk('b',null,t.o),mk('small',null,t.t));
-      const bw=mk('div','bw');bw.append(mk('span',null,`Best: ${best.n} ${sgn(best.v)}`),mk('span',null,`Worst: ${worst.n} ${sgn(worst.v)}`));
-      b.append(mk('span','rk','#'+t.rank),w,mk('span','gr '+t.g.replace('+','p'),t.g),mk('span','tot '+cls(t.v),`${sgn(t.v)} pts vs. slot · ${t.hits} hits, ${t.miss} misses`),bw);
-      b.onclick=()=>{focus=focus===t.s?null:t.s;draw()};
-      cards.appendChild(b);
-    });
-    // steals & busts
-    const graded=Sx.picks.filter(q=>q.v!=null);
-    const fill=(id,list)=>{const ol=$(id);ol.replaceChildren();list.forEach(q=>{const li=mk('li');
-      li.append(mk('b',null,`${q.n} · ${q.pos}`),mk('span','num '+cls(q.v),sgn(q.v)),mk('small',null,`Pick ${pk(q)} by ${owner(q.s)}${q.k?' (keeper)':''} · finished ${q.pos}${q.fr} of drafted`));ol.appendChild(li)})};
-    fill('dr-steals',[...graded].sort((a,b)=>b.v-a.v).slice(0,5));
-    fill('dr-busts',[...graded].sort((a,b)=>a.v-b.v).slice(0,5));
-    // board
+    return Sx.teams.map(t=>{const mine=Sx.picks.filter(q=>q.s===t.s&&q.v!=null);
+      const best=mine.reduce((a,b)=>b.v>a.v?b:a), worst=mine.reduce((a,b)=>b.v<a.v?b:a);
+      return {s:t.s,o:t.o,t:t.t,v:t.v,avg:t.v/mine.length,beat:mine.filter(q=>q.v>=0.5).length,miss:mine.filter(q=>q.v<=-0.5).length,best,worst}});
+  }
+  const COLS=[['o','Owner',1],['v','Total',-1],['avg','Per pick',-1],['beat','Beat',-1],['miss','Missed',1],['best','Best pick',-1],['worst','Worst pick',1]];
+  const val={o:x=>x.o.toLowerCase(),v:x=>x.v,avg:x=>x.avg,beat:x=>x.beat,miss:x=>x.miss,best:x=>x.best.v,worst:x=>x.worst.v};
+  function drawTable(){
+    const R=rows();R.sort((a,b)=>{const va=val[sortK](a),vb=val[sortK](b);return (va<vb?-1:va>vb?1:0)*sortDir||b.v-a.v});
+    tbl.replaceChildren();const th=mk('thead'),hr=mk('tr');
+    COLS.forEach(([k,lab,def])=>{const c=mk('th');const b=mk('button',null,lab);b.type='button';if(k===sortK)c.setAttribute('aria-sort',sortDir>0?'ascending':'descending');
+      b.onclick=()=>{if(sortK===k)sortDir=-sortDir;else{sortK=k;sortDir=def}drawTable()};c.appendChild(b);hr.appendChild(c)});
+    th.appendChild(hr);const body=mk('tbody');
+    R.forEach(x=>{const tr=mk('tr',focus===x.s?'on':'');tr.tabIndex=0;tr.setAttribute('aria-label',`${x.o}: show picks on the board`);
+      const td=mk('td','t',x.o);td.appendChild(mk('small',null,x.t));tr.appendChild(td);
+      [[pts(x.v),cls(x.v)],[pts(x.avg),cls(x.avg)],[String(x.beat),''],[String(x.miss),'']].forEach(([v,c])=>tr.appendChild(mk('td','num '+c,v)));
+      [x.best,x.worst].forEach(q=>{const c=mk('td','drp');c.append(mk('span',cls(q.v),pts(q.v)),' ',q.n);c.appendChild(mk('small',null,`Pick ${pk(q)} · ${q.pos}${q.dr}→${q.pos}${q.fr}`));tr.appendChild(c)});
+      const go=()=>{focus=focus===x.s?null:x.s;if(focus)mobileTeam=focus;draw()};tr.onclick=go;tr.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}};
+      body.appendChild(tr)});
+    tbl.append(th,body);
+  }
+  function drawBoard(){
+    const Sx=S();
     const order=Sx.picks.filter(q=>q.r===1).sort((a,b)=>a.o-b.o).map(q=>q.s);
+    if(!order.includes(mobileTeam))mobileTeam=order[0];
+    tsel.replaceChildren();order.forEach(s=>{const o=mk('option',null,owner(s));o.value=s;tsel.appendChild(o)});tsel.value=String(mobileTeam);
+    const cols=narrow.matches?[mobileTeam]:order;
+    const max=Math.max(...Sx.picks.filter(q=>q.v!=null).map(q=>Math.abs(q.v)))||1;
+    $('dr-lg-pos').style.background=shade(max*.6,max);$('dr-lg-neg').style.background=shade(-max*.6,max);
     const rounds=Math.max(...Sx.picks.map(q=>q.r));
-    board.replaceChildren();board.classList.toggle('focus',focus!=null);
+    board.replaceChildren();board.classList.toggle('focus',focus!=null&&!narrow.matches);
     const th=mk('thead'),hr=mk('tr');hr.appendChild(mk('th','rd',''));
-    order.forEach(s=>{const t=Sx.teams.find(t=>t.s===s);const c=mk('th',focus===s?'on':'');c.append(document.createTextNode(t.o.split(' ')[0]+' '+(t.o.split(' ')[1]||'').charAt(0)+'.'),mk('small',null,t.t));hr.appendChild(c)});
+    cols.forEach(s=>{const t=Sx.teams.find(t=>t.s===s);const c=mk('th',focus===s&&!narrow.matches?'on':'');const p=t.o.split(' ');c.append(p[0]+' '+(p[1]||'').charAt(0)+'.',mk('small',null,t.t));hr.appendChild(c)});
     th.appendChild(hr);const tb=mk('tbody');
     for(let r=1;r<=rounds;r++){const tr=mk('tr');tr.appendChild(mk('th','rd','Rd '+r));
-      order.forEach(s=>{const q=Sx.picks.find(x=>x.r===r&&x.s===s);const td=mk('td');
-        if(q){const b=mk('button',(q.g?'g-'+q.g:'')+(q.k?' kp':'')+(focus!=null&&focus!==q.s?' off':''));b.type='button';b.setAttribute('aria-pressed',picked===q.o);
-          const nm=q.n?q.n.replace(/^(\S)\S*\s+/,'$1. '):'Unknown';
-          b.append(mk('b',null,nm),mk('i',null,q.g||'–'),mk('small',null,q.pos?`${q.pos}${q.dr}→${q.pos}${q.fr} · ${Math.round(q.pts)}`:'not graded'));
-          b.setAttribute('aria-label',`${q.n||'Unknown'}, pick ${pk(q)}, grade ${q.g||'none'}`);
+      cols.forEach(s=>{const q=Sx.picks.find(x=>x.r===r&&x.s===s);const td=mk('td');
+        if(q){const b=mk('button',(q.k?'kp':'')+(focus!=null&&focus!==q.s?' off':''));b.type='button';b.setAttribute('aria-pressed',picked===q.o);
+          if(q.v!=null)b.style.background=shade(q.v,max);
+          const nm=q.n?(narrow.matches?q.n:q.n.replace(/^\S+\s+/,'')):'Unknown';
+          b.append(mk('b',null,nm),mk('small',null,q.pos?`${q.pos}${q.dr}→${q.pos}${q.fr}`:'not counted'),mk('i',q.v!=null?cls(q.v):'',q.v!=null?pts(q.v):'—'));
+          b.title=q.n||'Unknown';b.setAttribute('aria-label',`${q.n||'Unknown'}, pick ${pk(q)}${q.v!=null?', '+pts(q.v)+' vs expected':''}`);
           b.onclick=()=>{picked=q.o;detail(q);board.querySelectorAll('td button[aria-pressed="true"]').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true')};
           td.appendChild(b)}
         tr.appendChild(td)});
       tb.appendChild(tr)}
     board.append(th,tb);
-    const cur=Sx.picks.find(q=>q.o===picked);detail(cur||null);
+    detail(Sx.picks.find(q=>q.o===picked)||null);
   }
+  function draw(){
+    const Sx=S();
+    info.textContent=`${Sx.picks.length} picks · ${Sx.picks.filter(q=>q.k).length} keepers`;
+    $('dr-repl').textContent=`Waiver-wire level in ${sel.value}: QB ${Math.round(Sx.repl.QB)}, RB ${Math.round(Sx.repl.RB)}, WR ${Math.round(Sx.repl.WR)}, TE ${Math.round(Sx.repl.TE)}, K ${Math.round(Sx.repl.K)} points (the 12th QB, 28th RB, 34th WR, 13th TE and 11th K that season).`;
+    drawTable();
+    const graded=Sx.picks.filter(q=>q.v!=null);
+    const fill=(id,list)=>{const ol=$(id);ol.replaceChildren();list.forEach(q=>{const li=mk('li');
+      li.append(mk('b',null,`${q.n} · ${q.pos}`),mk('span','num '+cls(q.v),pts(q.v)),mk('small',null,`Pick ${pk(q)} by ${owner(q.s)}${q.k?' (keeper)':''} · ${q.pos}${q.dr} drafted, ${q.pos}${q.fr} finish`));ol.appendChild(li)})};
+    fill('dr-steals',[...graded].sort((a,b)=>b.v-a.v).slice(0,5));
+    fill('dr-busts',[...graded].sort((a,b)=>a.v-b.v).slice(0,5));
+    drawBoard();
+  }
+  tsel.onchange=()=>{mobileTeam=Number(tsel.value);drawBoard()};
+  narrow.addEventListener('change',()=>{if(DR)drawBoard()});
   fetch('data/draft.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{
     DR=d;Object.keys(d.seasons).sort().reverse().forEach(y=>{const o=mk('option',null,y);o.value=y;sel.appendChild(o)});
-    sel.onchange=()=>{focus=null;picked=null;draw()};draw();
+    sel.onchange=()=>{focus=null;picked=null;sortK='v';sortDir=-1;draw()};draw();
   }).catch(()=>{info.textContent='Draft data couldn\'t be loaded. Refresh to try again.'});
 })();
 
