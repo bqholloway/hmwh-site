@@ -515,6 +515,10 @@ table.lb{min-width:0}
       <div class="head"><h2 id="h-mx">The full grid</h2><p>Each row owner's record against each column owner. Click a cell to open that matchup. Current owners only.</p></div>
       <div class="box tw"><table class="grid-m" id="matrix"></table></div>
     </section>
+    <section aria-labelledby="h-streak">
+      <div class="head"><h2 id="h-streak">Longest streaks</h2><p id="streak-sub">The three longest win streaks by one owner over another, regular season and playoffs.</p></div>
+      <div class="hh-facts" id="streaks"></div>
+    </section>
   </div>
 
   <!-- LUCK -->
@@ -648,6 +652,14 @@ table.lb{min-width:0}
     </section>
   </div>
 
+  <!-- LORE -->
+  <div class="view" id="v-lore" hidden>
+    <div><div class="eyebrow">The legend</div><h1>Lore</h1>
+      <p class="lede">The stories, feuds and moments that built the league.</p></div>
+    <div class="box" style="padding:28px 20px;text-align:center"><b>Coming soon.</b>
+      <p class="status" style="margin:6px 0 0">The Groundskeeper is still digging through the archives.</p></div>
+  </div>
+
   <!-- VIDEOS -->
   <div class="view" id="v-videos" hidden>
     <div><div class="eyebrow">Video vault</div><h1>League videos</h1>
@@ -677,8 +689,9 @@ const NAV=[
   {id:'stats',label:'Statistics ▾',children:[{id:'h2h',label:'Head-to-Head',sub:'Owner vs owner records'},{id:'luck',label:'Luck',sub:'All-play vs actual, by season'},{id:'draft',label:'Draft Results',sub:'Each pick vs. expected points'}]},
   {id:'history',label:'League History'},
   {id:'trades',label:'Trades'},
+  {id:'lore',label:'Lore'},
   {id:'videos',label:'Videos'}];
-const VIEWS=['home','rankings','pickem','h2h','luck','draft','history','trades','videos'];
+const VIEWS=['home','rankings','pickem','h2h','luck','draft','history','trades','lore','videos'];
 const nav=document.getElementById('nav'), menu=document.getElementById('statsmenu'), topin=document.getElementById('topin');
 let statsBtn;
 NAV.forEach(n=>{
@@ -775,7 +788,7 @@ show(start);
 /* ---------- Bump chart ---------- */
 (function(){
   const svg=document.getElementById('bump'), NS='http://www.w3.org/2000/svg';
-  const W=1000,H=470,L=46,R=150,TP=40,B=16, cols=13;
+  const W=1000,H=470,L=46,R=190,TP=40,B=16, cols=13;
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
   const x=w=>L+(W-L-R)*w/(cols-1), y=r=>TP+(H-TP-B)*(r-1)/9;
   const el=(n,a,p=svg)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e};
@@ -791,7 +804,7 @@ show(start);
     el('path',{class:'hit',d},g);el('path',{class:'case',d},g);el('path',{class:'line',d,stroke:col},g);
     if(p0){const c=el('circle',{class:'dot',cx:x(0),cy:y(p0),r:6,fill:col},g);el('title',{},c).textContent=`${t.name} · Preseason coaches poll: #${p0}`}
     t.weeks.forEach((wk,i)=>{const c=el('circle',{class:'dot',cx:x(i+1),cy:y(wk.rank),r:6,fill:col},g);el('title',{},c).textContent=`${t.name} · Week ${i+1}: ${wk.pts.toFixed(2)} pts, ${wk.rec}, rank ${wk.rank}`});
-    const last=t.weeks.at(-1);el('text',{x:x(LW)+14,y:y(last.rank)+4,'font-size':12,fill:'var(--ink)'},g).textContent=`${last.rec}  ${short(t.name)}`;
+    const last=t.weeks.at(-1);el('text',{x:x(LW)+14,y:y(last.rank)+4,'font-size':12,fill:'var(--ink)'},g).textContent=`${last.rec}  ${short(t.name,20)} (${t.owner.split(/\s+/).map(w=>w[0]).join('').toUpperCase()})`;
     g.addEventListener('click',()=>toggle(t.id));g.addEventListener('mouseenter',()=>hover(t.id));g.addEventListener('mouseleave',()=>hover(null));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle(t.id)}});
     groups[t.id]=g;
   });
@@ -890,6 +903,26 @@ show(start);
       tb.appendChild(tr)});
     m.append(th,tb);
   }
+  function streaks(){
+    const box=$('streaks');box.replaceChildren();
+    const all=[];
+    cur.forEach(a=>cur.forEach(b=>{
+      if(a===b) return;
+      const g=meetings(a,b).filter(x=>x.counts).reverse();
+      let run=[];const flush=(active)=>{if(run.length>1)all.push({a,b,n:run.length,from:run[0],to:run[run.length-1],active})};
+      g.forEach(x=>{if(x.won)run.push(x);else{flush(false);run=[]}});
+      flush(true);
+    }));
+    all.sort((p,q)=>q.n-p.n||(q.active-p.active)||(q.to.y-p.to.y)||(q.to.wk-p.to.wk));
+    const seen=new Set(),top=[];
+    for(const s of all){top.push(s);if(top.length===3)break}
+    if(!top.length){box.appendChild(mk('div','box','No streaks to show.'));return}
+    top.forEach((s,i)=>{
+      const d=mk('div','box'),sp=s.from.y===s.to.y?`${s.from.y}`:`${s.from.y}–${s.to.y}`;
+      d.append(mk('div','k',`#${i+1}${s.active?' · active':''}`),mk('div','v',`${s.a} over ${s.b}`),mk('div','n',`${s.n} straight wins · ${sp}`));
+      box.appendChild(d);
+    });
+  }
   function fillSelect(sel,val){
     sel.replaceChildren();
     const all=[...new Set(Object.values(H.seasons).flatMap(s=>Object.values(s).map(v=>v.o)))];
@@ -908,9 +941,9 @@ show(start);
     const ys=$('hh-yr');const o0=mk('option',null,'All seasons');o0.value='all';ys.appendChild(o0);
     Object.keys(h.seasons).sort().reverse().forEach(y=>{const o=mk('option',null,y);o.value=y;ys.appendChild(o)});
     $('ra').onchange=e=>{A=e.target.value;render()};$('rb').onchange=e=>{B=e.target.value;render()};
-    ys.onchange=e=>{YR=e.target.value;render();matrix()};
+    ys.onchange=e=>{YR=e.target.value;render();matrix();streaks()};
     $('hh-swap').onclick=()=>{[A,B]=[B,A];$('ra').value=A;$('rb').value=B;render()};
-    render();matrix();
+    render();matrix();streaks();
   }).catch(()=>{$('h2h').replaceChildren(mk('p',null,'Head-to-head history couldn\'t be loaded. Refresh to try again.'))});
 })();
 
@@ -1122,12 +1155,12 @@ show(start);
       const d=mk('div','box mu'+(g.x2?' gotw':''));const wk=mk('div','wk');
       const rk=`#${RANK[g.a]} vs #${RANK[g.b]}`;
       if(g.x2) wk.append(mk('span','gotw-tag','2× Game of the Week'),mk('span',null,rk));
-      else wk.append(mk('span',null,`${rk} · 1 pt`),mk('span',null,`proj ${g.pa.toFixed(1)}–${g.pb.toFixed(1)}`));
+      else wk.append(mk('span',null,`${rk} · 1 pt`));
       d.appendChild(wk);
       [[g.a,g.pa],[g.b,g.pb]].forEach(([id,p])=>{
         const t=T[id],bt=mk('button');bt.type='button';bt.disabled=!allow;
         bt.setAttribute('aria-pressed',String(picks[g.id]===id));
-        bt.append(mk('b',null,t.name),mk('small',null,`${owner(id)} · ${t.w}-${t.l} · proj ${p.toFixed(1)}`));
+        bt.append(mk('b',null,t.name),mk('small',null,`${owner(id)} · ${t.w}-${t.l}`));
         if(g.winner){bt.classList.add(g.winner===id?'win':'loss');if(g.winner===id)bt.appendChild(mk('span','res','Won'))}
         bt.onclick=()=>{picks[g.id]=id;dirty=true;d.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===bt)));renderStatus()};
         d.appendChild(bt);

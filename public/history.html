@@ -2249,17 +2249,33 @@ try { const s = localStorage.getItem("hmwhc-year"); if (s && DATA.seasons.some(x
 function renderYears(){
   $("#years").innerHTML = DATA.seasons.map(s => `<button data-y="${s.year}" aria-pressed="${s.year===year}">${s.year}</button>`).join("");
 }
+let sSort = null, sDir = 1;
+const SCOLS = [{k:"seed",l:"Seed"},{k:"name",l:"Team",cls:"l"},{k:"owner",l:"Owner",cls:"l"},{k:"w",l:"Record"},{k:"pf",l:"Points For"},{k:"pa",l:"Points Against"},{k:"final",l:"Finish"}];
 function renderSeason(){
   const s = DATA.seasons.find(x => x.year===year);
   const c = s.teams.find(t=>t.final===1);
   $("#season-meta").textContent = s.complete
-    ? `Champion: ${c.owner}. Rows are in regular-season order; Finish is the final placing after the playoffs.${s.bonus?" Records include bonus wins.":""}`
-    : `In progress. Standings through the latest week, including bonus wins.`;
-  const rows = s.teams.map(t => `<tr><td class="num">${t.seed}</td><td class="l">${nm(t.name)}</td><td class="l">${esc(t.owner)}</td>
+    ? `Champion: ${c.owner}. Rows start in regular-season order; Finish is the final placing after the playoffs. Click a column header to re-sort.${s.bonus?" Records include bonus wins.":""}`
+    : `In progress. Standings through the latest week, including bonus wins. Click a column header to re-sort.`;
+  const teams = [...s.teams];
+  if (sSort) teams.sort((p,q) => {
+    let x=p[sSort], y=q[sSort];
+    if (sSort==="final"){ x=x||99; y=y||99; }
+    if (typeof x==="string") return sDir*x.localeCompare(y);
+    return sDir*(x-y) || (p.seed-q.seed);
+  });
+  const rows = teams.map(t => `<tr><td class="num">${t.seed}</td><td class="l">${nm(t.name)}</td><td class="l">${esc(t.owner)}</td>
     <td class="num">${t.w}-${t.l}</td><td class="num">${fmt(t.pf)}</td><td class="num">${fmt(t.pa)}</td>
     <td class="num">${t.final===1?'<span class="pill c">Champion</span>':t.final===2?'<span class="pill r">Runner-up</span>':t.final?ordinal(t.final):'–'}</td></tr>`).join("");
-  $("#season").innerHTML = `<thead><tr><th>Seed</th><th class="l">Team</th><th class="l">Owner</th><th>Record</th><th>Points For</th><th>Points Against</th><th>Finish</th></tr></thead><tbody>${rows}</tbody>`;
+  const head = SCOLS.map(c => `<th class="${c.cls||''}" ${sSort===c.k?`aria-sort="${sDir<0?'descending':'ascending'}"`:''}><button data-k="${c.k}">${c.l}</button></th>`).join("");
+  $("#season").innerHTML = `<thead><tr>${head}</tr></thead><tbody>${rows}</tbody>`;
 }
+$("#season").addEventListener("click", e => {
+  const h = e.target.closest("th button"); if (!h) return;
+  const k = h.dataset.k;
+  if (k===sSort) sDir*=-1; else { sSort=k; sDir = (k==="name"||k==="owner"||k==="seed"||k==="final")?1:-1; }
+  renderSeason(); document.querySelector(`#season th button[data-k="${k}"]`)?.focus();
+});
 $("#years").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   year = +b.dataset.y; try{localStorage.setItem("hmwhc-year", year)}catch(e){}

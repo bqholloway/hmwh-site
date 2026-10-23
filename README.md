@@ -2,7 +2,7 @@
 
 The He Man Woman Haters Club league site, served by Cloudflare Pages behind Cloudflare Access.
 
-- `public/index.html` is the whole site (Home, Power Rankings, Pick'em, Statistics, League History, Trades, Videos).
+- `public/index.html` is the whole site (Home, Power Rankings, Pick'em, Statistics, League History, Trades, Lore, Videos).
 - `public/data/site.json` holds the league data. The scheduled update runs (Fri / Mon / Tue mornings) rewrite this file from ESPN via Flaim and FantasyCalc; the page reads it on load.
 
 Deployed with `npx wrangler deploy`. `wrangler.jsonc` serves `public/` as static assets and runs `src/worker.js` for `/api/*`.
