@@ -117,6 +117,56 @@ section{display:grid;gap:14px;min-width:0}
 .raft-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
 @media (prefers-reduced-motion:no-preference){.banner{transition:transform .2s}.banner:hover{transform:translateY(3px)}}
 
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpi{padding:14px 16px;display:grid;gap:4px;align-content:start;min-width:0}
+.kpi .k{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.kpi .v{font-family:var(--mono);font-size:1.6rem;font-weight:600;line-height:1.1}
+.kpi .n{font-size:.82rem;color:var(--muted);overflow-wrap:anywhere}
+.kpi .v.pos{color:var(--up)} .kpi .v.neg{color:var(--down)}
+@media (max-width:800px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tr-split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:24px;align-items:start}
+@media (max-width:1000px){.tr-split{grid-template-columns:1fr}}
+.tr-tbl th,.tr-tbl td{padding:9px 10px}
+.tr-net{padding:10px 14px;display:grid;gap:2px}
+.tr-net button{all:unset;cursor:pointer;display:grid;grid-template-columns:minmax(0,9.5rem) 1fr 4.2rem;gap:10px;align-items:center;padding:5px 4px;border-radius:3px;font-size:.84rem}
+.tr-net button:hover,.tr-net button[aria-pressed="true"]{background:var(--soft)}
+.tr-net button:focus-visible{outline:2px solid var(--mark);outline-offset:1px}
+.tr-net .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tr-net .track{position:relative;height:14px}
+.tr-net .track::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;border-left:1px solid var(--faint)}
+.tr-net .bar{position:absolute;top:2px;height:10px;border-radius:2px}
+.tr-net .bar.pos{background:var(--up);left:50%}
+.tr-net .bar.neg{background:var(--down);right:50%}
+.tr-net .val{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.tr-tbl{min-width:520px}
+.tr-tbl td.pos{color:var(--up);font-weight:600} .tr-tbl td.neg{color:var(--down);font-weight:600}
+.tr-filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tr-list{display:grid;gap:12px}
+.trade{padding:14px 16px;display:grid;gap:12px}
+.trade.me{border-color:var(--brass)}
+.trade .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.trade .top b{font-size:.95rem}
+.trade .top span{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.trade .sides{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.side{border:1px solid var(--line);border-radius:4px;padding:10px 12px;display:grid;gap:6px;align-content:start;min-width:0}
+.side.win{border-color:var(--up);box-shadow:inset 3px 0 0 var(--up)}
+.side h3{font-size:.9rem;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.side h3 small{font-family:var(--mono);font-weight:500;color:var(--muted);font-size:.74rem}
+.side .tag{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;color:var(--up);font-weight:600}
+.side .tag.l{color:var(--down)}
+.side ul{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:.85rem}
+.side li{display:flex;justify-content:space-between;gap:10px}
+.side li span:first-child{min-width:0;overflow-wrap:anywhere}
+.side li small{color:var(--muted);font-family:var(--mono);font-size:.7rem;margin-left:6px}
+.side li .num{color:var(--muted)}
+.side .tot{border-top:1px solid var(--line);padding-top:6px;display:flex;justify-content:space-between;font-weight:600;font-size:.85rem}
+.trade .meter{height:6px;border-radius:3px;background:var(--down);overflow:hidden}
+.trade .meter span{display:block;height:100%;background:var(--up)}
+.trade .nt{margin:0;font-size:.8rem;color:var(--muted)}
+.tr-how{padding:16px 18px;display:grid;gap:8px}
+.tr-how ul{margin:0;padding-left:18px;color:var(--muted);font-size:.88rem;display:grid;gap:6px;max-width:80ch}
+@media (max-width:600px){.trade .sides{grid-template-columns:1fr}}
 /* Trophy case */
 .trophies{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
 .trophy{display:grid;gap:10px;padding:14px;align-content:start;min-width:0}
@@ -400,13 +450,37 @@ table.lb{min-width:0}
 
   <!-- TRADES -->
   <div class="view" id="v-trades" hidden>
-    <div><div class="eyebrow">Already built</div><h1>Trade Ledger</h1>
-      <p class="lede">All 23 completed 2026 trades scored by FantasyCalc, plus the team leaderboard. Moves in as this tab.</p></div>
-    <div class="box existing">
-      <ul><li>Every trade with both sides' players and values</li><li>Winner, loser and margin per trade</li><li>Net value leaderboard by team</li></ul>
-      <a href="https://claude.ai/code/artifact/f6a42aa9-1bd3-4e00-ab52-a6834239cc35" target="_blank" rel="noopener">Open the current Trade Ledger ↗</a>
+    <div><div class="eyebrow">Trade ledger</div><h1>Trades</h1>
+      <p class="lede" id="tr-lede"></p></div>
+
+    <section class="kpis" aria-label="Trade market summary" id="tr-kpis"></section>
+
+    <div class="tr-split">
+      <section aria-labelledby="h-trnet">
+        <div class="head"><h2 id="h-trnet">Who's winning the trade market</h2><p>Net value gained across every trade. Click a team to see its trades.</p></div>
+        <div class="box tr-net" id="tr-net"></div>
+      </section>
+      <section aria-labelledby="h-trrec">
+        <div class="head"><h2 id="h-trrec">Team trade record</h2><p>"Won" means a team got more value back than it sent.</p></div>
+        <div class="box tw"><table class="tr-tbl" id="tr-tbl"></table></div>
+      </section>
     </div>
-    <p class="note">The current ledger runs inside Claude. For the website it gets rebuilt as a plain page from the same trade data, which the update runs add to as new trades clear review.</p>
+
+    <section aria-labelledby="h-trall">
+      <div class="head"><h2 id="h-trall">Every trade</h2></div>
+      <div class="tr-filters">
+        <div class="chip" role="group" aria-label="Show"><button type="button" id="tr-all" aria-pressed="true">All trades</button><button type="button" id="tr-mine" aria-pressed="false" hidden>My trades</button></div>
+        <label class="sr" for="tr-team">Team</label><select id="tr-team"><option value="">Any team</option></select>
+        <label class="sr" for="tr-sort">Sort</label><select id="tr-sort"><option value="new">Newest first</option><option value="old">Oldest first</option><option value="margin">Most lopsided</option></select>
+        <span class="status" id="tr-count"></span>
+      </div>
+      <div class="tr-list" id="tr-list"></div>
+    </section>
+
+    <section aria-labelledby="h-trhow" class="box tr-how">
+      <h2 id="h-trhow">How this is scored</h2>
+      <ul id="tr-notes"></ul>
+    </section>
   </div>
 
   <!-- VIDEOS -->
@@ -749,6 +823,95 @@ show(start);
     if(r.ok){S=r.data;picks={...S.myPicks}}else signedOut=r.error;
     render();
   })();
+})();
+
+/* ---------- Trades ---------- */
+(function(){
+  const $=id=>document.getElementById(id);
+  const num=n=>n.toLocaleString('en-US'), sgn=n=>(n>0?'+':n<0?'−':'')+num(Math.abs(n));
+  const day=iso=>new Date(iso+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  const tname=id=>T[id]?T[id].name:'Team '+id;
+  let TR=null, mySlot=null, filt={mine:false,team:'',sort:'new'};
+  function totals(){
+    const t={};for(let i=1;i<=10;i++)t[i]={id:i,n:0,w:0,l:0,inV:0,outV:0};
+    TR.trades.forEach(x=>{const W=t[x.w.team],L=t[x.l.team];W.n++;W.w++;L.n++;L.l++;W.inV+=x.w.total;W.outV+=x.l.total;L.inV+=x.l.total;L.outV+=x.w.total});
+    return Object.values(t).map(r=>({...r,net:r.inV-r.outV})).sort((a,b)=>b.net-a.net);
+  }
+  function kpis(rows){
+    const box=$('tr-kpis');box.replaceChildren();
+    const moved=TR.trades.reduce((s,x)=>s+x.w.total+x.l.total,0);
+    const top=[...TR.trades].sort((a,b)=>b.margin-a.margin)[0];
+    const ds=TR.trades.map(x=>x.date).sort();
+    const card=(k,v,n,cls)=>{const d=mk('div','box kpi');d.append(mk('div','k',k),mk('div','v'+(cls?' '+cls:''),v),mk('div','n',n));box.appendChild(d)};
+    card('Trades completed',TR.trades.length,`${day(ds[0])} – ${day(ds.at(-1))}`);
+    card('Value moved',num(moved),'Both sides, FantasyCalc points');
+    card('Most lopsided',sgn(top.margin),`${tname(top.w.team)} over ${tname(top.l.team)}, ${day(top.date)}`);
+    const busiest=[...rows].sort((a,b)=>b.n-a.n)[0];
+    if(mySlot){const me=rows.find(r=>r.id===mySlot);card('Your net',sgn(me.net),`${tname(mySlot)} · ${me.w}-${me.l} in ${me.n} trade${me.n===1?'':'s'}`,me.net>0?'pos':me.net<0?'neg':'')}
+    else card('Busiest trader',busiest.n,`${tname(busiest.id)} · ${busiest.w}-${busiest.l}`);
+  }
+  function netChart(rows){
+    const box=$('tr-net');box.replaceChildren();const max=Math.max(...rows.map(r=>Math.abs(r.net)))||1;
+    rows.forEach(r=>{const b=mk('button');b.type='button';b.setAttribute('aria-pressed',String(filt.team===String(r.id)));
+      const tr=mk('span','track'),bar=mk('span','bar '+(r.net>=0?'pos':'neg'));bar.style.width=(Math.abs(r.net)/max*50)+'%';tr.appendChild(bar);
+      b.append(mk('span','nm',tname(r.id)),tr,mk('span','val',r.n?sgn(r.net):'—'));
+      b.title=`${tname(r.id)}: ${r.n} trades, net ${sgn(r.net)}`;
+      b.onclick=()=>{filt.team=filt.team===String(r.id)?'':String(r.id);filt.mine=false;$('tr-team').value=filt.team;sync();document.getElementById('h-trall').scrollIntoView({behavior:'smooth',block:'start'})};
+      box.appendChild(b)});
+  }
+  function table(rows){
+    const tb=$('tr-tbl');tb.replaceChildren();const th=mk('thead'),hr=mk('tr');
+    ['Team','Trades','Won','Lost','Value in','Value out','Net'].forEach(h=>hr.appendChild(mk('th',null,h)));th.appendChild(hr);
+    const body=mk('tbody');rows.forEach(r=>{const tr=mk('tr');const td=mk('td','t',tname(r.id));td.appendChild(mk('small',null,T[r.id].owner));tr.appendChild(td);
+      [r.n,r.w,r.l,num(r.inV),num(r.outV)].forEach(v=>tr.appendChild(mk('td','num',v)));
+      tr.appendChild(mk('td','num '+(r.net>0?'pos':r.net<0?'neg':''),r.n?sgn(r.net):'—'));body.appendChild(tr)});
+    tb.append(th,body);
+  }
+  function side(s,won){
+    const d=mk('div','side'+(won?' win':''));const h=mk('h3');h.append(mk('span',null,tname(s.team)),mk('small',null,T[s.team].owner));
+    d.append(mk('span','tag'+(won?'':' l'),won?'Won the trade':'Lost the trade'),h);
+    d.appendChild(mk('span','status','Received'));
+    const ul=mk('ul');s.got.forEach(p=>{const li=mk('li');const a=mk('span',null,p.name);a.appendChild(mk('small',null,`${p.pos} ${p.nfl}`));li.append(a,mk('span','num',p.v?num(p.v):'0'));ul.appendChild(li)});
+    const tot=mk('div','tot');tot.append(mk('span',null,'Total'),mk('span','num',num(s.total)));
+    d.append(ul,tot);return d;
+  }
+  function list(){
+    let xs=[...TR.trades];
+    if(filt.mine&&mySlot) xs=xs.filter(x=>x.w.team===mySlot||x.l.team===mySlot);
+    if(filt.team) xs=xs.filter(x=>x.w.team===+filt.team||x.l.team===+filt.team);
+    xs.sort(filt.sort==='old'?(a,b)=>a.date.localeCompare(b.date)||a.n-b.n:filt.sort==='margin'?(a,b)=>b.margin-a.margin:(a,b)=>b.date.localeCompare(a.date)||b.n-a.n);
+    $('tr-count').textContent=`${xs.length} trade${xs.length===1?'':'s'}`;
+    const box=$('tr-list');box.replaceChildren();
+    if(!xs.length){box.appendChild(mk('p','status','No trades match.'));return}
+    xs.forEach(x=>{const mine=mySlot&&(x.w.team===mySlot||x.l.team===mySlot);
+      const c=mk('article','box trade'+(mine?' me':''));const top=mk('div','top');
+      top.append(mk('b',null,`${tname(x.w.team)} wins by ${num(x.margin)}`),mk('span',null,`Trade ${x.n} · ${day(x.date)} · ${Math.round(x.pct*100)}% margin`));
+      const sides=mk('div','sides');sides.append(side(x.w,true),side(x.l,false));
+      const m=mk('div','meter');m.setAttribute('aria-hidden','true');const sp=mk('span');sp.style.width=(x.w.total/(x.w.total+x.l.total)*100).toFixed(1)+'%';m.appendChild(sp);
+      c.append(top,m,sides);if(x.note)c.appendChild(mk('p','nt',x.note));box.appendChild(c)});
+  }
+  function sync(){
+    $('tr-all').setAttribute('aria-pressed',String(!filt.mine));$('tr-mine').setAttribute('aria-pressed',String(filt.mine));
+    netChart(ROWS);list();
+  }
+  let ROWS=[];
+  function render(){
+    ROWS=totals();
+    $('tr-lede').textContent=`All ${TR.trades.length} completed 2026 trades, each side valued with ${TR.source} as of ${new Date(TR.asOf+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric'})}.`;
+    kpis(ROWS);table(ROWS);
+    const sel=$('tr-team');[...ROWS].sort((a,b)=>tname(a.id).localeCompare(tname(b.id))).forEach(r=>{const o=mk('option',null,tname(r.id));o.value=r.id;sel.appendChild(o)});
+    $('tr-mine').hidden=!mySlot;
+    const ul=$('tr-notes');TR.notes.forEach(n=>ul.appendChild(mk('li',null,n)));
+    sync();
+  }
+  $('tr-all').onclick=()=>{filt.mine=false;filt.team='';$('tr-team').value='';sync()};
+  $('tr-mine').onclick=()=>{filt.mine=true;filt.team='';$('tr-team').value='';sync()};
+  $('tr-team').onchange=e=>{filt.team=e.target.value;filt.mine=false;sync()};
+  $('tr-sort').onchange=e=>{filt.sort=e.target.value;list()};
+  Promise.all([
+    fetch('data/trades.json',{cache:'no-store'}).then(r=>r.json()),
+    fetch('/api/state',{credentials:'same-origin'}).then(r=>r.ok&&(r.headers.get('content-type')||'').includes('json')?r.json():null).catch(()=>null)
+  ]).then(([tr,st])=>{TR=tr;mySlot=st&&st.mySlot||null;render()}).catch(()=>{$('tr-list').replaceChildren(mk('p','status','The trade data couldn\'t be loaded. Refresh to try again.'))});
 })();
 
 /* ---------- Videos ---------- */
