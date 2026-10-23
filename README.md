@@ -16,6 +16,9 @@ Deployed with `npx wrangler deploy`. `wrangler.jsonc` serves `public/` as static
 ## Home
 - The scoreboard colors the team name by head-to-head result and the score by bonus win (top 5 weekly score). The Week 7 matchups box shows projections until `live7.kickoff` in `site.json`, then live scores from `live7.scores` (rewritten on each update run, with `asOf`).
 
+## Lore
+- Members submit a date, title, description and optional co-author from the Lore tab (login must be linked to a team via Pick'em). Submissions land in the `lore` table of the `League` Durable Object as `pending`. The Groundskeeper (`ADMIN_EMAILS`) sees a Review queue on the Lore tab: edit the text and sort year, then Publish or Reject. Published entries appear on the timeline with a byline. API: `GET/POST /api/lore`, `POST /api/admin/lore`.
+
 ## Trades
 - `public/data/trades.json` holds every completed 2026 trade with both sides' players and FantasyCalc values. The update runs add new trades once they clear review and re-score them.
 

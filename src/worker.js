@@ -25,8 +25,38 @@ export class League extends DurableObject {
       "CREATE TABLE IF NOT EXISTS claims (email TEXT PRIMARY KEY, slot INTEGER UNIQUE NOT NULL, at TEXT NOT NULL)"
     );
     this.sql.exec(
+      "CREATE TABLE IF NOT EXISTS lore (id INTEGER PRIMARY KEY AUTOINCREMENT, author_email TEXT NOT NULL, author_slot INTEGER NOT NULL, co_slot INTEGER, date_text TEXT NOT NULL, sort_year INTEGER, title TEXT NOT NULL, body TEXT NOT NULL, status TEXT NOT NULL, at TEXT NOT NULL)"
+    );
+    this.sql.exec(
       "CREATE TABLE IF NOT EXISTS picks (email TEXT NOT NULL, season INTEGER NOT NULL, week INTEGER NOT NULL, game TEXT NOT NULL, team INTEGER NOT NULL, at TEXT NOT NULL, PRIMARY KEY (email, season, week, game))"
     );
+  }
+
+  loreRows() {
+    return this.sql.exec("SELECT id, author_email, author_slot, co_slot, date_text, sort_year, title, body, status, at FROM lore ORDER BY id").toArray();
+  }
+
+  loreAdd(email, slot, co, dateText, year, title, body) {
+    const n = this.sql.exec("SELECT COUNT(*) AS n FROM lore WHERE author_email = ? AND status = 'pending'", email).one().n;
+    if (n >= 5) return { error: "You already have 5 pieces waiting for review. Give Bradley a chance to clear them." };
+    this.sql.exec(
+      "INSERT INTO lore (author_email, author_slot, co_slot, date_text, sort_year, title, body, status, at) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)",
+      email, slot, co, dateText, year, title, body, new Date().toISOString()
+    );
+    return { ok: true };
+  }
+
+  loreEdit(id, f) {
+    this.sql.exec(
+      "UPDATE lore SET date_text = ?, sort_year = ?, title = ?, body = ?, status = ? WHERE id = ?",
+      f.dateText, f.year, f.title, f.body, f.status, id
+    );
+    return { ok: true };
+  }
+
+  loreDelete(id) {
+    this.sql.exec("DELETE FROM lore WHERE id = ?", id);
+    return { ok: true };
   }
 
   claims() {
@@ -114,6 +144,48 @@ export default {
         return json(await buildState(league, cfg, week, email, admin));
       }
 
+      if (url.pathname === "/api/lore" && request.method === "GET") {
+        return json(await loreState(league, email, admin));
+      }
+
+      if (url.pathname === "/api/lore" && request.method === "POST") {
+        const claims = await league.claims();
+        const mine = claims.find((c) => c.email === email);
+        if (!mine) return json({ error: "Link your login to your team first (it takes one tap on the Pick'em tab), then come back." }, 400);
+        const body = await request.json().catch(() => ({}));
+        const clean = (v, max) => String(v ?? "").replace(/\s+/g, " ").trim().slice(0, max);
+        const dateText = clean(body.dateText, 60), title = clean(body.title, 100);
+        const text = String(body.body ?? "").replace(/\r/g, "").trim().slice(0, 1500);
+        if (!dateText || !title || text.length < 10) return json({ error: "Add a date, a title and a short description." }, 400);
+        let co = Number(body.coSlot);
+        co = Number.isInteger(co) && co >= 1 && co <= 10 && co !== mine.slot ? co : null;
+        const r = await league.loreAdd(email, mine.slot, co, dateText, yearOf(dateText), title, text);
+        return r.error ? json(r, 429) : json({ ok: true });
+      }
+
+      if (url.pathname === "/api/admin/lore" && request.method === "POST") {
+        if (!admin) return json({ error: "Only the Groundskeeper can do that." }, 403);
+        const body = await request.json().catch(() => ({}));
+        const id = Number(body.id);
+        if (!Number.isInteger(id)) return json({ error: "Missing id." }, 400);
+        if (body.action === "delete") await league.loreDelete(id);
+        else {
+          const cur = (await league.loreRows()).find((x) => x.id === id);
+          if (!cur) return json({ error: "That piece is gone." }, 404);
+          const status = body.action === "publish" ? "published" : body.action === "reject" ? "rejected" : cur.status;
+          const dateText = String(body.dateText ?? cur.date_text).trim().slice(0, 60);
+          const yr = Number(body.year);
+          await league.loreEdit(id, {
+            dateText,
+            year: Number.isInteger(yr) && yr > 1990 && yr < 2100 ? yr : yearOf(dateText) ?? cur.sort_year,
+            title: String(body.title ?? cur.title).trim().slice(0, 100),
+            body: String(body.body ?? cur.body).trim().slice(0, 1500),
+            status,
+          });
+        }
+        return json(await loreState(league, email, admin));
+      }
+
       if (url.pathname === "/api/admin/access-info" && request.method === "GET") {
         // Shows the Groundskeeper which Access team and audience tag his login token carries,
         // so they can be copied into ACCESS_TEAM / ACCESS_AUD. Neither value is a secret.
@@ -142,6 +214,25 @@ export default {
     }
   },
 };
+
+const yearOf = (t) => {
+  const m = String(t).match(/\b(19|20)\d\d\b/);
+  return m ? Number(m[0]) : null;
+};
+
+async function loreState(league, email, admin) {
+  const claims = await league.claims();
+  const mine = claims.find((c) => c.email === email);
+  const rows = await league.loreRows();
+  const view = (r) => ({ id: r.id, slot: r.author_slot, co: r.co_slot, date: r.date_text, year: r.sort_year, title: r.title, body: r.body, status: r.status });
+  return {
+    admin,
+    mySlot: mine ? mine.slot : null,
+    published: rows.filter((r) => r.status === "published").map(view),
+    mine: rows.filter((r) => r.author_email === email && r.status !== "published").map(view),
+    queue: admin ? rows.filter((r) => r.status === "pending").map(view) : undefined,
+  };
+}
 
 function weekStatus(w) {
   const now = Date.now();

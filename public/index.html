@@ -431,6 +431,18 @@ table.lb{min-width:0}
 .split{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
 @media (max-width:560px){.pick{grid-template-columns:1fr}.vs{display:none}.h2h .big{font-size:1.9rem}}
 /* Lore timeline */
+.lore-dlg{border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);padding:20px;width:min(520px,92vw)}
+.lore-dlg::backdrop{background:rgba(0,0,0,.45)}
+.lore-dlg form{display:grid;gap:12px}
+.lore-dlg h2{margin:0}
+.lore-dlg label,.lq-item label{display:grid;gap:4px;font-size:.8rem;color:var(--muted)}
+.lore-dlg input,.lore-dlg textarea,.lore-dlg select,.lq-item input,.lq-item textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:8px;width:100%;box-sizing:border-box}
+.lore-actions{display:flex;gap:14px;align-items:center}
+.lq-list{display:grid;gap:12px}
+.lq-item{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:14px;display:grid;gap:10px}
+.lq-item .row{display:grid;grid-template-columns:1fr 6rem;gap:10px}
+.lq-item .by{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.tl .by{font-family:var(--mono);font-size:.7rem;color:var(--muted);margin-top:4px}
 .tl{list-style:none;margin:0;padding:8px 0;position:relative;display:grid;gap:18px}
 .tl::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:3px;background:var(--brass);transform:translateX(-50%);opacity:.5}
 .tl li{position:relative;display:grid;grid-template-columns:1fr 1fr;align-items:center}
@@ -678,9 +690,25 @@ table.lb{min-width:0}
   <!-- LORE -->
   <div class="view" id="v-lore" hidden>
     <div><div class="eyebrow">The legend</div><h1>Lore</h1>
-      <p class="lede">The stories, feuds and moments that built the league.</p></div>
+      <p class="lede">The stories, feuds and moments that built the league.</p>
+      <p style="margin:12px 0 0"><button class="btn" type="button" id="lore-open">Submit lore</button></p></div>
+    <p class="status" id="lore-mine" hidden></p>
+    <dialog id="lore-dlg" class="lore-dlg" aria-labelledby="lore-dh">
+      <form method="dialog" id="lore-form">
+        <h2 id="lore-dh">Submit lore</h2>
+        <p class="status">Tell the story. Bradley reviews and cleans it up before it goes on the timeline.</p>
+        <label>Date or dates<input id="lf-date" maxlength="60" required placeholder="e.g. Week 9, 2022 or Oct 2019 to Dec 2019"></label>
+        <label>Title<input id="lf-title" maxlength="100" required placeholder="A short headline"></label>
+        <label>What happened<textarea id="lf-body" rows="5" maxlength="1500" required minlength="10" placeholder="A few sentences is plenty."></textarea></label>
+        <label>Co-author (optional)<select id="lf-co"></select></label>
+        <p class="status" id="lf-msg" role="status" aria-live="polite"></p>
+        <div class="lore-actions"><button class="btn" type="submit" id="lf-send">Send for approval</button><button class="linkbtn" type="button" id="lf-cancel">Cancel</button></div>
+      </form>
+    </dialog>
+    <section id="lore-queue" hidden aria-labelledby="h-lq"><div class="head"><div class="eyebrow">Groundskeeper only</div><h2 id="h-lq">Review queue</h2>
+      <p>Edit anything, then publish. The sort year controls where it lands on the timeline.</p></div><div id="lq-list" class="lq-list"></div></section>
     <ol class="tl" id="tl" aria-label="League timeline"></ol>
-    <p class="note">Mock-up: general placeholder events. Hover (or tap) any event for details. The real lore goes in once you send it over.</p>
+    <p class="note">Hover (or tap) any event for details. Entries without a byline are placeholders until real lore is approved.</p>
   </div>
 
   <!-- VIDEOS -->
@@ -816,9 +844,9 @@ show(start);
   });
 })();
 
-/* ---------- Lore timeline (mock-up) ---------- */
+/* ---------- Lore timeline + submissions ---------- */
 (function(){
-  const EV=[
+  const SEED=[
     ['2015','The league is born','Ten friends, one ESPN league and a name nobody could talk them out of. Buzz Ellis wins the first title.'],
     ['2017','Briggs Tomlinson takes the crown','A placeholder for the first big upset story in league history.'],
     ['2020','The pandemic season','Placeholder: the year everything was weird and the league played on anyway.'],
@@ -826,8 +854,58 @@ show(start);
     ['2024','Bonus wins arrive','The top five weekly scores earn an extra win, so every Sunday matters twice as much.'],
     ['2025','The bowl games are born','Chupacabra Bowl and friends give the bottom of the standings something to play for.'],
     ['2026','The 11-player blockbuster','Donut Season II and Margot\'s Dad swap eleven players in the biggest trade the league has seen.']];
-  const ol=document.getElementById('tl');
-  EV.forEach(([y,t,d])=>{const li=mk('li'),ev=mk('div','ev');ev.tabIndex=0;ev.append(mk('div','yr',y),mk('b',null,t),mk('div','det',d));li.appendChild(ev);ol.appendChild(li)});
+  const $=id=>document.getElementById(id), ol=$('tl'), OW=D.owners||{};
+  const nm=s=>OW[s]||'A member';
+  let L=null;
+  function api(method,path,body){return fetch(path,{method,credentials:'same-origin',headers:body?{'content-type':'application/json'}:undefined,body:body?JSON.stringify(body):undefined}).then(async r=>{let d=null;try{d=await r.json()}catch(e){}return{ok:r.ok,data:d}}).catch(()=>({ok:false,data:null}))}
+  function draw(){
+    ol.replaceChildren();
+    const items=SEED.map(([y,t,d])=>({y:+y,date:y,t,d,by:null}));
+    ((L&&L.published)||[]).forEach(r=>items.push({y:r.year||9999,date:r.date,t:r.title,d:r.body,by:[r.slot,r.co]}));
+    items.sort((a,b)=>a.y-b.y);
+    items.forEach(it=>{const li=mk('li'),ev=mk('div','ev');ev.tabIndex=0;ev.append(mk('div','yr',it.date),mk('b',null,it.t),mk('div','det',it.d));
+      if(it.by)ev.appendChild(mk('div','by','By '+it.by.filter(Boolean).map(nm).join(' & ')));
+      li.appendChild(ev);ol.appendChild(li)});
+  }
+  function drawMine(){
+    const m=$('lore-mine'),mine=(L&&L.mine)||[];
+    m.hidden=!mine.length;
+    if(mine.length)m.textContent=`You have ${mine.length} piece${mine.length>1?'s':''} waiting on Bradley's review: ${mine.map(x=>x.title).join(', ')}.`;
+  }
+  function drawQueue(){
+    const sec=$('lore-queue'),list=$('lq-list');
+    sec.hidden=!(L&&L.admin);list.replaceChildren();
+    if(!(L&&L.admin))return;
+    if(!L.queue.length){list.appendChild(mk('p','status','Nothing waiting. Nice.'));return}
+    L.queue.forEach(r=>{
+      const d=mk('div','lq-item'),f={};
+      const fld=(k,lab,val,tag)=>{const l=mk('label',null,lab),i=mk(tag||'input');i.value=val;if(tag==='textarea')i.rows=5;f[k]=i;l.appendChild(i);return l};
+      const row=mk('div','row');row.append(fld('date','Date text',r.date),fld('year','Sort year',r.year||''));
+      d.append(mk('div','by',`From ${nm(r.slot)}${r.co?' with '+nm(r.co):''}`),row,fld('title','Title',r.title),fld('body','Description',r.body,'textarea'));
+      const act=mk('div','lore-actions'),pub=mk('button','btn','Publish'),rej=mk('button','linkbtn','Reject');pub.type=rej.type='button';
+      const go=async a=>{pub.disabled=rej.disabled=true;const x=await api('POST','/api/admin/lore',{id:r.id,action:a,dateText:f.date.value,year:f.year.value,title:f.title.value,body:f.body.value});if(x.ok){const q=await api('GET','/api/lore');if(q.ok)L=q.data;drawAll()}else{pub.disabled=rej.disabled=false;act.append(mk('span','status',(x.data&&x.data.error)||'Could not save.'))}};
+      pub.onclick=()=>go('publish');rej.onclick=()=>go('reject');
+      act.append(pub,rej);d.appendChild(act);list.appendChild(d);
+    });
+  }
+  function drawAll(){draw();drawMine();drawQueue()}
+  drawAll();
+  api('GET','/api/lore').then(r=>{if(r.ok&&r.data){L=r.data;drawAll()}});
+  const dlg=$('lore-dlg'),form=$('lore-form'),msg=$('lf-msg');
+  $('lore-open').onclick=()=>{
+    msg.textContent='';
+    const co=$('lf-co');co.replaceChildren();const n=mk('option','', 'No co-author');n.value='';co.appendChild(n);
+    Object.keys(OW).map(Number).filter(s=>!L||s!==L.mySlot).sort((a,b)=>nm(a).localeCompare(nm(b))).forEach(s=>{const o=mk('option',null,nm(s));o.value=s;co.appendChild(o)});
+    if(dlg.showModal)dlg.showModal();else dlg.setAttribute('open','');
+  };
+  $('lf-cancel').onclick=()=>dlg.close();
+  form.onsubmit=async e=>{
+    e.preventDefault();$('lf-send').disabled=true;msg.textContent='Sending…';
+    const r=await api('POST','/api/lore',{dateText:$('lf-date').value,title:$('lf-title').value,body:$('lf-body').value,coSlot:$('lf-co').value});
+    $('lf-send').disabled=false;
+    if(r.ok){form.reset();msg.textContent='';dlg.close();const q=await api('GET','/api/lore');if(q.ok){L=q.data;drawAll()}}
+    else msg.textContent=(r.data&&r.data.error)||'Could not send that. Try again.';
+  };
 })();
 
 /* ---------- Bump chart ---------- */
