@@ -6,6 +6,7 @@ body{background:transparent!important}
 .wrap>header .eyebrow,.wrap>header h1,.wrap>header .lede{display:none}
 </style>
 <meta name="robots" content="noindex,nofollow">
+<script>fetch('/api/settings',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():null}).then(function(x){if(x&&x.gold)document.documentElement.classList.add('gmode')}).catch(function(){})</script>
 </head><body>
 <title>HMWHC Record Book</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -21,6 +22,7 @@ body{background:transparent!important}
   --body:"Barlow","Helvetica Neue",Arial,sans-serif;
   --data:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
 }
+html.gmode{--brass:#f2c14e;--felt-gold:#f2c14e}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
 .wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 64px;display:grid;gap:56px}
 h1,h2{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:.01em}

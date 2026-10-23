@@ -40,6 +40,22 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
 .brand .logo{height:34px;width:auto;align-self:center;margin-right:-2px}
 .wl-logo{display:block;margin:0 auto 4px;height:84px;width:auto}
+.gmode{--brass:#f2c14e;--felt-gold:#f2c14e}
+.gmode .top{border-bottom-color:var(--brass);box-shadow:0 1px 0 var(--brass)}
+.gmode:not(.goldlogo) .logo,.gmode:not(.goldlogo) .wl-logo{filter:sepia(1) saturate(2.4) hue-rotate(-6deg) brightness(1.05)}
+.gmode nav button[aria-selected="true"]{border-bottom-color:var(--brass)}
+.gk-sec{display:grid;gap:10px}
+.gk-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.gk-row:last-child{border-bottom:0}
+.gk-row b{display:block}
+.gk-row small{color:var(--muted);font-size:.8rem}
+.sw{all:unset;cursor:pointer;width:46px;height:26px;border-radius:999px;background:var(--faint);position:relative;transition:background .2s;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--panel);transition:transform .2s}
+.sw[aria-checked="true"]{background:var(--up)}
+.sw[aria-checked="true"]::after{transform:translateX(20px)}
+.sw:focus-visible{outline:2px solid var(--mark);outline-offset:3px}
+.sw:disabled{opacity:.5;cursor:default}
+.gk-row .linked{font-family:var(--mono);font-size:.74rem;color:var(--muted);overflow-wrap:anywhere}
 .brand b{font-weight:700;font-size:1.05rem;letter-spacing:.02em}
 .brand span{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
 .tag{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;border:1px dashed var(--faint);color:var(--muted);padding:1px 7px;border-radius:3px;margin-left:auto}
@@ -744,6 +760,18 @@ table.lb{min-width:0}
     <p class="note">Hover (or tap) any event for details. Entries without a byline are placeholders until real lore is approved. The league also ran in 2013 and 2014, but those seasons are not canon.</p>
   </div>
 
+  <!-- GROUNDSKEEPER -->
+  <div class="view" id="v-ground" hidden>
+    <div><div class="eyebrow">Management</div><h1>Groundskeeper</h1>
+      <p class="lede">Switches and fixes for the league site. Only your login can see this tab.</p></div>
+    <section class="gk-sec" aria-labelledby="h-sw"><div class="head"><h2 id="h-sw">Switches</h2></div>
+      <div class="box" id="gk-switches"></div></section>
+    <section class="gk-sec" aria-labelledby="h-tl"><div class="head"><h2 id="h-tl">Team links</h2>
+      <p>Each member links their login to one team. If someone picked the wrong one, unlock it and they'll be asked to choose again on their next visit.</p></div>
+      <div class="box" id="gk-teams"></div></section>
+    <p class="status" id="gk-msg" role="status" aria-live="polite"></p>
+  </div>
+
   <!-- VIDEOS -->
   <div class="view" id="v-videos" hidden>
     <div><div class="eyebrow">Video vault</div><h1>League videos</h1>
@@ -774,6 +802,8 @@ const short = (n,k=22) => n.length>k ? n.slice(0,k-1)+'…' : n;
 const ordinal = n => {const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])};
 const RANK = Object.fromEntries(CUR.teams.map(t=>[t.id,t.weeks.at(-1).rank]));
 const GOTW = (()=>{let best=0,bs=[99,99];D.wk7.forEach(([a,b],i)=>{const k=[RANK[a]+RANK[b],Math.min(RANK[a],RANK[b])];if(k[0]<bs[0]||(k[0]===bs[0]&&k[1]<bs[1])){bs=k;best=i}});return best})();
+const SDEF={gold:false,welcome:true,loreOpen:true,wireframe:true};
+const SETTINGS=fetch('/api/settings',{credentials:'same-origin'}).then(r=>r.ok&&(r.headers.get('content-type')||'').includes('json')?r.json():SDEF).catch(()=>SDEF).then(x=>({...SDEF,...x}));
 const mk = (tag,cls,txt) => {const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
 
 /* ---------- Nav with Statistics dropdown ---------- */
@@ -785,8 +815,9 @@ const NAV=[
   {id:'history',label:'League History'},
   {id:'trades',label:'Trades'},
   {id:'lore',label:'Lore'},
-  {id:'videos',label:'Videos'}];
-const VIEWS=['home','rankings','pickem','h2h','luck','draft','history','trades','lore','videos'];
+  {id:'videos',label:'Videos'},
+  {id:'ground',label:'Groundskeeper',admin:true}];
+const VIEWS=['home','rankings','pickem','h2h','luck','draft','history','trades','lore','videos','ground'];
 const nav=document.getElementById('nav'), menu=document.getElementById('statsmenu'), topin=document.getElementById('topin');
 let statsBtn;
 NAV.forEach(n=>{
@@ -796,6 +827,7 @@ NAV.forEach(n=>{
     b.onclick=e=>{e.stopPropagation();menu.hidden?openMenu():closeMenu()};
     n.children.forEach(c=>{const m=mk('button');m.type='button';m.dataset.id=c.id;m.append(mk('span',null,c.label),mk('small',null,c.sub));m.onclick=()=>{closeMenu();show(c.id)};menu.appendChild(m)});
   } else b.onclick=()=>show(n.id);
+  if(n.admin)b.hidden=true;
   nav.appendChild(b);
 });
 function openMenu(){const r=statsBtn.getBoundingClientRect(),p=topin.getBoundingClientRect();menu.style.left=Math.max(8,Math.min(r.left-p.left,p.width-200))+'px';menu.hidden=false;statsBtn.setAttribute('aria-expanded','true');menu.querySelector('button').focus()}
@@ -888,12 +920,61 @@ show(start);
   });
 })();
 
+/* ---------- Site switches (apply for everyone) ---------- */
+function applySettings(x){
+  document.documentElement.classList.toggle('gmode',!!x.gold);
+  const tag=document.querySelector('.brand .tag');if(tag)tag.hidden=!x.wireframe;
+  const lb=document.getElementById('lore-open');if(lb)lb.hidden=!x.loreOpen;
+  if(x.gold&&!applySettings.probed){applySettings.probed=true;const im=new Image();im.onload=()=>{document.documentElement.classList.add('goldlogo');document.querySelectorAll('.logo,.wl-logo').forEach(i=>i.src='img/hmwh-logo-gold.png')};im.src='img/hmwh-logo-gold.png'}
+  if(!x.gold)document.documentElement.classList.remove('goldlogo');
+}
+SETTINGS.then(applySettings);
+
+/* ---------- Groundskeeper tab ---------- */
+(function(){
+  const SW=[['gold','Playoff gold graphics','Swaps the chrome accents and logo for gold. Flip it on for playoffs and special occasions.'],
+    ['welcome','First-visit team picker','Shows the Welcome popup to anyone who hasn\'t linked a team yet.'],
+    ['loreOpen','Lore submissions open','Lets members send in new lore. Turn off to pause the Submit lore button.'],
+    ['wireframe','Show the "Wireframe" tag','The small tag in the header. Turn it off at launch.']];
+  const sw=document.getElementById('gk-switches'),tm=document.getElementById('gk-teams'),msg=document.getElementById('gk-msg');
+  let cur=null;
+  const post=(path,body)=>fetch(path,{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify(body)}).then(async r=>({ok:r.ok,data:await r.json().catch(()=>null)})).catch(()=>({ok:false,data:null}));
+  function drawSwitches(){
+    sw.replaceChildren();
+    SW.forEach(([k,t,d])=>{
+      const row=mk('div','gk-row'),l=mk('div');l.append(mk('b',null,t),mk('small',null,d));
+      const b=mk('button','sw');b.type='button';b.setAttribute('role','switch');b.setAttribute('aria-checked',String(!!cur[k]));b.setAttribute('aria-label',t);
+      b.onclick=async()=>{b.disabled=true;msg.textContent='Saving…';const r=await post('/api/admin/settings',{key:k,value:!cur[k]});b.disabled=false;
+        if(r.ok){cur=r.data;applySettings(cur);drawSwitches();msg.textContent='Saved.'}else msg.textContent=(r.data&&r.data.error)||'Could not save that.'};
+      row.append(l,b);sw.appendChild(row);
+    });
+  }
+  function drawTeams(S){
+    tm.replaceChildren();
+    Object.keys(D.owners).map(Number).sort((a,b)=>a-b).forEach(n=>{
+      const em=S.claimEmails&&S.claimEmails[n],row=mk('div','gk-row'),l=mk('div');
+      l.append(mk('b',null,`${D.owners[n]} · ${T[n]?T[n].name:'Team '+n}`),mk('small','linked',em?`Linked to ${em}`:'Not linked yet'));
+      row.appendChild(l);
+      if(em){const u=mk('button','linkbtn','Unlock');u.type='button';
+        u.onclick=async()=>{if(!confirm(`Unlock ${D.owners[n]}'s team? ${em} will be asked to pick a team again.`))return;u.disabled=true;msg.textContent='Unlocking…';
+          const r=await post('/api/admin/release',{slot:n});if(r.ok){drawTeams(r.data);msg.textContent=`${D.owners[n]} is unlocked.`}else{u.disabled=false;msg.textContent=(r.data&&r.data.error)||'Could not unlock.'}};
+        row.appendChild(u)}
+      else row.appendChild(mk('span','status','Open'));
+      tm.appendChild(row);
+    });
+  }
+  Promise.all([SETTINGS,fetch('/api/state',{credentials:'same-origin'}).then(r=>r.ok&&(r.headers.get('content-type')||'').includes('json')?r.json():null).catch(()=>null)]).then(([x,S])=>{
+    if(!S||!S.admin)return;
+    cur=x;document.getElementById('tab-ground').hidden=false;drawSwitches();drawTeams(S);
+  });
+})();
+
 /* ---------- First-visit welcome: pick your team ---------- */
 (function(){
   const dlg=document.getElementById('welcome');if(!dlg||!dlg.showModal)return;
   const sel=document.getElementById('wl-sel'),msg=document.getElementById('wl-msg'),go=document.getElementById('wl-go');
   dlg.addEventListener('cancel',e=>e.preventDefault());
-  fetch('/api/state',{credentials:'same-origin'}).then(r=>r.ok&&(r.headers.get('content-type')||'').includes('json')?r.json():null).catch(()=>null).then(S=>{
+  SETTINGS.then(x=>x.welcome?fetch('/api/state',{credentials:'same-origin'}).then(r=>r.ok&&(r.headers.get('content-type')||'').includes('json')?r.json():null).catch(()=>null):null).then(S=>{
     if(!S||S.mySlot)return;
     const open=Object.keys(D.owners).map(Number).filter(n=>!(S.claimed||[]).includes(n)).sort((a,b)=>D.owners[a].localeCompare(D.owners[b]));
     if(!open.length)return;
@@ -976,8 +1057,8 @@ show(start);
     const sec=$('lore-queue'),list=$('lq-list');
     sec.hidden=!(L&&L.admin);list.replaceChildren();
     if(!(L&&L.admin))return;
-    if(!L.queue.length){list.appendChild(mk('p','status','Nothing waiting. Nice.'));return}
-    L.queue.forEach(r=>{
+    if(!(L.queue||[]).length){list.appendChild(mk('p','status','Nothing waiting. Nice.'));return}
+    (L.queue||[]).forEach(r=>{
       const d=mk('div','lq-item'),f={};
       const fld=(k,lab,val,tag)=>{const l=mk('label',null,lab),i=mk(tag||'input');i.value=val;if(tag==='textarea')i.rows=5;f[k]=i;l.appendChild(i);return l};
       const row=mk('div','row');row.append(fld('date','Date text',r.date),fld('year','Sort year',r.year||''));

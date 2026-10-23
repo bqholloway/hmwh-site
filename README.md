@@ -19,6 +19,9 @@ Deployed with `npx wrangler deploy`. `wrangler.jsonc` serves `public/` as static
 ## Lore
 - Members submit a date, title, description and optional co-author from the Lore tab (login must be linked to a team via Pick'em). Submissions land in the `lore` table of the `League` Durable Object as `pending`. The Groundskeeper (`ADMIN_EMAILS`) sees a Review queue on the Lore tab: edit the text and sort year, then Publish or Reject. Published entries appear on the timeline with a byline. API: `GET/POST /api/lore`, `POST /api/admin/lore`.
 
+## Groundskeeper
+- Admin-only tab (visible only to `ADMIN_EMAILS` logins; the API enforces it). Switches are stored in the `settings` table of the `League` Durable Object: `gold` (playoff gold graphics; uses `img/hmwh-logo-gold.png` when present, otherwise tints the chrome logo), `welcome` (first-visit team picker), `loreOpen` (lore submissions) and `wireframe` (header tag). Everyone reads them from `GET /api/settings`; the admin flips them with `POST /api/admin/settings`. The Team links list shows who linked which team and can unlock one (`POST /api/admin/release`).
+
 ## Trades
 - `public/data/trades.json` holds every completed 2026 trade with both sides' players and FantasyCalc values. The update runs add new trades once they clear review and re-score them.
 

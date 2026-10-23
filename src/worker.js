@@ -17,6 +17,9 @@ const json = (data, status = 200) =>
     headers: { "content-type": "application/json", "cache-control": "no-store" },
   });
 
+// Switches the Groundskeeper can flip from the site. Everything not listed here is rejected.
+const SETTING_DEFAULTS = { gold: false, welcome: true, loreOpen: true, wireframe: true };
+
 export class League extends DurableObject {
   constructor(ctx, env) {
     super(ctx, env);
@@ -24,12 +27,29 @@ export class League extends DurableObject {
     this.sql.exec(
       "CREATE TABLE IF NOT EXISTS claims (email TEXT PRIMARY KEY, slot INTEGER UNIQUE NOT NULL, at TEXT NOT NULL)"
     );
+    this.sql.exec("CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)");
     this.sql.exec(
       "CREATE TABLE IF NOT EXISTS lore (id INTEGER PRIMARY KEY AUTOINCREMENT, author_email TEXT NOT NULL, author_slot INTEGER NOT NULL, co_slot INTEGER, date_text TEXT NOT NULL, sort_year INTEGER, title TEXT NOT NULL, body TEXT NOT NULL, status TEXT NOT NULL, at TEXT NOT NULL)"
     );
     this.sql.exec(
       "CREATE TABLE IF NOT EXISTS picks (email TEXT NOT NULL, season INTEGER NOT NULL, week INTEGER NOT NULL, game TEXT NOT NULL, team INTEGER NOT NULL, at TEXT NOT NULL, PRIMARY KEY (email, season, week, game))"
     );
+  }
+
+  settings() {
+    const out = { ...SETTING_DEFAULTS };
+    for (const r of this.sql.exec("SELECT key, value FROM settings").toArray()) {
+      if (r.key in out) out[r.key] = r.value === "1";
+    }
+    return out;
+  }
+
+  setSetting(key, on) {
+    this.sql.exec(
+      "INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT (key) DO UPDATE SET value = excluded.value",
+      key, on ? "1" : "0"
+    );
+    return { ok: true };
   }
 
   loreRows() {
@@ -144,11 +164,24 @@ export default {
         return json(await buildState(league, cfg, week, email, admin));
       }
 
+      if (url.pathname === "/api/settings" && request.method === "GET") {
+        return json(await league.settings());
+      }
+
+      if (url.pathname === "/api/admin/settings" && request.method === "POST") {
+        if (!admin) return json({ error: "Only the Groundskeeper can do that." }, 403);
+        const body = await request.json().catch(() => ({}));
+        if (!(body.key in SETTING_DEFAULTS) || typeof body.value !== "boolean") return json({ error: "Unknown switch." }, 400);
+        await league.setSetting(body.key, body.value);
+        return json(await league.settings());
+      }
+
       if (url.pathname === "/api/lore" && request.method === "GET") {
         return json(await loreState(league, email, admin));
       }
 
       if (url.pathname === "/api/lore" && request.method === "POST") {
+        if (!(await league.settings()).loreOpen) return json({ error: "Lore submissions are closed right now." }, 403);
         const claims = await league.claims();
         const mine = claims.find((c) => c.email === email);
         if (!mine) return json({ error: "Link your login to your team first (it takes one tap on the Pick'em tab), then come back." }, 400);
