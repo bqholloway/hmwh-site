@@ -431,13 +431,25 @@ table.lb{min-width:0}
 .split{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
 @media (max-width:560px){.pick{grid-template-columns:1fr}.vs{display:none}.h2h .big{font-size:1.9rem}}
 /* Lore timeline (horizontal) */
-.htl-scroll{overflow-x:auto;overflow-y:hidden;border:1px solid var(--line);border-radius:8px;background:var(--panel);padding-bottom:8px}
+.htl-wrap{position:relative;min-width:0;max-width:100%}
+#v-lore{min-width:0}
+.htl-scroll{overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.htl-scroll::-webkit-scrollbar{display:none}
+.htl-wrap .edge{position:absolute;top:0;bottom:0;width:90px;pointer-events:none;z-index:6;opacity:0;transition:opacity .2s;display:flex;align-items:center;font-size:1.6rem;color:var(--muted)}
+.htl-wrap .edge.l{left:0;background:linear-gradient(90deg,var(--bg),transparent);padding-left:8px}
+.htl-wrap .edge.r{right:0;background:linear-gradient(270deg,var(--bg),transparent);justify-content:flex-end;padding-right:8px}
+.htl-wrap .edge.on{opacity:1}
 .htl{position:relative;height:430px;width:1520px}
 .htl .band{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--era) 7%,transparent);border-left:1px dashed color-mix(in srgb,var(--era) 45%,transparent)}
-.htl .band .hd{position:sticky;left:8px;display:inline-block;margin:36px 0 0 8px;background:var(--era);color:#fff;border-radius:999px;padding:5px 14px;font-weight:700;font-size:.82rem;letter-spacing:.03em;white-space:nowrap;box-shadow:0 0 0 4px var(--panel)}
+.htl .band .hd{position:sticky;left:8px;display:inline-block;margin:36px 0 0 8px;background:var(--era);color:#fff;border-radius:999px;padding:5px 14px;position:sticky;font-weight:700;font-size:.82rem;letter-spacing:.03em;white-space:nowrap;box-shadow:0 0 0 4px var(--bg);cursor:default;position:sticky}
+.htl .band .hd .ecard{display:none;position:absolute;left:0;top:calc(100% + 8px);width:250px;white-space:normal;background:var(--panel);color:var(--ink);border:1px solid var(--era);border-radius:6px;padding:10px 12px;box-shadow:0 10px 28px rgba(0,0,0,.2);font-weight:400;font-size:.82rem;line-height:1.4;letter-spacing:0;z-index:8}
+.htl .band .hd .ecard b{display:block;color:var(--era);font-size:.95rem;margin-bottom:2px}
+.htl .band .hd .ecard small{display:block;margin:0 0 6px;color:var(--muted);opacity:1}
+.htl .band .hd:hover .ecard,.htl .band .hd:focus .ecard{display:block}
+.htl .band .hd:hover,.htl .band .hd:focus{outline:none;z-index:8}
 .htl .band .hd small{font-family:var(--mono);font-weight:400;font-size:.64rem;margin-left:8px;opacity:.9}
 .htl .modern{position:absolute;top:8px;left:60px;right:0;height:16px;border-top:2px solid var(--muted);font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.htl .modern span{position:sticky;left:8px;display:inline-block;background:var(--panel);padding:0 8px;margin-top:-9px}
+.htl .modern span{position:sticky;left:8px;display:inline-block;background:var(--bg);padding:0 8px;margin-top:-9px}
 .htl .axis{position:absolute;left:0;right:0;top:var(--ay);height:4px;background:var(--ink);border-radius:2px}
 .htl .tick{position:absolute;top:calc(var(--ay) + 10px);font-family:var(--mono);font-size:.62rem;color:var(--muted);transform:translateX(-50%)}
 .htl .hev{position:absolute;left:var(--x);width:215px;height:var(--h);color:var(--ink)}
@@ -718,8 +730,9 @@ table.lb{min-width:0}
     </dialog>
     <section id="lore-queue" hidden aria-labelledby="h-lq"><div class="head"><div class="eyebrow">Groundskeeper only</div><h2 id="h-lq">Review queue</h2>
       <p>Edit anything, then publish. The sort year controls where it lands on the timeline.</p></div><div id="lq-list" class="lq-list"></div></section>
-    <div class="htl-scroll" id="htl-scroll" tabindex="-1"><div class="htl" id="tl" role="list" aria-label="League timeline"></div></div>
-    <p class="status">Scroll sideways for the full timeline.</p>
+    <div class="htl-wrap"><div class="edge l" id="edge-l" aria-hidden="true">‹</div><div class="edge r" id="edge-r" aria-hidden="true">›</div>
+      <div class="htl-scroll" id="htl-scroll"><div class="htl" id="tl" role="list" aria-label="League timeline"></div></div></div>
+    <p class="status">Move your mouse toward either edge to scroll the timeline.</p>
     <p class="note">Hover (or tap) any event for details. Entries without a byline are placeholders until real lore is approved. The league also ran in 2013 and 2014, but those seasons are not canon.</p>
   </div>
 
@@ -870,9 +883,9 @@ show(start);
   const nm=s=>OW[s]||'A member';
   let L=null;
   const ERAS=[
-    {n:'Genesis Era',a:2015,b:2016,c:'#2f7d3a',t:'Pre-PPR · the beginning'},
-    {n:'Eagle Pride Era',a:2017,b:2023,c:'#4a6a86',t:'Full-point PPR'},
-    {n:'Comp Era',a:2024,b:9999,c:'#9b2a3c',t:'Half-point PPR · bonus wins'}];
+    {n:'Genesis Era',a:2015,b:2016,c:'#2f7d3a',t:'Pre-PPR · the beginning',d:'Non-PPR scoring. The founding seasons, when every point was hard to come by.'},
+    {n:'Eagle Pride Era',a:2017,b:2023,c:'#4a6a86',t:'Full-point PPR',d:'Seven seasons where every catch counted a full point.'},
+    {n:'Comp Era',a:2024,b:9999,c:'#9b2a3c',t:'Half-point PPR · bonus wins',d:'Half-point PPR, plus bonus wins for the week\'s top five scores. The era we are in now.'}];
   const eraOf=y=>ERAS.find(e=>y>=e.a&&y<=e.b)||ERAS[0];
   function api(method,path,body){return fetch(path,{method,credentials:'same-origin',headers:body?{'content-type':'application/json'}:undefined,body:body?JSON.stringify(body):undefined}).then(async r=>{let d=null;try{d=await r.json()}catch(e){}return{ok:r.ok,data:d}}).catch(()=>({ok:false,data:null}))}
   const X0=60,YW=110,AY=225,Y0=2015,YN=12;
@@ -886,7 +899,8 @@ show(start);
     items.sort((a,b)=>a.y-b.y);
     ERAS.forEach(e=>{const a=xOf(e.a),z=e.b===9999?X0+YN*YW+140:xOf(e.b+1)-0;
       const bd=mk('div','band');bd.style.cssText=`left:${a}px;width:${z-a}px;--era:${e.c}`;
-      const hd=mk('span','hd',e.n);hd.appendChild(mk('small',null,`${e.a}${e.b===9999?' to now':'–'+e.b}`));bd.appendChild(hd);ol.appendChild(bd)});
+      const yrs=`${e.a}${e.b===9999?' to now':'–'+e.b}`,hd=mk('span','hd',e.n);hd.tabIndex=0;hd.appendChild(mk('small',null,yrs));
+      const ec=mk('span','ecard');ec.append(mk('b',null,e.n),mk('small',null,`${yrs} · ${e.t}`),document.createTextNode(e.d));hd.appendChild(ec);bd.appendChild(hd);ol.appendChild(bd)});
     const md=mk('div','modern');md.appendChild(mk('span',null,'The Modern Era · 2015 to now'));ol.appendChild(md);
     ol.appendChild(mk('div','axis'));
     for(let y=Y0;y<Y0+YN;y++){const t=mk('div','tick',String(y));t.style.left=xOf(y+.5)+'px';ol.appendChild(t)}
@@ -931,6 +945,22 @@ show(start);
   }
   function drawAll(){draw();drawMine();drawQueue()}
   drawAll();
+  (function(){
+    const sc=$('htl-scroll'),el=$('edge-l'),er=$('edge-r');
+    const calm=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    let v=0,raf=0;
+    const edges=()=>{const m=sc.scrollWidth-sc.clientWidth;el.classList.toggle('on',sc.scrollLeft>4);er.classList.toggle('on',sc.scrollLeft<m-4)};
+    function tick(){sc.scrollLeft+=v;edges();raf=v?requestAnimationFrame(tick):0}
+    sc.addEventListener('mousemove',e=>{
+      if(calm||e.target.closest('.card,.hd')){v=0;return}
+      const r=sc.getBoundingClientRect(),z=Math.min(220,r.width*.22),x=e.clientX-r.left;
+      v=x<z?-Math.pow((z-x)/z,1.5)*16:x>r.width-z?Math.pow((x-(r.width-z))/z,1.5)*16:0;
+      if(v&&!raf)raf=requestAnimationFrame(tick);
+    });
+    sc.addEventListener('mouseleave',()=>{v=0});
+    sc.addEventListener('scroll',edges);window.addEventListener('resize',edges);
+    setTimeout(edges,0);
+  })();
   api('GET','/api/lore').then(r=>{if(r.ok&&r.data){L=r.data;drawAll()}});
   const dlg=$('lore-dlg'),form=$('lore-form'),msg=$('lf-msg');
   $('lore-open').onclick=()=>{
