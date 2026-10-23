@@ -134,12 +134,15 @@ section{display:grid;gap:14px;min-width:0}
 .chart-wrap{overflow-x:auto;padding:12px 8px 6px}
 .chart-wrap svg{display:block;min-width:680px;width:100%;height:auto}
 .chart-wrap text{font-family:var(--mono)}
-.line{fill:none;stroke:var(--faint);stroke-width:3;transition:stroke .15s,opacity .15s}
-.dot{fill:var(--panel);stroke:var(--faint);stroke-width:2.5}
-.team-g{cursor:pointer}
-.team-g.on .line{stroke:var(--mark);stroke-width:4}
-.team-g.on .dot{stroke:var(--mark)}
-.chart.has-on .team-g:not(.on){opacity:.28}
+.case{fill:none;stroke:var(--ink);stroke-opacity:.45;stroke-width:6;stroke-linejoin:round}
+.line{fill:none;stroke-width:3.5;stroke-linejoin:round;transition:opacity .15s}
+.dot{stroke:var(--ink);stroke-opacity:.6;stroke-width:1.5}
+.team-g{cursor:pointer;transition:opacity .15s}
+.team-g.on .line{stroke-width:5}
+.team-g.on .case{stroke-width:8}
+.team-g.on .dot{r:8}
+.chart.has-on .team-g:not(.on){opacity:.18}
+.chip .sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px;box-shadow:0 0 0 1px var(--faint)}
 .chip{display:flex;flex-wrap:wrap;gap:6px}
 .chip button{all:unset;cursor:pointer;font-size:.8rem;padding:4px 10px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
 .chip button[aria-pressed="true"]{background:var(--mark);color:var(--panel);border-color:var(--mark)}
@@ -309,7 +312,7 @@ table.lb{min-width:0}
         <p>Rank after each week, using full records with bonus wins and points for as the tiebreaker. Tap a team to follow its line.</p></div>
       <div class="chip" id="chips" role="group" aria-label="Highlight a team"></div>
       <div class="box chart-wrap"><svg id="bump" class="chart" role="img" aria-label="Standings rank by week for all ten teams"></svg></div>
-      <p class="note">Week 0 is your preseason coaches poll, entered by hand. Avatars, team colors and the stadium background replace these gray circles in the design pass.</p>
+      <p class="note">Poll = the preseason coaches poll. Team avatars and the stadium background come in the design pass.</p>
     </section>
     <section aria-labelledby="h-pr">
       <div class="head"><div class="eyebrow">Week 6</div><h2 id="h-pr">The rankings</h2>
@@ -515,18 +518,22 @@ show(start);
   const el=(n,a,p=svg)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e};
   for(let w=0;w<cols;w++){el('line',{x1:x(w),x2:x(w),y1:TP-14,y2:H-B+6,stroke:'var(--soft)','stroke-width':1});const t=el('text',{x:x(w),y:20,'text-anchor':'middle','font-size':12,fill:w<=LW?'var(--ink)':'var(--faint)'});t.textContent=w===0?'Poll':'W'+w}
   for(let r=1;r<=10;r++){el('line',{x1:L-6,x2:W-R+10,y1:y(r),y2:y(r),stroke:'var(--line)','stroke-dasharray':'2 5'});const t=el('text',{x:L-14,y:y(r)+4,'text-anchor':'end','font-size':12,fill:'var(--muted)'});t.textContent=r}
-  for(let r=1;r<=10;r++) el('circle',{cx:x(0),cy:y(r),r:9,fill:'none',stroke:'var(--faint)','stroke-dasharray':'3 3'});
+  const POLL=CUR.poll||{}, COL=D.colors||{};
   const groups={};
   CUR.teams.forEach(t=>{
+    const col=COL[t.id]||'var(--faint)', p0=POLL[t.id];
+    const pts=[...(p0?[[x(0),y(p0)]]:[]),...t.weeks.map((wk,i)=>[x(i+1),y(wk.rank)])];
     const g=el('g',{class:'team-g',tabindex:0,role:'button','aria-label':`${t.name}, ${t.w}-${t.l}`});
-    el('path',{class:'line',d:'M'+t.weeks.map((wk,i)=>`${x(i+1)},${y(wk.rank)}`).join('L')},g);
-    t.weeks.forEach((wk,i)=>{const c=el('circle',{class:'dot',cx:x(i+1),cy:y(wk.rank),r:6},g);el('title',{},c).textContent=`${t.name} · Week ${i+1}: ${wk.pts.toFixed(2)} pts, ${wk.rec}, rank ${wk.rank}`});
+    const d='M'+pts.map(p=>p.join(',')).join('L');
+    el('path',{class:'case',d},g);el('path',{class:'line',d,stroke:col},g);
+    if(p0){const c=el('circle',{class:'dot',cx:x(0),cy:y(p0),r:6,fill:col},g);el('title',{},c).textContent=`${t.name} · Preseason coaches poll: #${p0}`}
+    t.weeks.forEach((wk,i)=>{const c=el('circle',{class:'dot',cx:x(i+1),cy:y(wk.rank),r:6,fill:col},g);el('title',{},c).textContent=`${t.name} · Week ${i+1}: ${wk.pts.toFixed(2)} pts, ${wk.rec}, rank ${wk.rank}`});
     const last=t.weeks.at(-1);el('text',{x:x(LW)+14,y:y(last.rank)+4,'font-size':12,fill:'var(--ink)'},g).textContent=`${last.rec}  ${short(t.name)}`;
     g.addEventListener('click',()=>toggle(t.id));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle(t.id)}});
     groups[t.id]=g;
   });
   const chips=document.getElementById('chips');
-  [...CUR.teams].sort((a,b)=>a.weeks.at(-1).rank-b.weeks.at(-1).rank).forEach(t=>{const b=mk('button',null,short(t.name));b.type='button';b.dataset.id=t.id;b.setAttribute('aria-pressed','false');b.onclick=()=>toggle(t.id);chips.appendChild(b)});
+  [...CUR.teams].sort((a,b)=>a.weeks.at(-1).rank-b.weeks.at(-1).rank).forEach(t=>{const b=mk('button');const sw=mk('span','sw');sw.style.background=(D.colors||{})[t.id]||'var(--faint)';b.append(sw,short(t.name));b.type='button';b.dataset.id=t.id;b.setAttribute('aria-pressed','false');b.onclick=()=>toggle(t.id);chips.appendChild(b)});
   let on=null;
   function toggle(id){on=on===id?null:id;svg.classList.toggle('has-on',on!==null);Object.entries(groups).forEach(([k,g])=>{g.classList.toggle('on',+k===on);if(+k===on)svg.appendChild(g)});chips.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.id===on))}
 })();
