@@ -22,7 +22,11 @@
   --bg:#151614; --panel:#1d1e1c; --ink:#e9eae6; --muted:#9a9c96; --line:#33352f; --soft:#262724; --mark:#d6d7d2; --faint:#4b4d48; --felt:#7f2633; --felt-edge:#57161f; --brass:#d4a446; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#151614; --panel:#1d1e1c; --ink:#e9eae6; --muted:#9a9c96; --line:#33352f; --soft:#262724; --mark:#d6d7d2; --faint:#4b4d48; --felt:#7f2633; --felt-edge:#57161f; --brass:#d4a446; color-scheme:dark}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
 .top-in{position:relative;max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px 0;display:grid;gap:8px}
@@ -200,6 +204,28 @@ select{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:
 .mu.gotw{border:2px solid var(--brass);box-shadow:0 0 0 3px color-mix(in srgb,var(--brass) 18%,transparent)}
 .gotw-tag{display:inline-flex;gap:6px;align-items:center;font-family:var(--mono);font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;background:var(--brass);color:var(--panel);padding:2px 7px;border-radius:2px}
 .mu-mini .x2{grid-column:1/-1;justify-self:start}
+.pk-bar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:12px 14px;font-size:.88rem}
+.pk-bar .st{font-family:var(--mono);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding:2px 8px;border-radius:2px;border:1px solid var(--mark)}
+.pk-bar .st.open{background:var(--mark);color:var(--panel)}
+.pk-bar .muted{color:var(--muted)}
+.pk-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.mu button:disabled{cursor:default}
+.mu button.loss{opacity:.5}
+.mu button .res{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink)}
+.mu .who{grid-column:1/-1;display:grid;gap:2px;font-size:.76rem;color:var(--muted);border-top:1px solid var(--line);padding-top:6px}
+.claim{display:grid;gap:10px;padding:14px}
+.claim p{margin:0;font-size:.9rem}
+.claim .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.claim select{flex:1 1 220px}
+table.lb{min-width:0}
+.lb th,.lb td{padding:8px 10px}
+.lb th:nth-child(2),.lb td:nth-child(2){text-align:left}
+.lb tr.me td{font-weight:700}
+.lb td small{display:block;color:var(--muted);font-weight:400;font-size:.76rem}
+.admin{padding:14px;display:grid;gap:8px;font-size:.85rem}
+.admin div{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.admin button{all:unset;cursor:pointer;font-size:.78rem;border:1px solid var(--line);border-radius:3px;padding:3px 8px}
+.btn:disabled{opacity:.45;cursor:default}
 .btn{all:unset;cursor:pointer;background:var(--mark);color:var(--panel);font-weight:600;padding:10px 16px;border-radius:4px;justify-self:start}
 .btn:focus-visible{outline:2px solid var(--mark);outline-offset:3px}
 .status{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
@@ -254,7 +280,7 @@ select{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:
         <div class="box">
           <h2>Week 7 matchups</h2>
           <div class="mu-mini" id="minimu"></div>
-          <button class="linkbtn" type="button" data-go="pickem" style="margin-top:12px">Make your picks →</button>
+          <button class="linkbtn" type="button" data-go="pickem" style="margin-top:12px">Week 8 pick'em →</button>
         </div>
         <div class="box">
           <h2>Latest video</h2>
@@ -325,20 +351,22 @@ select{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:
 
   <!-- PICK'EM -->
   <div class="view" id="v-pickem" hidden>
-    <div><div class="eyebrow">Weekly pick'em</div><h1>Week 7 picks</h1>
-      <p class="lede">Pick a winner in every matchup. Each correct pick is worth 1 point, and the Game of the Week is worth 2. Picks lock at each team's first kickoff and get scored with Tuesday's update.</p></div>
+    <div><div class="eyebrow">Weekly pick'em</div><h1 id="pk-title">Pick'em</h1>
+      <p class="lede">Pick a winner in every matchup. Each correct pick is worth 1 point, and the Game of the Week is worth 2. You can change your picks until they lock.</p></div>
+    <div class="box pk-bar" id="pk-bar" aria-live="polite">Loading picks…</div>
     <div class="split">
       <section aria-labelledby="h-pk">
         <h2 id="h-pk">This week's matchups</h2>
+        <div class="box claim" id="pk-claim" hidden></div>
         <div class="pk" id="pk"></div>
-        <button class="btn" id="pk-save" type="button">Save picks</button>
-        <p class="status" id="pk-status" aria-live="polite">0 of 5 picked · 6 points available</p>
+        <div class="pk-actions"><button class="btn" id="pk-save" type="button" disabled>Save picks</button><p class="status" id="pk-status" aria-live="polite"></p></div>
+        <p class="note" id="pk-note" hidden></p>
       </section>
       <section aria-labelledby="h-pkb">
         <h2 id="h-pkb">Season leaderboard</h2>
-        <div class="ph" style="min-height:220px">Leaderboard: owner · points · correct picks · Game of the Week record<br>Fills in once picks are stored</div>
-        <p class="note">You're signed in through Cloudflare Access, so the site already knows who's picking. Picks get stored in a free Cloudflare database. In this wireframe, Save does nothing.</p>
+        <div class="box tw"><table class="lb" id="pk-board"></table></div>
         <p class="note">Game of the Week is picked automatically: the matchup whose two teams have the best combined standings rank going into the week. Ties go to the game with the higher-ranked team.</p>
+        <div class="box admin" id="pk-admin" hidden></div>
       </section>
     </div>
   </div>
@@ -565,22 +593,145 @@ show(start);
   sel.onchange=draw;draw();
 })();
 
-/* ---------- Pick'em ---------- */
+/* ---------- Pick'em (live) ---------- */
 (function(){
-  const box=document.getElementById('pk'),st=document.getElementById('pk-status'),picks={};
-  const pts=i=>i===GOTW?2:1, total=D.wk7.reduce((s,_,i)=>s+pts(i),0);
-  const order=[GOTW,...D.wk7.map((_,i)=>i).filter(i=>i!==GOTW)];
-  const upd=()=>{const n=Object.keys(picks).length;st.textContent=`${n} of 5 picked · ${total} points available`};
-  order.forEach(i=>{const [a,b,pa,pb]=D.wk7[i];
-    const d=mk('div','box mu'+(i===GOTW?' gotw':''));const wk=mk('div','wk');
-    if(i===GOTW){wk.append(mk('span','gotw-tag','2× Game of the Week'),mk('span',null,`#${RANK[a]} vs #${RANK[b]}`))}
-    else wk.append(mk('span',null,`#${RANK[a]} vs #${RANK[b]} · 1 pt`),mk('span',null,'Locks at first kickoff'));
-    d.appendChild(wk);
-    [[a,pa],[b,pb]].forEach(([id,p])=>{const t=T[id];const bt=mk('button');bt.type='button';bt.setAttribute('aria-pressed','false');bt.append(mk('b',null,t.name),mk('small',null,`${t.w}-${t.l} · proj ${p.toFixed(1)}`));
-      bt.onclick=()=>{picks[i]=id;d.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===bt));upd()};d.appendChild(bt)});
-    box.appendChild(d);
-  });
-  document.getElementById('pk-save').onclick=()=>{const n=Object.keys(picks).length;st.textContent=n<5?`Pick all 5 matchups first (${n} of 5)`:'Wireframe only: picks are not saved yet'};
+  const $=id=>document.getElementById(id);
+  const box=$('pk'),bar=$('pk-bar'),st=$('pk-status'),save=$('pk-save'),claimBox=$('pk-claim'),board=$('pk-board'),note=$('pk-note'),adminBox=$('pk-admin');
+  const owner=s=>D.owners[String(s)]||('Team '+s), first=s=>owner(s).split(' ')[0];
+  const when=iso=>new Date(iso).toLocaleString([], {weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+  let cfg=null,W=null,S=null,picks={},dirty=false,signedOut=null;
+
+  async function api(method,path,body){
+    try{
+      const r=await fetch(path,{method,credentials:'same-origin',headers:body?{'content-type':'application/json'}:{},body:body?JSON.stringify(body):undefined});
+      const ct=r.headers.get('content-type')||'';
+      if(!ct.includes('application/json')) return {ok:false,signedOut:true,error:'Your sign-in expired. Refresh the page to sign in again.'};
+      const data=await r.json();
+      if(r.status===401) return {ok:false,signedOut:true,error:data.error};
+      return r.ok?{ok:true,data}:{ok:false,error:data.error||'Something went wrong. Try again.'};
+    }catch(e){return {ok:false,signedOut:true,error:'Sign in at hmwh.men to make picks.'}}
+  }
+
+  const canPick=()=>S&&S.mySlot&&W&&(S.status==='open'||(S.status==='upcoming'&&S.admin));
+
+  function renderBar(){
+    bar.replaceChildren();
+    if(!W){bar.textContent='No pick\'em week is set up right now.';return}
+    const status=S?S.status:(Date.now()>=Date.parse(W.locksAt)?'locked':Date.now()<Date.parse(W.opensAt)?'upcoming':'open');
+    const chip=mk('span','st'+(status==='open'?' open':''),status==='open'?'Open':status==='locked'?'Locked':'Opens soon');
+    bar.appendChild(chip);
+    if(status==='open') bar.appendChild(mk('span',null,`Locks ${W.lockLabel}`));
+    else if(status==='upcoming') bar.appendChild(mk('span',null,`Opens ${when(W.opensAt)} · locks ${W.lockLabel}`));
+    else bar.appendChild(mk('span',null,'Kickoff has passed. Everyone\'s picks are shown below.'));
+    if(S) bar.appendChild(mk('span','muted',`${S.submitted.length} of 10 have picked`));
+    if(S&&S.admin&&status==='upcoming') bar.appendChild(mk('span','muted','Commissioner preview: you can save picks early.'));
+  }
+
+  function renderClaim(){
+    claimBox.replaceChildren();
+    if(!S||S.mySlot){claimBox.hidden=true;return}
+    claimBox.hidden=false;
+    const open=Object.keys(D.owners).map(Number).filter(s=>!S.claimed.includes(s)).sort((a,b)=>owner(a).localeCompare(owner(b)));
+    claimBox.appendChild(mk('p',null,'Which team is yours? This links your login to that team for the whole season.'));
+    const row=mk('div','row'),sel=mk('select');sel.id='pk-claim-sel';
+    const lab=mk('label',null,'Your team');lab.htmlFor='pk-claim-sel';lab.className='status';
+    open.forEach(s=>{const o=mk('option',null,`${owner(s)} · ${T[s].name}`);o.value=s;sel.appendChild(o)});
+    const b=mk('button','btn','This is me');b.type='button';
+    const msg=mk('p','status');msg.setAttribute('aria-live','polite');
+    b.onclick=async()=>{b.disabled=true;const r=await api('POST','/api/claim',{slot:+sel.value});b.disabled=false;if(r.ok){S=r.data;render()}else msg.textContent=r.error};
+    row.append(sel,b);claimBox.append(lab,row,msg,mk('p','status',`Signed in as ${S.email}. Pick the wrong team? Ask Bradley to undo it.`));
+  }
+
+  function renderGames(){
+    box.replaceChildren();
+    if(!W) return;
+    const allow=canPick();
+    W.games.forEach(g=>{
+      const d=mk('div','box mu'+(g.x2?' gotw':''));const wk=mk('div','wk');
+      const rk=`#${RANK[g.a]} vs #${RANK[g.b]}`;
+      if(g.x2) wk.append(mk('span','gotw-tag','2× Game of the Week'),mk('span',null,rk));
+      else wk.append(mk('span',null,`${rk} · 1 pt`),mk('span',null,`proj ${g.pa.toFixed(1)}–${g.pb.toFixed(1)}`));
+      d.appendChild(wk);
+      [[g.a,g.pa],[g.b,g.pb]].forEach(([id,p])=>{
+        const t=T[id],bt=mk('button');bt.type='button';bt.disabled=!allow;
+        bt.setAttribute('aria-pressed',String(picks[g.id]===id));
+        bt.append(mk('b',null,t.name),mk('small',null,`${owner(id)} · ${t.w}-${t.l} · proj ${p.toFixed(1)}`));
+        if(g.winner){bt.classList.add(g.winner===id?'win':'loss');if(g.winner===id)bt.appendChild(mk('span','res','Won'))}
+        bt.onclick=()=>{picks[g.id]=id;dirty=true;d.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===bt)));renderStatus()};
+        d.appendChild(bt);
+      });
+      if(S&&S.everyone){
+        const who=mk('div','who'),ev=S.everyone[g.id]||{};
+        [g.a,g.b].forEach(id=>{const names=Object.entries(ev).filter(([,t])=>t===id).map(([s])=>first(s));who.appendChild(mk('span',null,`${T[id].name}: ${names.length?names.join(', '):'nobody'}`))});
+        d.appendChild(who);
+      }
+      box.appendChild(d);
+    });
+  }
+
+  function renderStatus(msg){
+    if(!W){st.textContent='';save.disabled=true;return}
+    const n=W.games.filter(g=>picks[g.id]).length,total=W.games.reduce((t,g)=>t+(g.x2?2:1),0);
+    save.disabled=!canPick()||!dirty||n===0;
+    if(msg){st.textContent=msg;return}
+    let t=`${n} of ${W.games.length} picked · ${total} points available`;
+    if(dirty) t+=' · unsaved changes';
+    else if(S&&S.savedAt) t+=` · saved ${when(S.savedAt)}`;
+    st.textContent=t;
+  }
+
+  function renderNote(){
+    const msgs=[];
+    if(signedOut) msgs.push(signedOut);
+    else if(S&&!S.mySlot) msgs.push('Pick your team above to start making picks.');
+    if(W&&W.note) msgs.push(W.note);
+    note.hidden=!msgs.length;note.textContent=msgs.join(' ');
+  }
+
+  function renderBoard(){
+    board.replaceChildren();
+    if(!S){const tb=mk('tbody'),tr=mk('tr'),td=mk('td',null,'The leaderboard shows once you\'re signed in at hmwh.men.');tr.appendChild(td);tb.appendChild(tr);board.appendChild(tb);return}
+    const th=mk('thead'),hr=mk('tr');['#','Owner','Pts','Correct','GOTW','Last wk'].forEach(h=>hr.appendChild(mk('th',null,h)));th.appendChild(hr);
+    const rows=[...S.leaderboard].sort((a,b)=>b.points-a.points||b.correct-a.correct||owner(a.slot).localeCompare(owner(b.slot)));
+    const tb=mk('tbody');let place=0,prev=null;
+    rows.forEach((r,i)=>{
+      const key=r.points+'|'+r.correct;if(key!==prev){place=i+1;prev=key}
+      const tr=mk('tr',r.slot===S.mySlot?'me':'');
+      const name=mk('td',null,owner(r.slot));name.appendChild(mk('small',null,r.claimed?T[r.slot].name:'Not signed up yet'));
+      tr.append(mk('td','num',S.lastScored?place:'–'),name,mk('td','num',r.points),mk('td','num',r.graded?`${r.correct}/${r.graded}`:'—'),mk('td','num',r.gotwW+r.gotwL?`${r.gotwW}-${r.gotwL}`:'—'),mk('td','num',r.last==null?'—':r.last));
+      tb.appendChild(tr);
+    });
+    board.append(th,tb);
+  }
+
+  function renderAdmin(){
+    adminBox.replaceChildren();
+    if(!S||!S.admin||!S.claimEmails){adminBox.hidden=true;return}
+    adminBox.hidden=false;adminBox.appendChild(mk('b',null,'Commissioner: sign-ups'));
+    const ids=Object.keys(S.claimEmails).map(Number).sort((a,b)=>owner(a).localeCompare(owner(b)));
+    if(!ids.length) adminBox.appendChild(mk('span','status','Nobody has linked a team yet.'));
+    ids.forEach(s=>{const row=mk('div');row.appendChild(mk('span',null,`${owner(s)} · ${S.claimEmails[s]}`));const b=mk('button',null,'Undo');b.type='button';
+      b.onclick=async()=>{b.disabled=true;const r=await api('POST','/api/admin/release',{slot:s});if(r.ok){S=r.data;render()}else{b.disabled=false;b.textContent=r.error}};row.appendChild(b);adminBox.appendChild(row)});
+  }
+
+  function render(){
+    $('pk-title').textContent=W?`Week ${W.week} picks`:'Pick\'em';
+    renderBar();renderClaim();renderGames();renderStatus();renderNote();renderBoard();renderAdmin();
+  }
+
+  save.onclick=async()=>{
+    save.disabled=true;renderStatus('Saving…');
+    const r=await api('POST','/api/picks',{week:W.week,picks});
+    if(r.ok){S=r.data;picks={...S.myPicks};dirty=false;render()}
+    else{renderStatus(r.error);save.disabled=false}
+  };
+
+  (async()=>{
+    try{cfg=await (await fetch('data/pickem.json',{cache:'no-store'})).json();W=cfg.weeks.find(w=>w.week===cfg.current)||null}catch(e){cfg=null}
+    const r=await api('GET','/api/state');
+    if(r.ok){S=r.data;picks={...S.myPicks}}else signedOut=r.error;
+    render();
+  })();
 })();
 
 /* ---------- Videos ---------- */
