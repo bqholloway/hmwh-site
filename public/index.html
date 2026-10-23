@@ -134,6 +134,7 @@ section{display:grid;gap:14px;min-width:0}
 .tr-split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:24px;align-items:start}
 @media (max-width:1000px){.tr-split{grid-template-columns:1fr}}
 .tr-tbl th,.tr-tbl td{padding:9px 10px}
+.tr-split .kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:6px}
 .tr-net{padding:10px 14px;display:grid;gap:2px}
 .tr-net button{all:unset;cursor:pointer;display:grid;grid-template-columns:minmax(0,9.5rem) 1fr 4.2rem;gap:10px;align-items:center;padding:5px 4px;border-radius:3px;font-size:.84rem}
 .tr-net button:hover,.tr-net button[aria-pressed="true"]{background:var(--soft)}
@@ -148,6 +149,7 @@ section{display:grid;gap:14px;min-width:0}
 .tr-tbl{min-width:520px}
 .tr-tbl td.pos{color:var(--up);font-weight:600} .tr-tbl td.neg{color:var(--down);font-weight:600}
 .tr-filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tr-filters select{width:auto;max-width:100%}
 .tr-list{display:grid;gap:12px}
 .trade{padding:14px 16px;display:grid;gap:12px}
 .trade.me{border-color:var(--brass)}
@@ -464,12 +466,11 @@ table.lb{min-width:0}
       <div class="seg"><button type="button" id="tr-now" aria-pressed="true">Today</button><button type="button" id="tr-day" aria-pressed="false">Trade day</button></div>
     </div>
 
-    <section class="kpis" aria-label="Trade market summary" id="tr-kpis"></section>
-
     <div class="tr-split">
       <section aria-labelledby="h-trnet">
         <div class="head"><h2 id="h-trnet">Who's winning the trade market</h2><p>Net value gained across every trade. Click a team to see its trades.</p></div>
         <div class="box tr-net" id="tr-net"></div>
+        <div class="kpis" aria-label="Trade market summary" id="tr-kpis"></div>
       </section>
       <section aria-labelledby="h-trrec">
         <div class="head"><h2 id="h-trrec">Team trade record</h2><p>"Won" means a team got more value back than it sent.</p></div>
