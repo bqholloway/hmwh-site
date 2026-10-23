@@ -258,7 +258,18 @@ tbody tr:last-child td{border-bottom:0}
 td.t{white-space:normal;min-width:180px}
 td.t small{display:block;color:var(--muted)}
 .bar{display:inline-block;height:8px;background:var(--mark);border-radius:2px;vertical-align:middle}
-.bar.neg{background:var(--faint)}
+.bar.pos{background:var(--up)}
+.bar.neg{background:var(--down)}
+td.luck-td{transition:background .15s}
+td.luck-td .num{font-weight:700}
+td.luck-td.pos .num{color:var(--up)}
+td.luck-td.neg .num{color:var(--down)}
+.luck-explain{padding:16px 18px;display:grid;gap:8px;max-width:78ch}
+.luck-explain h2{font-size:1rem}
+.luck-explain p{margin:0;font-size:.92rem;color:var(--muted)}
+.luck-explain b{color:var(--ink)}
+.luck-explain .pos{color:var(--up);font-weight:700;font-family:var(--mono)}
+.luck-explain .neg{color:var(--down);font-weight:700;font-family:var(--mono)}
 .luck-cell{display:flex;align-items:center;gap:8px;justify-content:flex-end}
 .yrpick{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .yrpick label{font-size:.85rem;color:var(--muted)}
@@ -457,7 +468,12 @@ table.lb{min-width:0}
     <section aria-label="Luck by season">
       <div class="yrpick"><label for="luckyr">Season</label><select id="luckyr"></select><span class="status" id="luckinfo"></span></div>
       <div class="box tw"><table id="luck"></table></div>
-      <p class="note">Luck = actual head-to-head wins minus expected wins from all-play %. Bonus results are left out since they don't depend on schedule. Opp. avg = average score of the opponents each team faced. Seasons before 2025 load in the build.</p>
+      <div class="box luck-explain">
+        <h2>What is luck?</h2>
+        <p>Every week, your score is checked against all nine other teams, not just the one you played. That all-play record shows how good your team actually was. Your all-play win rate times the games you've played gives the wins an average schedule would have handed you.</p>
+        <p><b>Luck is the gap between your real wins and those expected wins.</b> <span class="pos">+2.0</span> means you won two more games than your scoring earned, from soft opponents or close games breaking your way. <span class="neg">−2.0</span> means the schedule took two wins from you. It measures schedule luck only. Trades, injuries and lineup calls show up in your score, not here.</p>
+      </div>
+      <p class="note">Regular-season head-to-head games only. Bonus results are left out since they don't depend on the schedule. Opp. avg is the average score of the opponents each team faced.</p>
     </section>
   </div>
 
@@ -802,26 +818,43 @@ show(start);
   }).catch(()=>{$('h2h').replaceChildren(mk('p',null,'Head-to-head history couldn\'t be loaded. Refresh to try again.'))});
 })();
 
-/* ---------- Luck with season picker ---------- */
+/* ---------- Luck with season picker (all seasons from h2h.json) ---------- */
 (function(){
-  const sel=document.getElementById('luckyr'), info=document.getElementById('luckinfo');
-  for(let y=D.current;y>=2015;y--){const o=mk('option',null,D.seasons[y]?String(y):`${y} (in build)`);o.value=y;o.disabled=!D.seasons[y];sel.appendChild(o)}
-  sel.value=D.current;
+  const sel=document.getElementById('luckyr'), info=document.getElementById('luckinfo'), tb=document.getElementById('luck');
+  let H=null;
+  function season(y){
+    const g=H.games.filter(x=>String(x[0])===y&&x[2]==='R');
+    const t={},wk={};
+    g.forEach(([yy,w,_,h,hp,a,ap,win])=>{
+      [[h,hp,a,ap,win==='H'],[a,ap,h,hp,win==='A']].forEach(([me,ms,op,os,won])=>{
+        const r=t[me]||(t[me]={id:me,w:0,l:0,apw:0,apl:0,opp:0,n:0});won?r.w++:r.l++;r.opp+=os;r.n++;});
+      (wk[w]||(wk[w]={}))[h]=hp;(wk[w]||(wk[w]={}))[a]=ap;
+    });
+    Object.values(wk).forEach(sc=>{const ids=Object.keys(sc);ids.forEach(i=>ids.forEach(j=>{if(i===j)return;if(sc[i]>sc[j])t[i].apw++;else if(sc[i]<sc[j])t[i].apl++;else{t[i].apw+=.5;t[i].apl+=.5}}))});
+    return {weeks:Object.keys(wk).length,rows:Object.values(t)};
+  }
+  const nm=(y,id)=>H.seasons[y]&&H.seasons[y][id]?H.seasons[y][id]:{n:'Team '+id,o:''};
+  const fmtAP=n=>Number.isInteger(n)?String(n):n.toFixed(1);
   function draw(){
-    const S=D.seasons[sel.value];
-    info.textContent=S.year===D.current?`Through Week ${LW}`:`Regular season, ${S.weeks} weeks`;
-    const rows=S.teams.map(t=>{const g=t.h2hw+t.h2hl,ap=t.apw/(t.apw+t.apl),exp=ap*g;return{t,ap,exp,luck:t.h2hw-exp}}).sort((a,b)=>b.luck-a.luck);
-    const max=Math.max(...rows.map(r=>Math.abs(r.luck)))||1;
-    const tb=document.getElementById('luck');tb.replaceChildren();
+    const y=sel.value,S=season(y),cur=y===String(D.current);
+    info.textContent=cur?`Through Week ${S.weeks}`:`Regular season, ${S.weeks} weeks`;
+    const rows=S.rows.map(r=>{const g=r.w+r.l,ap=r.apw/(r.apw+r.apl),exp=ap*g;return{r,ap,exp,luck:r.w-exp,sos:r.opp/r.n}}).sort((a,b)=>b.luck-a.luck);
+    const max=Math.max(...rows.map(x=>Math.abs(x.luck)))||1;
+    tb.replaceChildren();
     const th=mk('thead'),hr=mk('tr');['Team','All-play','All-play %','H2H record','Expected W','Opp. avg','Luck'].forEach(h=>hr.appendChild(mk('th',null,h)));th.appendChild(hr);
     const body=mk('tbody');
-    rows.forEach(r=>{const tr=mk('tr');const td=mk('td','t',r.t.name);td.appendChild(mk('small',null,r.t.owner));tr.appendChild(td);
-      [`${r.t.apw}-${r.t.apl}`,`${(r.ap*100).toFixed(0)}%`,`${r.t.h2hw}-${r.t.h2hl}`,r.exp.toFixed(1),r.t.sos.toFixed(1)].forEach(v=>tr.appendChild(mk('td','num',v)));
-      const lc=mk('td'),wrap=mk('span','luck-cell'),bar=mk('span','bar'+(r.luck<0?' neg':''));bar.style.width=Math.round(Math.abs(r.luck)/max*60)+'px';
-      wrap.append(bar,mk('span','num',(r.luck>=0?'+':'')+r.luck.toFixed(1)));lc.appendChild(wrap);tr.appendChild(lc);body.appendChild(tr)});
+    rows.forEach(x=>{const tr=mk('tr'),info=nm(y,x.r.id);const td=mk('td','t',info.n);td.appendChild(mk('small',null,info.o));tr.appendChild(td);
+      [`${fmtAP(x.r.apw)}-${fmtAP(x.r.apl)}`,`${(x.ap*100).toFixed(0)}%`,`${x.r.w}-${x.r.l}`,x.exp.toFixed(1),x.sos.toFixed(1)].forEach(v=>tr.appendChild(mk('td','num',v)));
+      const sign=x.luck>=0.05?'pos':x.luck<=-0.05?'neg':'';
+      const lc=mk('td','luck-td '+sign),wrap=mk('span','luck-cell'),bar=mk('span','bar '+sign);bar.style.width=Math.max(2,Math.round(Math.abs(x.luck)/max*60))+'px';
+      const k=Math.abs(x.luck)/max;if(sign)lc.style.background=`color-mix(in srgb, var(--${sign==='pos'?'up':'down'}) ${Math.round(6+k*18)}%, transparent)`;
+      wrap.append(bar,mk('span','num',(x.luck>=0?'+':'−')+Math.abs(x.luck).toFixed(1)));lc.appendChild(wrap);tr.appendChild(lc);body.appendChild(tr)});
     tb.append(th,body);
   }
-  sel.onchange=draw;draw();
+  fetch('data/h2h.json',{cache:'no-store'}).then(r=>r.json()).then(h=>{
+    H=h;Object.keys(h.seasons).sort().reverse().forEach(y=>{const o=mk('option',null,y);o.value=y;sel.appendChild(o)});
+    sel.value=String(D.current);sel.onchange=draw;draw();
+  }).catch(()=>{info.textContent='Season data couldn\'t be loaded. Refresh to try again.'});
 })();
 
 /* ---------- Pick'em (live) ---------- */
