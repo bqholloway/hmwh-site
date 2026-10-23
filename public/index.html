@@ -70,8 +70,12 @@ section{display:grid;gap:14px;min-width:0}
 .scorebar{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
 .score{flex:none;display:grid;gap:2px;padding:8px 12px;min-width:170px;font-size:.82rem}
 .score .row{display:flex;justify-content:space-between;gap:10px}
-.score .row{color:var(--up);font-weight:600}
-.score .row.l{color:var(--down);font-weight:400}
+.score .win{color:var(--up);font-weight:700}
+.score .loss{color:var(--down);font-weight:400}
+.sb-key{font-family:var(--mono);font-size:.68rem;color:var(--muted);margin:6px 0 0;display:flex;gap:6px 16px;flex-wrap:wrap}
+.sb-key .win{color:var(--up);font-weight:700}.sb-key .loss{color:var(--down)}
+.mini tr.playin td{background:var(--soft)}
+.rail-mu .live{font-family:var(--mono);font-size:.68rem;color:var(--muted);margin:0 0 10px}
 .score .row span:first-child{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .score .wkl{font-family:var(--mono);font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 .front{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:start}
@@ -465,6 +469,7 @@ table.lb{min-width:0}
 
     <section aria-label="Week 6 scores">
       <div class="scorebar" id="scorebar"></div>
+      <p class="sb-key"><span>Team name = head-to-head result</span><span>Score = bonus win (top 5 score of the week)</span><span><span class="win">Green</span> = win · <span class="loss">Red</span> = loss</span></p>
     </section>
 
     <div class="front">
@@ -742,10 +747,13 @@ show(start);
 (function(){
   // score bar
   const sb=document.getElementById('scorebar');
-  CUR.games.filter(g=>g.wk===LW).forEach(g=>{
+  const wkGames=CUR.games.filter(g=>g.wk===LW);
+  const topScores=wkGames.flatMap(g=>[g.hp,g.ap]).sort((a,b)=>b-a);
+  const cut=topScores[4];
+  wkGames.forEach(g=>{
     const w=g.hp>g.ap?[g.h,g.hp,g.a,g.ap]:[g.a,g.ap,g.h,g.hp];
     const d=mk('div','box score');d.append(mk('span','wkl',`Week ${LW} · Final`));
-    [[w[0],w[1],''],[w[2],w[3],'l']].forEach(([id,p,c])=>{const r=mk('div','row '+c);r.append(mk('span',null,T[id].name),mk('span','num',p.toFixed(2)));d.appendChild(r)});
+    [[w[0],w[1],'win'],[w[2],w[3],'loss']].forEach(([id,p,c])=>{const r=mk('div','row');r.append(mk('span',c,T[id].name),mk('span','num '+(p>=cut?'win':'loss'),p.toFixed(2)));d.appendChild(r)});
     sb.appendChild(d);
   });
   // lead + stories
@@ -766,7 +774,7 @@ show(start);
   rest.forEach(h=>{const a=mk('article','story');const m=mk('div','meta');m.append(mk('span','pill',h.tag),mk('span',null,h.date));a.append(m,mk('h3',null,h.h),mk('p',null,h.d));grid.appendChild(a)});
   // mini standings
   const st=[...CUR.teams].sort((a,b)=>a.weeks.at(-1).rank-b.weeks.at(-1).rank), tb=document.getElementById('ministand');
-  st.forEach((t,i)=>{const tr=mk('tr',i===4?'cut':'');tr.append(mk('td',null,i+1),mk('td',null,t.name),mk('td','num',`${t.w}-${t.l}`));tb.appendChild(tr)});
+  st.forEach((t,i)=>{const tr=mk('tr',(i===4?'cut ':'')+(i===3||i===4?'playin':''));tr.append(mk('td',null,i+1),mk('td',null,t.name),mk('td','num',`${t.w}-${t.l}`));tb.appendChild(tr)});
   // rafters
   const rf=document.getElementById('rafters');
   D.champs.forEach(c=>{const b=mk('div','banner'+(c.complete?'':' live'));b.append(mk('div','yr',c.y),mk('div','champ',c.complete?c.owner:'TBD'),mk('div','tname',c.complete?c.name:'In progress'));rf.appendChild(b)});
@@ -775,7 +783,12 @@ show(start);
   document.getElementById('raftnote').textContent=`Multiple titles: ${multi}`;
   // mini matchups
   const mm=document.getElementById('minimu');
-  D.wk7.forEach(([a,b,pa,pb],i)=>{const d=mk('div',i===GOTW?'gold':'');if(i===GOTW)d.title='2× Game of the Week';d.append(mk('span',null,T[a].name),mk('span',null,pa.toFixed(1)),mk('span',null,T[b].name),mk('span',null,pb.toFixed(1)));mm.appendChild(d)});
+  const LV=D.live7, started=!!(LV&&Date.now()>=Date.parse(LV.kickoff));
+  const cap=mk('p','live',started?`Live scores · as of ${new Date(LV.asOf).toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'})}`:'Projections until the first kickoff');
+  mm.before(cap);
+  D.wk7.forEach(([a,b,pa,pb],i)=>{const d=mk('div',i===GOTW?'gold':'');if(i===GOTW)d.title='2× Game of the Week';
+    const va=started?LV.scores[a]:pa, vb=started?LV.scores[b]:pb;
+    d.append(mk('span',null,T[a].name),mk('span',null,va.toFixed(1)),mk('span',null,T[b].name),mk('span',null,vb.toFixed(1)));mm.appendChild(d)});
 })();
 
 /* ---------- League History (Record Book page, same origin) ---------- */

@@ -13,6 +13,9 @@ Deployed with `npx wrangler deploy`. `wrangler.jsonc` serves `public/` as static
 ## Draft Results
 - `public/data/draft.json` holds every pick from completed drafts (2025 and 2024 so far) with each player's year-end points under league scoring, from ESPN via Flaim. Each pick gets pts over or under expected: the k-th player taken at a position that season is expected to score what the k-th best drafted player at that position scored, and anyone below waiver-wire level (12th QB, 28th RB, 34th WR, 13th TE, 11th K that season) counts as waiver level. Team totals sum their picks. No letter grades. Add a season once its playoffs end.
 
+## Home
+- The scoreboard colors the team name by head-to-head result and the score by bonus win (top 5 weekly score). The Week 7 matchups box shows projections until `live7.kickoff` in `site.json`, then live scores from `live7.scores` (rewritten on each update run, with `asOf`).
+
 ## Trades
 - `public/data/trades.json` holds every completed 2026 trade with both sides' players and FantasyCalc values. The update runs add new trades once they clear review and re-score them.
 
