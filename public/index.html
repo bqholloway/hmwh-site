@@ -257,6 +257,36 @@ select{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:
 .grid-m td,.grid-m th{text-align:center;padding:7px 6px;min-width:44px}
 .grid-m th:first-child,.grid-m td:first-child{text-align:left;min-width:120px}
 .grid-m td.self{background:var(--soft)}
+.hh-pick{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) minmax(0,10rem);gap:12px;align-items:end}
+.hh-pick label{display:grid;gap:4px;font-size:.8rem;color:var(--muted)}
+.hh-pick select{width:100%}
+.swap{all:unset;cursor:pointer;border:1px solid var(--line);border-radius:4px;padding:8px 12px;font-size:1.1rem;line-height:1;background:var(--panel);margin-bottom:1px}
+.swap:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+.hh-score{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;padding:22px 18px;text-align:center}
+.hh-score .big{font-family:var(--mono);font-size:3rem;font-weight:600;line-height:1}
+.hh-score .big.ahead{color:var(--up)}
+.hh-score .who{font-weight:600;margin-top:6px}
+.hh-score small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+.hh-score .mid{font-family:var(--mono);font-size:.76rem;color:var(--muted);display:grid;gap:4px}
+.hh-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.hh-facts .box{padding:12px 14px;display:grid;gap:3px;min-width:0}
+.hh-facts .k{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.hh-facts .v{font-weight:600}
+.hh-facts .n{font-size:.8rem;color:var(--muted);overflow-wrap:anywhere}
+.hh-games li{align-items:baseline}
+.hh-games li.cons{opacity:.5}
+.hh-games .when{font-family:var(--mono);font-size:.74rem;color:var(--muted);flex:none;width:7.5rem}
+.hh-games .teams{flex:1;min-width:0;overflow-wrap:anywhere}
+.hh-games .teams b{font-weight:700}
+.hh-games .tag{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;border:1px solid currentColor;border-radius:2px;padding:0 5px;margin-left:6px;color:var(--brass)}
+.hh-games .tag.c{color:var(--muted)}
+.hh-games .sc{font-family:var(--mono);white-space:nowrap}
+.hh-games li.yr{background:var(--soft);font-family:var(--mono);font-size:.72rem;color:var(--muted);padding:5px 16px;letter-spacing:.08em}
+.grid-m td.cell{cursor:pointer}
+.grid-m td.cell:hover{outline:1px solid var(--mark);outline-offset:-1px}
+.grid-m td.w{color:var(--up);font-weight:600}
+.grid-m td.l{color:var(--down)}
+@media (max-width:640px){.hh-pick{grid-template-columns:1fr auto 1fr}.hh-pick label:last-child{grid-column:1/-1}.hh-score .big{font-size:2.2rem}.hh-games .when{width:auto}}
 .games{list-style:none;margin:0;padding:0;font-size:.9rem}
 .games li{display:flex;justify-content:space-between;gap:12px;padding:8px 16px;border-bottom:1px solid var(--line)}
 .games li:last-child{border-bottom:0}
@@ -388,19 +418,21 @@ table.lb{min-width:0}
   <!-- HEAD-TO-HEAD -->
   <div class="view" id="v-h2h" hidden>
     <div><div class="eyebrow">Statistics</div><h1>Head-to-Head</h1>
-      <p class="lede">Pick any two owners to see who owns who. Tracked by owner, so it follows people across every team name.</p></div>
-    <section aria-label="Pick two owners">
-      <div class="pick">
+      <p class="lede">Every game since 2015, owner against owner. Records follow the person, whatever their team was called that year.</p></div>
+    <section aria-label="Pick two owners" class="hh">
+      <div class="hh-pick">
         <label for="ra">Owner<select id="ra"></select></label>
-        <div class="vs">vs</div>
-        <label for="rb">Owner<select id="rb"></select></label>
+        <button type="button" class="swap" id="hh-swap" aria-label="Swap owners">⇄</button>
+        <label for="rb">Opponent<select id="rb"></select></label>
+        <label for="hh-yr">Seasons<select id="hh-yr"></select></label>
       </div>
-      <div class="box h2h" id="h2h"></div>
-      <div class="box"><ul class="games" id="h2h-games"></ul></div>
-      <p class="note">Wireframe has 2025 and 2026 regular seasons loaded. The build adds every season back to 2015, plus playoffs, streaks and biggest blowout per pairing.</p>
+      <div class="box hh-score" id="h2h"></div>
+      <div class="hh-facts" id="hh-facts"></div>
+      <div class="box"><ul class="games hh-games" id="h2h-games"></ul></div>
+      <p class="note">Records count regular-season and playoff games. Consolation games are listed in gray but not counted. Ties went to ESPN's tiebreaker.</p>
     </section>
     <section aria-labelledby="h-mx">
-      <div class="head"><h2 id="h-mx">The full grid</h2><p>Row owner's record against each column owner, 2025–2026.</p></div>
+      <div class="head"><h2 id="h-mx">The full grid</h2><p>Each row owner's record against each column owner. Click a cell to open that matchup. Current owners only.</p></div>
       <div class="box tw"><table class="grid-m" id="matrix"></table></div>
     </section>
   </div>
@@ -649,29 +681,98 @@ show(start);
   });
 })();
 
-/* ---------- Head-to-Head (owner = franchise slot; same owners in 2025–2026) ---------- */
+/* ---------- Head-to-Head (all-time, by owner) ---------- */
 (function(){
-  const ALL=Object.values(D.seasons).flatMap(s=>s.games);
-  const O=D.owners, ids=Object.keys(O).map(Number).sort((a,b)=>O[a].localeCompare(O[b]));
-  const ra=document.getElementById('ra'), rb=document.getElementById('rb');
-  ids.forEach(id=>[ra,rb].forEach(s=>{const o=mk('option',null,O[id]);o.value=id;s.appendChild(o)}));
-  ra.value=8; rb.value=7;
-  const rec=(a,b)=>{let w=0,l=0,games=[];ALL.forEach(g=>{let me,them;if(g.h===a&&g.a===b){me=g.hp;them=g.ap}else if(g.a===a&&g.h===b){me=g.ap;them=g.hp}else return;me>them?w++:l++;games.push({y:g.y,wk:g.wk,me,them})});games.sort((p,q)=>q.y-p.y||q.wk-p.wk);return{w,l,games}};
-  function draw(){
-    const a=+ra.value,b=+rb.value,box=document.getElementById('h2h'),ul=document.getElementById('h2h-games');box.replaceChildren();ul.replaceChildren();
-    if(a===b){const p=mk('p',null,'Pick two different owners.');p.style.cssText='grid-column:1/-1;margin:0;color:var(--muted)';box.appendChild(p);return}
-    const r=rec(a,b);
-    const side=(id,n)=>{const d=mk('div');d.append(mk('div','big num',n),mk('small',null,O[id]));return d};
-    const mid=mk('div','num','2025–26');mid.style.color='var(--muted)';
-    box.append(side(a,r.w),mid,side(b,r.l));
-    if(!r.games.length){const li=mk('li');li.append(mk('span',null,'No meetings in loaded seasons'),mk('span','num','—'));ul.appendChild(li)}
-    r.games.forEach(g=>{const li=mk('li');li.append(mk('span',null,`${g.y} · Week ${g.wk} · ${g.me>g.them?O[a]:O[b]} won`),mk('span','num',`${g.me.toFixed(2)}–${g.them.toFixed(2)}`));ul.appendChild(li)});
+  const $=id=>document.getElementById(id);
+  let H=null, cur=[], A='', B='', YR='all';
+  const ownerOf=(y,slot)=>H.seasons[y]&&H.seasons[y][slot]?H.seasons[y][slot].o:'?';
+  const teamOf=(y,slot)=>H.seasons[y]&&H.seasons[y][slot]?H.seasons[y][slot].n:'';
+  const fmt=n=>n.toFixed(2);
+  const fmtY=(n,y)=>y<=2016?String(Math.round(n)):n.toFixed(2);
+  const label={P:'Playoffs',W:'Consolation',L:'Consolation'};
+  // games between owners a and b, from a's side
+  function meetings(a,b){
+    const out=[];
+    H.games.forEach(([y,wk,t,h,hp,aa,ap,w])=>{
+      if(YR!=='all'&&String(y)!==YR) return;
+      const oh=ownerOf(y,h),oa=ownerOf(y,aa);let me,them,ms,ts;
+      if(oh===a&&oa===b){me=hp;them=ap;ms=h;ts=aa}else if(oa===a&&oh===b){me=ap;them=hp;ms=aa;ts=h}else return;
+      const won=(w==='H')===(oh===a);
+      out.push({y,wk,t,me,them,won,ms,ts,counts:t==='R'||t==='P'});
+    });
+    return out.sort((p,q)=>q.y-p.y||q.wk-p.wk);
   }
-  ra.onchange=rb.onchange=draw;draw();
-  const m=document.getElementById('matrix'),thead=mk('thead'),hr=mk('tr');hr.appendChild(mk('th',null,'Owner'));
-  ids.forEach(id=>{const th=mk('th',null,O[id].split(' ')[0]);th.title=O[id];hr.appendChild(th)});thead.appendChild(hr);
-  const tb=mk('tbody');ids.forEach(r=>{const tr=mk('tr');tr.appendChild(mk('td',null,O[r]));ids.forEach(c=>{if(r===c){tr.appendChild(mk('td','self'));return}const x=rec(r,c);tr.appendChild(mk('td','num',x.w+x.l?`${x.w}-${x.l}`:'·'))});tb.appendChild(tr)});
-  m.append(thead,tb);
+  function rec(g){let w=0,l=0;g.forEach(x=>{if(!x.counts)return;x.won?w++:l++});return[w,l]}
+  function render(){
+    const g=meetings(A,B), c=g.filter(x=>x.counts), [w,l]=rec(g);
+    const rs=rec(g.filter(x=>x.t==='R')), po=rec(g.filter(x=>x.t==='P'));
+    const box=$('h2h');box.replaceChildren();
+    if(A===B){box.appendChild(mk('p',null,'Pick two different owners.'));$('hh-facts').replaceChildren();$('h2h-games').replaceChildren();return}
+    const side=(o,n,lead)=>{const d=mk('div');d.append(mk('div','big num'+(lead?' ahead':''),n),mk('div','who',o));return d};
+    const mid=mk('div','mid');mid.append(mk('span',null,YR==='all'?'All-time':YR),mk('span',null,`Reg. season ${rs[0]}-${rs[1]}`),mk('span',null,`Playoffs ${po[0]}-${po[1]}`));
+    box.append(side(A,w,w>l),mid,side(B,l,l>w));
+    // facts
+    const f=$('hh-facts');f.replaceChildren();
+    const card=(k,v,n)=>{const d=mk('div','box');d.append(mk('div','k',k),mk('div','v',v),mk('div','n',n||''));f.appendChild(d)};
+    if(c.length){
+      const pf=c.reduce((s,x)=>s+x.me,0),pa=c.reduce((s,x)=>s+x.them,0);
+      card('Points',`${fmt(pf)} – ${fmt(pa)}`,`${A.split(' ')[0]} averages ${(pf/c.length).toFixed(1)}, ${B.split(' ')[0]} ${(pa/c.length).toFixed(1)}`);
+      let s=0,who=null;for(const x of c){if(who===null){who=x.won;s=1}else if(x.won===who)s++;else break}
+      card('Current streak',`${who?A.split(' ')[0]:B.split(' ')[0]} ${s}`,`Last meeting: ${c[0].y} Week ${c[0].wk}`);
+      const big=[...c].sort((p,q)=>Math.abs(q.me-q.them)-Math.abs(p.me-p.them))[0];
+      card('Biggest blowout',`${(big.won?A:B).split(' ')[0]} by ${fmt(Math.abs(big.me-big.them))}`,`${big.y} Week ${big.wk}, ${fmtY(Math.max(big.me,big.them),big.y)}–${fmtY(Math.min(big.me,big.them),big.y)}`);
+      const close=[...c].sort((p,q)=>Math.abs(p.me-p.them)-Math.abs(q.me-q.them))[0];
+      card('Closest game',`${(close.won?A:B).split(' ')[0]} by ${fmt(Math.abs(close.me-close.them))}`,`${close.y} Week ${close.wk}, ${fmtY(Math.max(close.me,close.them),close.y)}–${fmtY(Math.min(close.me,close.them),close.y)}`);
+    }
+    // list
+    const ul=$('h2h-games');ul.replaceChildren();
+    if(!g.length){const li=mk('li');li.append(mk('span',null,'These two have never played'+(YR==='all'?'.':' in '+YR+'.')));ul.appendChild(li)}
+    let lastY=null;
+    g.forEach(x=>{
+      if(x.y!==lastY){lastY=x.y;ul.appendChild(mk('li','yr',String(x.y)))}
+      const li=mk('li',x.counts?'':'cons');
+      const tm=mk('span','teams');
+      const a1=mk(x.won?'b':'span',null,teamOf(x.y,x.ms)),b1=mk(x.won?'span':'b',null,teamOf(x.y,x.ts));
+      tm.append(a1,' vs ',b1);if(x.t!=='R')tm.appendChild(mk('span','tag'+(x.t==='P'?'':' c'),label[x.t]));
+      li.append(mk('span','when',`Week ${x.wk}`),tm,mk('span','sc',`${fmtY(x.me,x.y)}–${fmtY(x.them,x.y)}`));
+      ul.appendChild(li);
+    });
+  }
+  function matrix(){
+    const m=$('matrix');m.replaceChildren();
+    const ids=[...cur].sort((a,b)=>a.localeCompare(b));
+    const th=mk('thead'),hr=mk('tr');hr.appendChild(mk('th',null,'Owner'));
+    ids.forEach(o=>{const t=mk('th',null,o.split(' ')[0]);t.title=o;hr.appendChild(t)});th.appendChild(hr);
+    const tb=mk('tbody');
+    ids.forEach(r=>{const tr=mk('tr');tr.appendChild(mk('td',null,r));
+      ids.forEach(c=>{if(r===c){tr.appendChild(mk('td','self'));return}
+        const [w,l]=rec(meetings(r,c));const td=mk('td','num cell'+(w>l?' w':w<l?' l':''),w+l?`${w}-${l}`:'·');
+        td.title=`${r} vs ${c}`;td.onclick=()=>{A=r;B=c;$('ra').value=A;$('rb').value=B;render();$('h2h').scrollIntoView({behavior:'smooth',block:'center'})};tr.appendChild(td)});
+      tb.appendChild(tr)});
+    m.append(th,tb);
+  }
+  function fillSelect(sel,val){
+    sel.replaceChildren();
+    const all=[...new Set(Object.values(H.seasons).flatMap(s=>Object.values(s).map(v=>v.o)))];
+    const now=all.filter(o=>cur.includes(o)).sort(),past=all.filter(o=>!cur.includes(o)).sort();
+    [['Current owners',now],['Former owners',past]].forEach(([lab,list])=>{const og=document.createElement('optgroup');og.label=lab;list.forEach(o=>{const op=mk('option',null,o);op.value=o;og.appendChild(op)});sel.appendChild(og)});
+    sel.value=val;
+  }
+  Promise.all([
+    fetch('data/h2h.json',{cache:'no-store'}).then(r=>r.json()),
+    fetch('/api/state',{credentials:'same-origin'}).then(r=>r.ok&&(r.headers.get('content-type')||'').includes('json')?r.json():null).catch(()=>null)
+  ]).then(([h,st])=>{
+    H=h;cur=h.current;
+    const me=st&&st.mySlot?ownerOf('2026',String(st.mySlot)):'Bradley Holloway';
+    A=me;B=cur.filter(o=>o!==A).sort()[0];
+    fillSelect($('ra'),A);fillSelect($('rb'),B);
+    const ys=$('hh-yr');const o0=mk('option',null,'All seasons');o0.value='all';ys.appendChild(o0);
+    Object.keys(h.seasons).sort().reverse().forEach(y=>{const o=mk('option',null,y);o.value=y;ys.appendChild(o)});
+    $('ra').onchange=e=>{A=e.target.value;render()};$('rb').onchange=e=>{B=e.target.value;render()};
+    ys.onchange=e=>{YR=e.target.value;render();matrix()};
+    $('hh-swap').onclick=()=>{[A,B]=[B,A];$('ra').value=A;$('rb').value=B;render()};
+    render();matrix();
+  }).catch(()=>{$('h2h').replaceChildren(mk('p',null,'Head-to-head history couldn\'t be loaded. Refresh to try again.'))});
 })();
 
 /* ---------- Luck with season picker ---------- */

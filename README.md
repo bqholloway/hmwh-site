@@ -7,6 +7,9 @@ The He Man Woman Haters Club league site, served by Cloudflare Pages behind Clou
 
 Deployed with `npx wrangler deploy`. `wrangler.jsonc` serves `public/` as static assets and runs `src/worker.js` for `/api/*`.
 
+## Head-to-Head
+- `public/data/h2h.json` holds every game since 2015 (regular season, playoffs and consolation) plus each season's owner and team name per franchise slot. Records count regular season and playoffs. Pulled from ESPN via Flaim and checked against each season's final standings. The update runs append each new week.
+
 ## Trades
 - `public/data/trades.json` holds every completed 2026 trade with both sides' players and FantasyCalc values. The update runs add new trades once they clear review and re-score them.
 
