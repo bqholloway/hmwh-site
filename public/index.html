@@ -258,6 +258,12 @@ tbody tr:last-child td{border-bottom:0}
 td.t{white-space:normal;min-width:180px}
 td.t small{display:block;color:var(--muted)}
 .bar{display:inline-block;height:8px;background:var(--mark);border-radius:2px;vertical-align:middle}
+#luck thead th button{all:unset;cursor:pointer}
+#luck thead th button:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+#luck thead th button::after{content:" ↕";color:var(--faint)}
+#luck thead th[aria-sort="descending"] button::after{content:" ▾";color:var(--brass)}
+#luck thead th[aria-sort="ascending"] button::after{content:" ▴";color:var(--brass)}
+#luck thead th[aria-sort]{color:var(--ink)}
 .bar.pos{background:var(--up)}
 .bar.neg{background:var(--down)}
 td.luck-td{transition:background .15s}
@@ -821,7 +827,9 @@ show(start);
 /* ---------- Luck with season picker (all seasons from h2h.json) ---------- */
 (function(){
   const sel=document.getElementById('luckyr'), info=document.getElementById('luckinfo'), tb=document.getElementById('luck');
-  let H=null;
+  let H=null, sortK='luck', sortDir=-1;
+  const COLS=[['name','Team',1],['apw','All-play',-1],['ap','All-play %',-1],['h2h','H2H record',-1],['exp','Expected W',-1],['sos','Opp. avg',-1],['luck','Luck',-1]];
+  const val={name:x=>x.name.toLowerCase(),apw:x=>x.r.apw,ap:x=>x.ap,h2h:x=>x.r.w/(x.r.w+x.r.l),exp:x=>x.exp,sos:x=>x.sos,luck:x=>x.luck};
   function season(y){
     const g=H.games.filter(x=>String(x[0])===y&&x[2]==='R');
     const t={},wk={};
@@ -851,10 +859,13 @@ show(start);
     const y=sel.value;let rows;
     if(y==='all'){const A=allTime();rows=A.rows;info.textContent=`2015–${D.current}, by owner (${D.current} through Week ${A.curWk})`}
     else{const S=seasonRows(y);rows=S.rows;info.textContent=y===String(D.current)?`Through Week ${S.weeks}`:`Regular season, ${S.weeks} weeks`}
-    rows.sort((a,b)=>b.luck-a.luck);
+    rows.sort((a,b)=>{const va=val[sortK](a),vb=val[sortK](b);return (va<vb?-1:va>vb?1:0)*sortDir||b.luck-a.luck});
     const max=Math.max(...rows.map(x=>Math.abs(x.luck)))||1;
     tb.replaceChildren();
-    const th=mk('thead'),hr=mk('tr');[y==='all'?'Owner':'Team','All-play','All-play %','H2H record','Expected W','Opp. avg','Luck'].forEach(h=>hr.appendChild(mk('th',null,h)));th.appendChild(hr);
+    const th=mk('thead'),hr=mk('tr');
+    COLS.forEach(([k,lab,def])=>{const c=mk('th');const b=mk('button',null,k==='name'&&y==='all'?'Owner':lab);b.type='button';
+      if(k===sortK)c.setAttribute('aria-sort',sortDir>0?'ascending':'descending');
+      b.onclick=()=>{if(sortK===k)sortDir=-sortDir;else{sortK=k;sortDir=def}draw()};c.appendChild(b);hr.appendChild(c)});th.appendChild(hr);
     const body=mk('tbody');
     rows.forEach(x=>{const tr=mk('tr');const td=mk('td','t',x.name);td.appendChild(mk('small',null,x.sub));tr.appendChild(td);
       [`${fmtAP(x.r.apw)}-${fmtAP(x.r.apl)}`,`${(x.ap*100).toFixed(0)}%`,`${x.r.w}-${x.r.l}`,x.exp.toFixed(1),x.sos.toFixed(1)].forEach(v=>tr.appendChild(mk('td','num',v)));
@@ -867,7 +878,7 @@ show(start);
   fetch('data/h2h.json',{cache:'no-store'}).then(r=>r.json()).then(h=>{
     H=h;const oa=mk('option',null,'All-Time');oa.value='all';sel.appendChild(oa);
     Object.keys(h.seasons).sort().reverse().forEach(y=>{const o=mk('option',null,y);o.value=y;sel.appendChild(o)});
-    sel.value=String(D.current);sel.onchange=draw;draw();
+    sel.value=String(D.current);sel.onchange=()=>{sortK='luck';sortDir=-1;draw()};draw();
   }).catch(()=>{info.textContent='Season data couldn\'t be loaded. Refresh to try again.'});
 })();
 
