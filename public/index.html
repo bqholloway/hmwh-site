@@ -15,13 +15,14 @@
   --body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
   --head:"IBM Plex Serif",Georgia,serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --up:#1f7a3e; --down:#b3261e;
   --felt:#6e1f2b; --felt-edge:#4f141e; --on-felt:#f3e9d6; --felt-gold:#e0b456; --brass:#99691a;
   --display:"Graduate","Rockwell",Georgia,serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#151614; --panel:#1d1e1c; --ink:#e9eae6; --muted:#9a9c96; --line:#33352f; --soft:#262724; --mark:#d6d7d2; --faint:#4b4d48; --felt:#7f2633; --felt-edge:#57161f; --brass:#d4a446; color-scheme:dark}}
+  --bg:#151614; --panel:#1d1e1c; --ink:#e9eae6; --muted:#9a9c96; --line:#33352f; --soft:#262724; --mark:#d6d7d2; --faint:#4b4d48; --felt:#7f2633; --felt-edge:#57161f; --brass:#d4a446; --up:#5cc583; --down:#f07a6e; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#151614; --panel:#1d1e1c; --ink:#e9eae6; --muted:#9a9c96; --line:#33352f; --soft:#262724; --mark:#d6d7d2; --faint:#4b4d48; --felt:#7f2633; --felt-edge:#57161f; --brass:#d4a446; color-scheme:dark}
+  --bg:#151614; --panel:#1d1e1c; --ink:#e9eae6; --muted:#9a9c96; --line:#33352f; --soft:#262724; --mark:#d6d7d2; --faint:#4b4d48; --felt:#7f2633; --felt-edge:#57161f; --brass:#d4a446; --up:#5cc583; --down:#f07a6e; color-scheme:dark}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 [hidden]{display:none!important}
@@ -155,6 +156,8 @@ section{display:grid;gap:14px;min-width:0}
 .pr li{display:grid;grid-template-columns:2.4rem 3rem minmax(0,1fr) auto;gap:4px 14px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
 .pr li:last-child{border-bottom:0}
 .pr .rk{font-family:var(--mono);font-size:1.5rem;font-weight:600;line-height:1}
+.pr .mv.up{color:var(--up);font-weight:600}
+.pr .mv.down{color:var(--down);font-weight:600}
 .pr .mv{font-family:var(--mono);font-size:.78rem;color:var(--muted);padding-top:4px}
 .pr .who{min-width:0}
 .pr .who b{display:block;overflow-wrap:anywhere}
@@ -315,7 +318,7 @@ table.lb{min-width:0}
     </section>
     <section aria-labelledby="h-pr">
       <div class="head"><div class="eyebrow" id="pr-week"></div><h2 id="h-pr">The rankings</h2>
-        <p>Ranked by record with bonus wins, points for as the tiebreaker. Arrows show movement from the week before.</p></div>
+        <p>Ranked by record, including bonus wins. Arrows show movement from the week before.</p></div>
       <ol class="pr box" id="pr"></ol>
     </section>
   </div>
@@ -550,7 +553,7 @@ show(start);
     const li=mk('li');
     const who=mk('div','who');who.append(mk('b',null,t.name),mk('small',null,t.owner));
     const rec=mk('div','rec');rec.append(mk('span',null,`${t.w}-${t.l}`),mk('small',null,`${t.pf.toFixed(1)} PF`));
-    li.append(mk('div','rk num',now.rank),mk('div','mv',d>0?`▲ ${d}`:d<0?`▼ ${-d}`:'—'),who,rec);
+    li.append(mk('div','rk num',now.rank),mk('div',d>0?'mv up':d<0?'mv down':'mv',d>0?`▲ ${d}`:d<0?`▼ ${-d}`:'—'),who,rec);
     ol.appendChild(li);
   });
 })();
