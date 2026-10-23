@@ -7,13 +7,53 @@
       "opensAt": "2026-10-27T13:00:00Z",
       "locksAt": "2026-10-30T00:15:00Z",
       "lockLabel": "Thu, Oct 29 at 7:15 PM CT (Panthers at Packers)",
-      "note": "Game of the Week is based on standings through Week 6 and gets confirmed with Tuesday's update.",
+      "note": "Pick'em kicks off with Week 8. The 2x Game of the Week is set Tuesday morning from the standings after Week 7.",
       "games": [
-        { "id": "8-1", "a": 8, "b": 10, "pa": 122.0, "pb": 110.4, "x2": true, "winner": null },
-        { "id": "8-2", "a": 4, "b": 6, "pa": 89.2, "pb": 86.6, "x2": false, "winner": null },
-        { "id": "8-3", "a": 1, "b": 9, "pa": 123.1, "pb": 102.0, "x2": false, "winner": null },
-        { "id": "8-4", "a": 7, "b": 2, "pa": 93.4, "pb": 95.7, "x2": false, "winner": null },
-        { "id": "8-5", "a": 3, "b": 5, "pa": 101.5, "pb": 100.9, "x2": false, "winner": null }
+        {
+          "id": "8-1",
+          "a": 8,
+          "b": 10,
+          "pa": 122.0,
+          "pb": 110.4,
+          "x2": true,
+          "winner": null
+        },
+        {
+          "id": "8-2",
+          "a": 4,
+          "b": 6,
+          "pa": 89.2,
+          "pb": 86.6,
+          "x2": false,
+          "winner": null
+        },
+        {
+          "id": "8-3",
+          "a": 1,
+          "b": 9,
+          "pa": 123.1,
+          "pb": 102.0,
+          "x2": false,
+          "winner": null
+        },
+        {
+          "id": "8-4",
+          "a": 7,
+          "b": 2,
+          "pa": 93.4,
+          "pb": 95.7,
+          "x2": false,
+          "winner": null
+        },
+        {
+          "id": "8-5",
+          "a": 3,
+          "b": 5,
+          "pa": 101.5,
+          "pb": 100.9,
+          "x2": false,
+          "winner": null
+        }
       ]
     }
   ]

@@ -621,7 +621,7 @@ show(start);
     const chip=mk('span','st'+(status==='open'?' open':''),status==='open'?'Open':status==='locked'?'Locked':'Opens soon');
     bar.appendChild(chip);
     if(status==='open') bar.appendChild(mk('span',null,`Locks ${W.lockLabel}`));
-    else if(status==='upcoming') bar.appendChild(mk('span',null,`Opens ${when(W.opensAt)} · locks ${W.lockLabel}`));
+    else if(status==='upcoming') bar.appendChild(mk('span',null,`Pick'em kicks off Week ${W.week}. Picks open ${when(W.opensAt)} and lock ${W.lockLabel}.`));
     else bar.appendChild(mk('span',null,'Kickoff has passed. Everyone\'s picks are shown below.'));
     if(S) bar.appendChild(mk('span','muted',`${S.submitted.length} of 10 have picked`));
     if(S&&S.admin&&status==='upcoming') bar.appendChild(mk('span','muted','Commissioner preview: you can save picks early.'));
