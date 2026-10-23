@@ -118,6 +118,12 @@ section{display:grid;gap:14px;min-width:0}
 @media (prefers-reduced-motion:no-preference){.banner{transition:transform .2s}.banner:hover{transform:translateY(3px)}}
 
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.tr-mode{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:-18px}
+.seg{display:inline-flex;border:1px solid var(--mark);border-radius:4px;overflow:hidden}
+.seg button{all:unset;cursor:pointer;padding:7px 16px;font-size:.88rem;font-weight:600}
+.seg button+button{border-left:1px solid var(--mark)}
+.seg button[aria-pressed="true"]{background:var(--mark);color:var(--panel)}
+.seg button:focus-visible{outline:2px solid var(--brass);outline-offset:-2px}
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .kpi{padding:14px 16px;display:grid;gap:4px;align-content:start;min-width:0}
 .kpi .k{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
@@ -452,6 +458,11 @@ table.lb{min-width:0}
   <div class="view" id="v-trades" hidden>
     <div><div class="eyebrow">Trade ledger</div><h1>Trades</h1>
       <p class="lede" id="tr-lede"></p></div>
+
+    <div class="tr-mode" role="group" aria-label="Value trades at">
+      <span class="status">Value trades at</span>
+      <div class="seg"><button type="button" id="tr-now" aria-pressed="true">Today</button><button type="button" id="tr-day" aria-pressed="false">Trade day</button></div>
+    </div>
 
     <section class="kpis" aria-label="Trade market summary" id="tr-kpis"></section>
 
@@ -831,20 +842,28 @@ show(start);
   const num=n=>n.toLocaleString('en-US'), sgn=n=>(n>0?'+':n<0?'−':'')+num(Math.abs(n));
   const day=iso=>new Date(iso+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
   const tname=id=>T[id]?T[id].name:'Team '+id;
-  let TR=null, mySlot=null, filt={mine:false,team:'',sort:'new'};
+  let TR=null, TV=[], mySlot=null, filt={mine:false,team:'',sort:'new'}, mode='now';
+  try{const m=localStorage.getItem('hmwh-trade-mode');if(m==='day'||m==='now')mode=m}catch(e){}
+  function view(){
+    TV=TR.trades.map(x=>{
+      const sides=[x.w,x.l].map(sd=>{const got=sd.got.map(p=>({...p,val:mode==='day'?(p.day??0):p.v})).sort((a,b)=>b.val-a.val);return {team:sd.team,got,total:got.reduce((t,p)=>t+p.val,0)}});
+      const [w,l]=sides[0].total>=sides[1].total?sides:[sides[1],sides[0]];
+      const margin=w.total-l.total;return {n:x.n,date:x.date,note:x.note,w,l,margin,pct:w.total?margin/w.total:0};
+    });
+  }
   function totals(){
     const t={};for(let i=1;i<=10;i++)t[i]={id:i,n:0,w:0,l:0,inV:0,outV:0};
-    TR.trades.forEach(x=>{const W=t[x.w.team],L=t[x.l.team];W.n++;W.w++;L.n++;L.l++;W.inV+=x.w.total;W.outV+=x.l.total;L.inV+=x.l.total;L.outV+=x.w.total});
+    TV.forEach(x=>{const W=t[x.w.team],L=t[x.l.team];W.n++;W.w++;L.n++;L.l++;W.inV+=x.w.total;W.outV+=x.l.total;L.inV+=x.l.total;L.outV+=x.w.total});
     return Object.values(t).map(r=>({...r,net:r.inV-r.outV})).sort((a,b)=>b.net-a.net);
   }
   function kpis(rows){
     const box=$('tr-kpis');box.replaceChildren();
-    const moved=TR.trades.reduce((s,x)=>s+x.w.total+x.l.total,0);
-    const top=[...TR.trades].sort((a,b)=>b.margin-a.margin)[0];
-    const ds=TR.trades.map(x=>x.date).sort();
+    const moved=TV.reduce((s,x)=>s+x.w.total+x.l.total,0);
+    const top=[...TV].sort((a,b)=>b.margin-a.margin)[0];
+    const ds=TV.map(x=>x.date).sort();
     const card=(k,v,n,cls)=>{const d=mk('div','box kpi');d.append(mk('div','k',k),mk('div','v'+(cls?' '+cls:''),v),mk('div','n',n));box.appendChild(d)};
-    card('Trades completed',TR.trades.length,`${day(ds[0])} – ${day(ds.at(-1))}`);
-    card('Value moved',num(moved),'Both sides, FantasyCalc points');
+    card('Trades completed',TV.length,`${day(ds[0])} – ${day(ds.at(-1))}`);
+    card('Value moved',num(moved),mode==='day'?'Both sides, on trade day':'Both sides, at today\'s values');
     card('Most lopsided',sgn(top.margin),`${tname(top.w.team)} over ${tname(top.l.team)}, ${day(top.date)}`);
     const busiest=[...rows].sort((a,b)=>b.n-a.n)[0];
     if(mySlot){const me=rows.find(r=>r.id===mySlot);card('Your net',sgn(me.net),`${tname(mySlot)} · ${me.w}-${me.l} in ${me.n} trade${me.n===1?'':'s'}`,me.net>0?'pos':me.net<0?'neg':'')}
@@ -871,12 +890,12 @@ show(start);
     const d=mk('div','side'+(won?' win':''));const h=mk('h3');h.append(mk('span',null,tname(s.team)),mk('small',null,T[s.team].owner));
     d.append(mk('span','tag'+(won?'':' l'),won?'Won the trade':'Lost the trade'),h);
     d.appendChild(mk('span','status','Received'));
-    const ul=mk('ul');s.got.forEach(p=>{const li=mk('li');const a=mk('span',null,p.name);a.appendChild(mk('small',null,`${p.pos} ${p.nfl}`));li.append(a,mk('span','num',p.v?num(p.v):'0'));ul.appendChild(li)});
+    const ul=mk('ul');s.got.forEach(p=>{const li=mk('li');const a=mk('span',null,p.name);a.appendChild(mk('small',null,`${p.pos} ${p.nfl}`));li.append(a,mk('span','num',p.val?num(p.val):'0'));ul.appendChild(li)});
     const tot=mk('div','tot');tot.append(mk('span',null,'Total'),mk('span','num',num(s.total)));
     d.append(ul,tot);return d;
   }
   function list(){
-    let xs=[...TR.trades];
+    let xs=[...TV];
     if(filt.mine&&mySlot) xs=xs.filter(x=>x.w.team===mySlot||x.l.team===mySlot);
     if(filt.team) xs=xs.filter(x=>x.w.team===+filt.team||x.l.team===+filt.team);
     xs.sort(filt.sort==='old'?(a,b)=>a.date.localeCompare(b.date)||a.n-b.n:filt.sort==='margin'?(a,b)=>b.margin-a.margin:(a,b)=>b.date.localeCompare(a.date)||b.n-a.n);
@@ -895,15 +914,24 @@ show(start);
     netChart(ROWS);list();
   }
   let ROWS=[];
+  function lede(){
+    $('tr-lede').textContent=mode==='day'
+      ?`All ${TV.length} completed 2026 trades, each side valued with FantasyCalc on the day the trade went through.`
+      :`All ${TV.length} completed 2026 trades, each side valued with ${TR.source} as of ${new Date(TR.asOf+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric'})}.`;
+  }
+  function refresh(){view();ROWS=totals();lede();kpis(ROWS);table(ROWS);sync();
+    $('tr-now').setAttribute('aria-pressed',String(mode==='now'));$('tr-day').setAttribute('aria-pressed',String(mode==='day'));}
   function render(){
-    ROWS=totals();
-    $('tr-lede').textContent=`All ${TR.trades.length} completed 2026 trades, each side valued with ${TR.source} as of ${new Date(TR.asOf+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric'})}.`;
+    view();ROWS=totals();lede();
     kpis(ROWS);table(ROWS);
+    $('tr-now').setAttribute('aria-pressed',String(mode==='now'));$('tr-day').setAttribute('aria-pressed',String(mode==='day'));
     const sel=$('tr-team');[...ROWS].sort((a,b)=>tname(a.id).localeCompare(tname(b.id))).forEach(r=>{const o=mk('option',null,tname(r.id));o.value=r.id;sel.appendChild(o)});
     $('tr-mine').hidden=!mySlot;
-    const ul=$('tr-notes');TR.notes.forEach(n=>ul.appendChild(mk('li',null,n)));
+    const ul=$('tr-notes');[...TR.notes,...(TR.dayNotes||[])].forEach(n=>ul.appendChild(mk('li',null,n)));
     sync();
   }
+  const setMode=m=>{if(mode===m)return;mode=m;try{localStorage.setItem('hmwh-trade-mode',m)}catch(e){}refresh()};
+  $('tr-now').onclick=()=>setMode('now');$('tr-day').onclick=()=>setMode('day');
   $('tr-all').onclick=()=>{filt.mine=false;filt.team='';$('tr-team').value='';sync()};
   $('tr-mine').onclick=()=>{filt.mine=true;filt.team='';$('tr-team').value='';sync()};
   $('tr-team').onchange=e=>{filt.team=e.target.value;filt.mine=false;sync()};
