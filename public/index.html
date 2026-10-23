@@ -446,18 +446,28 @@ table.lb{min-width:0}
 .tl{list-style:none;margin:0;padding:8px 0;position:relative;display:grid;gap:18px}
 .tl::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:3px;background:var(--brass);transform:translateX(-50%);opacity:.5}
 .tl li{position:relative;display:grid;grid-template-columns:1fr 1fr;align-items:center}
-.tl li::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;background:var(--brass);border:3px solid var(--bg);transform:translate(-50%,-50%);transition:transform .2s}
+.tl li::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;background:var(--era,var(--brass));border:3px solid var(--bg);transform:translate(-50%,-50%);transition:transform .2s}
+.tl li.era::after{display:none}
+.tl li.era{grid-template-columns:1fr;justify-items:center;padding:14px 0 4px;z-index:1}
+.tl .eraTag{background:var(--era);color:#fff;border-radius:999px;padding:8px 20px;text-align:center;box-shadow:0 0 0 6px var(--bg);max-width:min(92%,440px)}
+.tl .eraTag b{display:block;font-size:1.05rem;letter-spacing:.03em}
+.tl .eraTag small{display:block;font-family:var(--mono);font-size:.68rem;opacity:.9;letter-spacing:.06em}
 .tl li:hover::after,.tl li:focus-within::after{transform:translate(-50%,-50%) scale(1.5)}
 .tl .ev{grid-column:1;justify-self:end;margin-right:34px;width:min(100%,380px);text-align:right}
-.tl li:nth-child(even) .ev{grid-column:2;justify-self:start;margin-left:34px;margin-right:0;text-align:left}
+.tl li.r .ev{grid-column:2;justify-self:start;margin-left:34px;margin-right:0;text-align:left}
 .tl .ev{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 16px;cursor:default;transition:transform .2s,box-shadow .2s,border-color .2s;transform-origin:center}
-.tl .ev:hover,.tl .ev:focus{transform:scale(1.05);box-shadow:0 8px 22px rgba(0,0,0,.14);border-color:var(--brass);outline:none;z-index:2}
-.tl .yr{font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;color:var(--brass)}
+.tl .ev{border-top:4px solid var(--era,var(--brass))}
+.tl .ev:hover,.tl .ev:focus{transform:scale(1.05);box-shadow:0 8px 22px rgba(0,0,0,.14);border-color:var(--era,var(--brass));outline:none;z-index:2}
+.tl .yr{font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;color:var(--era,var(--brass))}
+.era-key{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.84rem;align-items:center}
+.era-key span{display:inline-flex;align-items:center;gap:6px}
+.era-key i{width:12px;height:12px;border-radius:50%;background:var(--era);display:inline-block}
+.era-key .modern{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
 .tl .ev b{display:block;font-size:1rem;margin-top:2px}
 .tl .det{max-height:0;opacity:0;overflow:hidden;color:var(--muted);font-size:.86rem;transition:max-height .25s,opacity .25s,margin .25s}
 .tl .ev:hover .det,.tl .ev:focus .det{max-height:160px;opacity:1;margin-top:8px}
 @media (max-width:640px){.tl::before{left:12px}.tl li{grid-template-columns:1fr}.tl li::after{left:12px}
-.tl .ev,.tl li:nth-child(even) .ev{grid-column:1;justify-self:stretch;margin:0 0 0 36px;width:auto;text-align:left}}
+.tl .ev,.tl li.r .ev{grid-column:1;justify-self:stretch;margin:0 0 0 36px;width:auto;text-align:left}}
 @media (hover:none){.tl .det{max-height:160px;opacity:1;margin-top:8px}}
 @media (prefers-reduced-motion:reduce){.line,.tl .ev,.tl li::after,.tl .det{transition:none}}
 </style>
@@ -707,8 +717,9 @@ table.lb{min-width:0}
     </dialog>
     <section id="lore-queue" hidden aria-labelledby="h-lq"><div class="head"><div class="eyebrow">Groundskeeper only</div><h2 id="h-lq">Review queue</h2>
       <p>Edit anything, then publish. The sort year controls where it lands on the timeline.</p></div><div id="lq-list" class="lq-list"></div></section>
+    <div class="era-key" id="era-key"></div>
     <ol class="tl" id="tl" aria-label="League timeline"></ol>
-    <p class="note">Hover (or tap) any event for details. Entries without a byline are placeholders until real lore is approved.</p>
+    <p class="note">Hover (or tap) any event for details. Entries without a byline are placeholders until real lore is approved. The league also ran in 2013 and 2014, but those seasons are not canon.</p>
   </div>
 
   <!-- VIDEOS -->
@@ -857,13 +868,24 @@ show(start);
   const $=id=>document.getElementById(id), ol=$('tl'), OW=D.owners||{};
   const nm=s=>OW[s]||'A member';
   let L=null;
+  const ERAS=[
+    {n:'Genesis Era',a:2015,b:2016,c:'#2f7d3a',t:'Pre-PPR · the beginning'},
+    {n:'Eagle Pride Era',a:2017,b:2023,c:'#4a6a86',t:'Full-point PPR'},
+    {n:'Comp Era',a:2024,b:9999,c:'#9b2a3c',t:'Half-point PPR · bonus wins'}];
+  const eraOf=y=>ERAS.find(e=>y>=e.a&&y<=e.b)||ERAS[0];
+  const key=$('era-key');
+  key.append(mk('span','modern','The Modern Era · 2015 to now'),...ERAS.map(e=>{const sp=mk('span');const i=mk('i');i.style.setProperty('--era',e.c);sp.append(i,`${e.n} (${e.a}${e.b===9999?' to now':'–'+e.b})`);return sp}));
   function api(method,path,body){return fetch(path,{method,credentials:'same-origin',headers:body?{'content-type':'application/json'}:undefined,body:body?JSON.stringify(body):undefined}).then(async r=>{let d=null;try{d=await r.json()}catch(e){}return{ok:r.ok,data:d}}).catch(()=>({ok:false,data:null}))}
   function draw(){
     ol.replaceChildren();
     const items=SEED.map(([y,t,d])=>({y:+y,date:y,t,d,by:null}));
     ((L&&L.published)||[]).forEach(r=>items.push({y:r.year||9999,date:r.date,t:r.title,d:r.body,by:[r.slot,r.co]}));
     items.sort((a,b)=>a.y-b.y);
-    items.forEach(it=>{const li=mk('li'),ev=mk('div','ev');ev.tabIndex=0;ev.append(mk('div','yr',it.date),mk('b',null,it.t),mk('div','det',it.d));
+    let curEra=null,n=0;
+    items.forEach(it=>{const er=eraOf(it.y);
+      if(er!==curEra){curEra=er;const h=mk('li','era'),tg=mk('div','eraTag');h.style.setProperty('--era',er.c);
+        tg.append(mk('b',null,er.n),mk('small',null,`${er.a}${er.b===9999?' to now':'–'+er.b} · ${er.t}`));h.appendChild(tg);ol.appendChild(h);n=0}
+      const li=mk('li',n++%2?'r':''),ev=mk('div','ev');li.style.setProperty('--era',er.c);ev.tabIndex=0;ev.append(mk('div','yr',it.date),mk('b',null,it.t),mk('div','det',it.d));
       if(it.by)ev.appendChild(mk('div','by','By '+it.by.filter(Boolean).map(nm).join(' & ')));
       li.appendChild(ev);ol.appendChild(li)});
   }
