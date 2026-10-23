@@ -114,6 +114,21 @@ export default {
         return json(await buildState(league, cfg, week, email, admin));
       }
 
+      if (url.pathname === "/api/admin/access-info" && request.method === "GET") {
+        // Shows the commissioner which Access team and audience tag his login token carries,
+        // so they can be copied into ACCESS_TEAM / ACCESS_AUD. Neither value is a secret.
+        if (!admin) return json({ error: "Only the commissioner can do that." }, 403);
+        const token = request.headers.get("cf-access-jwt-assertion");
+        if (!token) return json({ error: "No Cloudflare Access token on this request." }, 400);
+        try {
+          const payload = JSON.parse(new TextDecoder().decode(b64u(token.split(".")[1])));
+          const aud = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
+          return json({ team: payload.iss, aud, verifying: !!(env.ACCESS_TEAM && env.ACCESS_AUD) });
+        } catch {
+          return json({ error: "Couldn't read the Access token." }, 400);
+        }
+      }
+
       if (url.pathname === "/api/admin/release" && request.method === "POST") {
         if (!admin) return json({ error: "Only the commissioner can do that." }, 403);
         const body = await request.json().catch(() => ({}));
