@@ -11,7 +11,7 @@
   },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["League"] }],
   "vars": {
-    "ADMIN_EMAILS": "bqholloway@gmail.com"
+    "ADMIN_EMAILS": "bquholl@gmail.com,bqholloway@gmail.com"
   },
   "workers_dev": false,
   "preview_urls": false
