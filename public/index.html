@@ -279,6 +279,57 @@ td.luck-td.neg .num{color:var(--down)}
 .luck-cell{display:flex;align-items:center;gap:8px;justify-content:flex-end}
 .yrpick{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .yrpick label{font-size:.85rem;color:var(--muted)}
+/* Draft grades */
+.dr-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.dr-card{all:unset;box-sizing:border-box;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:12px 14px;display:grid;grid-template-columns:auto 1fr auto;gap:2px 12px;align-items:center;transition:border-color .15s,opacity .15s}
+.dr-card:hover{border-color:var(--faint)}
+.dr-card:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+.dr-card[aria-pressed="true"]{border-color:var(--mark);box-shadow:inset 0 0 0 1px var(--mark)}
+.dr-cards.focus .dr-card[aria-pressed="false"]{opacity:.55}
+.dr-card .rk{font-family:var(--mono);font-size:.75rem;color:var(--muted);grid-row:1/3}
+.dr-card .who{min-width:0}
+.dr-card .who b{display:block;overflow-wrap:anywhere}
+.dr-card .who small{display:block;color:var(--muted);font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dr-card .gr{grid-row:1/3;grid-column:3;font-size:1.7rem;font-weight:700;line-height:1;min-width:2.2ch;text-align:right}
+.dr-card .tot{grid-column:1/-1;font-family:var(--mono);font-size:.82rem;margin-top:8px}
+.dr-card .tot.pos{color:var(--up)} .dr-card .tot.neg{color:var(--down)}
+.dr-card .bw{grid-column:1/-1;font-size:.8rem;color:var(--muted);display:grid;gap:1px}
+.dr-card .bw span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gr.A,.gr.Ap{color:var(--up)} .gr.F,.gr.D{color:var(--down)} .gr.B,.gr.Bp{color:color-mix(in srgb,var(--up) 70%,var(--ink))}
+.dr-split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:720px){.dr-split{grid-template-columns:1fr}}
+.dr-list{list-style:none;margin:0;padding:0}
+.dr-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.dr-list li:last-child{border-bottom:0}
+.dr-list b{overflow-wrap:anywhere}
+.dr-list small{grid-column:1;color:var(--muted);font-size:.8rem}
+.dr-list .num{grid-row:1/3;grid-column:2;align-self:center;font-weight:700}
+.dr-list .num.pos{color:var(--up)} .dr-list .num.neg{color:var(--down)}
+.dr-legend{display:flex;flex-wrap:wrap;gap:6px;font-family:var(--mono);font-size:.72rem}
+.dr-legend span{padding:2px 9px;border-radius:3px;border:1px solid var(--line)}
+.dr-legend .kp{border-style:dashed;color:var(--muted)}
+.g-A{background:color-mix(in srgb,var(--up) 34%,var(--panel))}
+.g-B{background:color-mix(in srgb,var(--up) 15%,var(--panel))}
+.g-C{background:var(--panel)}
+.g-D{background:color-mix(in srgb,var(--down) 15%,var(--panel))}
+.g-F{background:color-mix(in srgb,var(--down) 34%,var(--panel))}
+table.dr-board{min-width:1180px;table-layout:fixed}
+.dr-board th,.dr-board td{padding:3px;text-align:left;white-space:normal;border-bottom:0}
+.dr-board thead th{padding:8px 6px;text-transform:none;letter-spacing:0;font-family:var(--body);font-size:.78rem;color:var(--ink);font-weight:600;line-height:1.25;vertical-align:bottom}
+.dr-board thead th small{display:block;color:var(--muted);font-weight:400;font-size:.72rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dr-board th.rd{width:46px;font-family:var(--mono);font-size:.72rem;color:var(--muted);font-weight:500;text-align:center}
+.dr-board td button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:0 4px;width:100%;min-height:52px;padding:6px 7px;border-radius:3px;border:1px solid var(--line);font-size:.78rem;line-height:1.25;transition:opacity .15s}
+.dr-board td button:focus-visible{outline:2px solid var(--mark);outline-offset:1px}
+.dr-board td button[aria-pressed="true"]{outline:2px solid var(--mark);outline-offset:1px}
+.dr-board td button b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dr-board td button i{font-style:normal;font-family:var(--mono);font-weight:700;font-size:.74rem}
+.dr-board td button small{grid-column:1/-1;font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+.dr-board td button.kp{border-style:dashed;border-color:var(--mark)}
+.dr-board.focus td button.off{opacity:.25}
+.dr-board th.on{box-shadow:inset 0 -2px 0 var(--mark)}
+.dr-detail{padding:12px 16px;font-size:.92rem;color:var(--muted)}
+.dr-detail b{color:var(--ink)}
+.dr-detail .pos{color:var(--up);font-weight:700} .dr-detail .neg{color:var(--down);font-weight:700}
 select{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);min-width:0}
 
 /* H2H */
@@ -483,6 +534,43 @@ table.lb{min-width:0}
     </section>
   </div>
 
+  <!-- DRAFT GRADES -->
+  <div class="view" id="v-draft" hidden>
+    <div><div class="eyebrow">Statistics</div><h1>Draft Grades</h1>
+      <p class="lede">Every pick graded on what the player actually scored that season, under our league's scoring. Completed seasons only.</p></div>
+    <div class="yrpick"><label for="dr-yr">Season</label><select id="dr-yr"></select><span class="status" id="dr-info"></span></div>
+
+    <section aria-labelledby="h-drcard">
+      <div class="head"><h2 id="h-drcard">Report cards</h2><p>Ranked by total points gained over what each draft slot usually returns. Click a team to light up its picks on the board.</p></div>
+      <div class="dr-cards" id="dr-cards"></div>
+    </section>
+
+    <div class="dr-split">
+      <section aria-labelledby="h-drst">
+        <div class="head"><h2 id="h-drst">Steals</h2></div>
+        <ol class="box dr-list" id="dr-steals"></ol>
+      </section>
+      <section aria-labelledby="h-drbu">
+        <div class="head"><h2 id="h-drbu">Busts</h2></div>
+        <ol class="box dr-list" id="dr-busts"></ol>
+      </section>
+    </div>
+
+    <section aria-labelledby="h-drboard">
+      <div class="head"><h2 id="h-drboard">The board</h2><p>Columns follow the first-round order. Click any pick for the full story.</p></div>
+      <div class="dr-legend" aria-hidden="true"><span class="g-A">A</span><span class="g-B">B</span><span class="g-C">C</span><span class="g-D">D</span><span class="g-F">F</span><span class="kp">Keeper</span></div>
+      <div class="box dr-detail" id="dr-detail" aria-live="polite"></div>
+      <div class="box tw"><table class="dr-board" id="dr-board"></table></div>
+    </section>
+
+    <div class="box luck-explain">
+      <h2>How the grades work</h2>
+      <p>Take every player drafted at a position and sort them by year-end points. <b>The 5th running back taken should score like the 5th-best drafted running back.</b> That's the slot's expected score. A pick's value is how far he beat or missed it.</p>
+      <p>Anyone who finished below a waiver-wire starter counts as that starter, since you could have picked one up. So a late flier who busts costs you nothing, and a first-rounder who busts costs you the full gap. <span id="dr-repl"></span></p>
+      <p>A team's grade is the sum of its picks' value, curved against the rest of the league. Keepers count in the round they were kept. A player traded after the draft still counts for the team that drafted him.</p>
+    </div>
+  </div>
+
   <!-- PICK'EM -->
   <div class="view" id="v-pickem" hidden>
     <div><div class="eyebrow">Weekly pick'em</div><h1 id="pk-title">Pick'em</h1>
@@ -584,11 +672,11 @@ const NAV=[
   {id:'home',label:'Home'},
   {id:'rankings',label:'Power Rankings'},
   {id:'pickem',label:"Pick'em"},
-  {id:'stats',label:'Statistics ▾',children:[{id:'h2h',label:'Head-to-Head',sub:'Owner vs owner records'},{id:'luck',label:'Luck',sub:'All-play vs actual, by season'}]},
+  {id:'stats',label:'Statistics ▾',children:[{id:'h2h',label:'Head-to-Head',sub:'Owner vs owner records'},{id:'luck',label:'Luck',sub:'All-play vs actual, by season'},{id:'draft',label:'Draft Grades',sub:'Every pick vs year-end points'}]},
   {id:'history',label:'League History'},
   {id:'trades',label:'Trades'},
   {id:'videos',label:'Videos'}];
-const VIEWS=['home','rankings','pickem','h2h','luck','history','trades','videos'];
+const VIEWS=['home','rankings','pickem','h2h','luck','draft','history','trades','videos'];
 const nav=document.getElementById('nav'), menu=document.getElementById('statsmenu'), topin=document.getElementById('topin');
 let statsBtn;
 NAV.forEach(n=>{
@@ -880,6 +968,77 @@ show(start);
     Object.keys(h.seasons).sort().reverse().forEach(y=>{const o=mk('option',null,y);o.value=y;sel.appendChild(o)});
     sel.value=String(D.current);sel.onchange=()=>{sortK='luck';sortDir=-1;draw()};draw();
   }).catch(()=>{info.textContent='Season data couldn\'t be loaded. Refresh to try again.'});
+})();
+
+/* ---------- Draft grades (data/draft.json) ---------- */
+(function(){
+  const $=id=>document.getElementById(id);
+  const sel=$('dr-yr'), info=$('dr-info'), cards=$('dr-cards'), board=$('dr-board'), det=$('dr-detail');
+  let DR=null, focus=null, picked=null;
+  const sgn=v=>(v>=0?'+':'−')+Math.abs(Math.round(v));
+  const cls=v=>v>=0.5?'pos':v<=-0.5?'neg':'';
+  const rp=p=>p==null?'—':(Math.round(p*10)/10).toString();
+  const pk=q=>`${q.r}.${String(((q.o-1)%10)+1).padStart(2,'0')}`;
+  const POSN={QB:'quarterback',RB:'running back',WR:'receiver',TE:'tight end',K:'kicker'};
+  function S(){return DR.seasons[sel.value]}
+  function owner(s){const t=S().teams.find(t=>t.s===s);return t?t.o:'Team '+s}
+  function detail(q){
+    if(!q){det.innerHTML='';det.append(mk('span',null,'Pick a cell on the board to see how that pick graded.'));return}
+    det.replaceChildren();
+    const Sx=S(), R=Sx.repl[q.pos];
+    const top=mk('div');top.append(mk('b',null,`Round ${q.r}, pick ${((q.o-1)%10)+1}`),document.createTextNode(` (#${q.o} overall) · ${owner(q.s)} ${q.k?'kept':'took'} `),mk('b',null,q.n||'an unidentified player'),document.createTextNode(q.pos?` (${q.pos})`:''));
+    det.appendChild(top);
+    if(!q.pos){det.appendChild(mk('div',null,'Dropped before Week 1 and not in ESPN\'s season data, so this pick isn\'t graded.'));return}
+    const sl=mk('div');
+    sl.textContent=`${ordinal(q.dr)} ${POSN[q.pos]} taken. Finished ${ordinal(q.fr)} of the ${Sx.posN[q.pos]} drafted, with ${rp(q.pts)} points. That slot usually returns ${rp(q.exp)}; a waiver-wire ${q.pos} scored about ${Math.round(R)}.`;
+    const vv=mk('div');vv.append(document.createTextNode('Value: '),mk('span',cls(q.v),sgn(q.v)+' pts'),document.createTextNode(` · Grade ${q.g}`));
+    det.append(sl,vv);
+  }
+  function draw(){
+    const Sx=S();
+    info.textContent=`${Sx.picks.length} picks · ${Sx.picks.filter(q=>q.k).length} keepers`;
+    $('dr-repl').textContent=`Waiver-wire level in ${sel.value}: QB ${Math.round(Sx.repl.QB)}, RB ${Math.round(Sx.repl.RB)}, WR ${Math.round(Sx.repl.WR)}, TE ${Math.round(Sx.repl.TE)}, K ${Math.round(Sx.repl.K)} points (12th QB, 28th RB, 34th WR, 13th TE, 11th K).`;
+    // report cards
+    cards.replaceChildren();cards.classList.toggle('focus',focus!=null);
+    Sx.teams.forEach(t=>{
+      const b=mk('button','dr-card');b.type='button';b.setAttribute('aria-pressed',focus===t.s);
+      const best=Sx.picks.find(q=>q.o===t.best), worst=Sx.picks.find(q=>q.o===t.worst);
+      const w=mk('div','who');w.append(mk('b',null,t.o),mk('small',null,t.t));
+      const bw=mk('div','bw');bw.append(mk('span',null,`Best: ${best.n} ${sgn(best.v)}`),mk('span',null,`Worst: ${worst.n} ${sgn(worst.v)}`));
+      b.append(mk('span','rk','#'+t.rank),w,mk('span','gr '+t.g.replace('+','p'),t.g),mk('span','tot '+cls(t.v),`${sgn(t.v)} pts vs. slot · ${t.hits} hits, ${t.miss} misses`),bw);
+      b.onclick=()=>{focus=focus===t.s?null:t.s;draw()};
+      cards.appendChild(b);
+    });
+    // steals & busts
+    const graded=Sx.picks.filter(q=>q.v!=null);
+    const fill=(id,list)=>{const ol=$(id);ol.replaceChildren();list.forEach(q=>{const li=mk('li');
+      li.append(mk('b',null,`${q.n} · ${q.pos}`),mk('span','num '+cls(q.v),sgn(q.v)),mk('small',null,`Pick ${pk(q)} by ${owner(q.s)}${q.k?' (keeper)':''} · finished ${q.pos}${q.fr} of drafted`));ol.appendChild(li)})};
+    fill('dr-steals',[...graded].sort((a,b)=>b.v-a.v).slice(0,5));
+    fill('dr-busts',[...graded].sort((a,b)=>a.v-b.v).slice(0,5));
+    // board
+    const order=Sx.picks.filter(q=>q.r===1).sort((a,b)=>a.o-b.o).map(q=>q.s);
+    const rounds=Math.max(...Sx.picks.map(q=>q.r));
+    board.replaceChildren();board.classList.toggle('focus',focus!=null);
+    const th=mk('thead'),hr=mk('tr');hr.appendChild(mk('th','rd',''));
+    order.forEach(s=>{const t=Sx.teams.find(t=>t.s===s);const c=mk('th',focus===s?'on':'');c.append(document.createTextNode(t.o.split(' ')[0]+' '+(t.o.split(' ')[1]||'').charAt(0)+'.'),mk('small',null,t.t));hr.appendChild(c)});
+    th.appendChild(hr);const tb=mk('tbody');
+    for(let r=1;r<=rounds;r++){const tr=mk('tr');tr.appendChild(mk('th','rd','Rd '+r));
+      order.forEach(s=>{const q=Sx.picks.find(x=>x.r===r&&x.s===s);const td=mk('td');
+        if(q){const b=mk('button',(q.g?'g-'+q.g:'')+(q.k?' kp':'')+(focus!=null&&focus!==q.s?' off':''));b.type='button';b.setAttribute('aria-pressed',picked===q.o);
+          const nm=q.n?q.n.replace(/^(\S)\S*\s+/,'$1. '):'Unknown';
+          b.append(mk('b',null,nm),mk('i',null,q.g||'–'),mk('small',null,q.pos?`${q.pos}${q.dr}→${q.pos}${q.fr} · ${Math.round(q.pts)}`:'not graded'));
+          b.setAttribute('aria-label',`${q.n||'Unknown'}, pick ${pk(q)}, grade ${q.g||'none'}`);
+          b.onclick=()=>{picked=q.o;detail(q);board.querySelectorAll('td button[aria-pressed="true"]').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true')};
+          td.appendChild(b)}
+        tr.appendChild(td)});
+      tb.appendChild(tr)}
+    board.append(th,tb);
+    const cur=Sx.picks.find(q=>q.o===picked);detail(cur||null);
+  }
+  fetch('data/draft.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{
+    DR=d;Object.keys(d.seasons).sort().reverse().forEach(y=>{const o=mk('option',null,y);o.value=y;sel.appendChild(o)});
+    sel.onchange=()=>{focus=null;picked=null;draw()};draw();
+  }).catch(()=>{info.textContent='Draft data couldn\'t be loaded. Refresh to try again.'});
 })();
 
 /* ---------- Pick'em (live) ---------- */
