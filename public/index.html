@@ -305,7 +305,7 @@ table.lb{min-width:0}
     <div>
       <div class="eyebrow">Updates Fri / Mon / Tue</div>
       <h1 id="week-h">Power Rankings</h1>
-      <p class="lede">The standings chart and the weekly rankings with a roast line for every team.</p>
+      <p class="lede">Where every team stands after each week, and how they got there.</p>
     </div>
     <section aria-labelledby="h-bump">
       <div class="head"><div class="eyebrow">Standings progression</div><h2 id="h-bump">Week over week</h2>
@@ -315,8 +315,8 @@ table.lb{min-width:0}
       <p class="note">Poll = the preseason coaches poll. Team avatars and the stadium background come in the design pass.</p>
     </section>
     <section aria-labelledby="h-pr">
-      <div class="head"><div class="eyebrow">Week 6</div><h2 id="h-pr">The rankings</h2>
-        <p>Ordered by standings here. In the real build you can override the order and the Tuesday run writes a roast line for each team.</p></div>
+      <div class="head"><div class="eyebrow" id="pr-week"></div><h2 id="h-pr">The rankings</h2>
+        <p>Ranked by record with bonus wins, points for as the tiebreaker. Arrows show movement from the week before.</p></div>
       <ol class="pr box" id="pr"></ol>
     </section>
   </div>
@@ -540,14 +540,14 @@ show(start);
 
 /* ---------- Power rankings ---------- */
 (function(){
-  const ol=document.getElementById('pr');
+  const ol=document.getElementById('pr');document.getElementById('pr-week').textContent=`After Week ${LW}`;
   const opp={};CUR.games.filter(g=>g.wk===LW).forEach(g=>{opp[g.h]={o:g.a,me:g.hp,them:g.ap};opp[g.a]={o:g.h,me:g.ap,them:g.hp}});
   [...CUR.teams].sort((a,b)=>a.weeks.at(-1).rank-b.weeks.at(-1).rank).forEach(t=>{
     const now=t.weeks.at(-1),prev=t.weeks.at(-2),d=prev.rank-now.rank,g=opp[t.id];
     const li=mk('li');
     const who=mk('div','who');who.append(mk('b',null,t.name),mk('small',null,t.owner));
     const rec=mk('div','rec');rec.append(mk('span',null,`${t.w}-${t.l}`),mk('small',null,`${t.pf.toFixed(1)} PF`));
-    const bl=mk('p','blurb');bl.append(mk('span',null,`Week ${LW}: ${g.me>g.them?'beat':'lost to'} ${T[g.o].name}, ${g.me.toFixed(2)}–${g.them.toFixed(2)}. ${ordinal(now.wrank)}-highest score, ${now.wrank<=5?'bonus win':'bonus loss'}.`),mk('i',null,'Roast line for this team · written by the Tuesday run'));
+    const bl=mk('p','blurb');bl.append(mk('span',null,`Week ${LW}: ${g.me>g.them?'beat':'lost to'} ${T[g.o].name}, ${g.me.toFixed(2)}–${g.them.toFixed(2)}. ${ordinal(now.wrank)}-highest score, ${now.wrank<=5?'bonus win':'bonus loss'}.`));
     li.append(mk('div','rk num',now.rank),mk('div','mv',d>0?`▲ ${d}`:d<0?`▼ ${-d}`:'—'),who,rec,bl);
     ol.appendChild(li);
   });
