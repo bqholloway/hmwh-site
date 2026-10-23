@@ -100,6 +100,15 @@ section{display:grid;gap:14px;min-width:0}
 .mu-mini span:nth-of-type(odd){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mu-mini span:nth-of-type(even){font-family:var(--mono);color:var(--muted);font-size:.78rem}
 .mu-mini div+div{border-top:1px solid var(--line);padding-top:8px}
+@media (min-width:881px){
+  .front{grid-template-areas:"lead stand" "grid mu" "note .";row-gap:22px}
+  .front .stories,.front .rail{display:contents}
+  .front .lead{grid-area:lead}
+  .front #storygrid{grid-area:grid}
+  .front .st-note{grid-area:note}
+  .front .rail-stand{grid-area:stand;align-self:start}
+  .front .rail-mu{grid-area:mu;align-self:center}
+}
 @media (max-width:880px){.front{grid-template-columns:1fr}}
 @media (max-width:600px){.lead{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
 
@@ -368,15 +377,15 @@ table.lb{min-width:0}
       <div class="stories">
         <article class="lead" id="lead"></article>
         <div class="grid2" id="storygrid"></div>
-        <p class="note">Headlines are written by the update runs from rules: every completed trade, the biggest upset by projection, the biggest blowout, new records, clinches and eliminations, preseason-vs-now. You can edit or pin any headline before it posts.</p>
+        <p class="note st-note">Headlines are written by the update runs from rules: every completed trade, the biggest upset by projection, the biggest blowout, new records, clinches and eliminations, preseason-vs-now. You can edit or pin any headline before it posts.</p>
       </div>
       <aside class="rail">
-        <div class="box">
+        <div class="box rail-stand">
           <h2>Standings</h2>
           <table class="mini" id="ministand"></table>
           <p class="note" style="margin-top:10px">Dashed line = playoff cut (top 5)</p>
         </div>
-        <div class="box">
+        <div class="box rail-mu">
           <h2>Week 7 matchups</h2>
           <div class="mu-mini" id="minimu"></div>
           <button class="linkbtn" type="button" data-go="pickem" style="margin-top:12px">Week 8 pick'em →</button>
