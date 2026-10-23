@@ -381,11 +381,6 @@ table.lb{min-width:0}
           <div class="mu-mini" id="minimu"></div>
           <button class="linkbtn" type="button" data-go="pickem" style="margin-top:12px">Week 8 pick'em →</button>
         </div>
-        <div class="box">
-          <h2>Latest video</h2>
-          <div class="ph" style="aspect-ratio:16/9;max-width:100%">YouTube thumbnail</div>
-          <p style="margin:8px 0 0;font-size:.88rem"><b>Prelude: Field Goal Forest</b><br><span style="color:var(--muted);font-size:.8rem">2026</span></p>
-        </div>
       </aside>
     </div>
 
@@ -597,7 +592,7 @@ show(start);
     sb.appendChild(d);
   });
   // lead + stories
-  const H=D.headlines, lead=H.find(h=>h.lead), rest=H.filter(h=>!h.lead);
+  const H=D.headlines, lead=H.find(h=>h.lead), rest=H.filter(h=>!h.lead).slice(0,6);
   const L=document.getElementById('lead');
   L.append(mk('div','ph','Team avatar or player photo'));
   const tx=mk('div','txt');const meta=mk('div','meta');meta.append(mk('span','pill',lead.tag),mk('span',null,lead.date));
