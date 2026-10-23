@@ -115,9 +115,9 @@ export default {
       }
 
       if (url.pathname === "/api/admin/access-info" && request.method === "GET") {
-        // Shows the commissioner which Access team and audience tag his login token carries,
+        // Shows the Groundskeeper which Access team and audience tag his login token carries,
         // so they can be copied into ACCESS_TEAM / ACCESS_AUD. Neither value is a secret.
-        if (!admin) return json({ error: "Only the commissioner can do that." }, 403);
+        if (!admin) return json({ error: "Only the Groundskeeper can do that." }, 403);
         const token = request.headers.get("cf-access-jwt-assertion");
         if (!token) return json({ error: "No Cloudflare Access token on this request." }, 400);
         try {
@@ -130,7 +130,7 @@ export default {
       }
 
       if (url.pathname === "/api/admin/release" && request.method === "POST") {
-        if (!admin) return json({ error: "Only the commissioner can do that." }, 403);
+        if (!admin) return json({ error: "Only the Groundskeeper can do that." }, 403);
         const body = await request.json().catch(() => ({}));
         await league.release(Number(body.slot));
         return json(await buildState(league, cfg, week, email, admin));
