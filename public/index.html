@@ -114,7 +114,8 @@ section{display:grid;gap:14px;min-width:0}
   .front #storygrid{grid-area:grid}
   .front .st-note{grid-area:note}
   .front .rail-stand{grid-area:stand;align-self:start}
-  .front .rail-mu{grid-area:mu;align-self:center}
+  .front .rail-mu{grid-area:mu;align-self:start;min-height:402px;display:flex;flex-direction:column}
+  .front .rail-mu .mu-mini{flex:1;align-content:space-between}
 }
 @media (max-width:880px){.front{grid-template-columns:1fr}}
 .lead .art{min-height:0}
@@ -425,7 +426,24 @@ table.lb{min-width:0}
 .vid small{color:var(--muted);font-family:var(--mono);font-size:.74rem}
 .split{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
 @media (max-width:560px){.pick{grid-template-columns:1fr}.vs{display:none}.h2h .big{font-size:1.9rem}}
-@media (prefers-reduced-motion:reduce){.line{transition:none}}
+/* Lore timeline */
+.tl{list-style:none;margin:0;padding:8px 0;position:relative;display:grid;gap:18px}
+.tl::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:3px;background:var(--brass);transform:translateX(-50%);opacity:.5}
+.tl li{position:relative;display:grid;grid-template-columns:1fr 1fr;align-items:center}
+.tl li::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;background:var(--brass);border:3px solid var(--bg);transform:translate(-50%,-50%);transition:transform .2s}
+.tl li:hover::after,.tl li:focus-within::after{transform:translate(-50%,-50%) scale(1.5)}
+.tl .ev{grid-column:1;justify-self:end;margin-right:34px;width:min(100%,380px);text-align:right}
+.tl li:nth-child(even) .ev{grid-column:2;justify-self:start;margin-left:34px;margin-right:0;text-align:left}
+.tl .ev{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 16px;cursor:default;transition:transform .2s,box-shadow .2s,border-color .2s;transform-origin:center}
+.tl .ev:hover,.tl .ev:focus{transform:scale(1.05);box-shadow:0 8px 22px rgba(0,0,0,.14);border-color:var(--brass);outline:none;z-index:2}
+.tl .yr{font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;color:var(--brass)}
+.tl .ev b{display:block;font-size:1rem;margin-top:2px}
+.tl .det{max-height:0;opacity:0;overflow:hidden;color:var(--muted);font-size:.86rem;transition:max-height .25s,opacity .25s,margin .25s}
+.tl .ev:hover .det,.tl .ev:focus .det{max-height:160px;opacity:1;margin-top:8px}
+@media (max-width:640px){.tl::before{left:12px}.tl li{grid-template-columns:1fr}.tl li::after{left:12px}
+.tl .ev,.tl li:nth-child(even) .ev{grid-column:1;justify-self:stretch;margin:0 0 0 36px;width:auto;text-align:left}}
+@media (hover:none){.tl .det{max-height:160px;opacity:1;margin-top:8px}}
+@media (prefers-reduced-motion:reduce){.line,.tl .ev,.tl li::after,.tl .det{transition:none}}
 </style>
 </head>
 <body>
@@ -441,7 +459,7 @@ table.lb{min-width:0}
   <!-- HOME -->
   <div class="view" id="v-home" hidden>
     <div class="mast">
-      <div class="paper">The Club Gazette</div>
+      <div class="paper">The Lunchroom</div>
       <div class="dateline"><span>Thursday, October 22, 2026</span><span>Week 7 kicks off tonight</span><span>Through Week 6</span></div>
     </div>
 
@@ -516,7 +534,7 @@ table.lb{min-width:0}
       <div class="box tw"><table class="grid-m" id="matrix"></table></div>
     </section>
     <section aria-labelledby="h-streak">
-      <div class="head"><h2 id="h-streak">Longest streaks</h2><p id="streak-sub">The three longest win streaks by one owner over another, regular season and playoffs.</p></div>
+      <div class="head"><h2 id="h-streak">Longest streaks</h2><p id="streak-sub">The four longest win streaks by one owner over another, regular season and playoffs.</p></div>
       <div class="hh-facts" id="streaks"></div>
     </section>
   </div>
@@ -656,8 +674,8 @@ table.lb{min-width:0}
   <div class="view" id="v-lore" hidden>
     <div><div class="eyebrow">The legend</div><h1>Lore</h1>
       <p class="lede">The stories, feuds and moments that built the league.</p></div>
-    <div class="box" style="padding:28px 20px;text-align:center"><b>Coming soon.</b>
-      <p class="status" style="margin:6px 0 0">The Groundskeeper is still digging through the archives.</p></div>
+    <ol class="tl" id="tl" aria-label="League timeline"></ol>
+    <p class="note">Mock-up: general placeholder events. Hover (or tap) any event for details. The real lore goes in once you send it over.</p>
   </div>
 
   <!-- VIDEOS -->
@@ -785,10 +803,24 @@ show(start);
   });
 })();
 
+/* ---------- Lore timeline (mock-up) ---------- */
+(function(){
+  const EV=[
+    ['2015','The league is born','Ten friends, one ESPN league and a name nobody could talk them out of. Buzz Ellis wins the first title.'],
+    ['2017','Briggs Tomlinson takes the crown','A placeholder for the first big upset story in league history.'],
+    ['2020','The pandemic season','Placeholder: the year everything was weird and the league played on anyway.'],
+    ['2022','Seth Wade wins it all','Placeholder: a title run worth a full story, with a team name worth another.'],
+    ['2024','Bonus wins arrive','The top five weekly scores earn an extra win, so every Sunday matters twice as much.'],
+    ['2025','The bowl games are born','Chupacabra Bowl and friends give the bottom of the standings something to play for.'],
+    ['2026','The 11-player blockbuster','Donut Season II and Margot\'s Dad swap eleven players in the biggest trade the league has seen.']];
+  const ol=document.getElementById('tl');
+  EV.forEach(([y,t,d])=>{const li=mk('li'),ev=mk('div','ev');ev.tabIndex=0;ev.append(mk('div','yr',y),mk('b',null,t),mk('div','det',d));li.appendChild(ev);ol.appendChild(li)});
+})();
+
 /* ---------- Bump chart ---------- */
 (function(){
   const svg=document.getElementById('bump'), NS='http://www.w3.org/2000/svg';
-  const W=1000,H=470,L=46,R=190,TP=40,B=16, cols=13;
+  const W=1000,H=470,L=46,R=150,TP=40,B=16, cols=13;
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
   const x=w=>L+(W-L-R)*w/(cols-1), y=r=>TP+(H-TP-B)*(r-1)/9;
   const el=(n,a,p=svg)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e};
@@ -804,7 +836,7 @@ show(start);
     el('path',{class:'hit',d},g);el('path',{class:'case',d},g);el('path',{class:'line',d,stroke:col},g);
     if(p0){const c=el('circle',{class:'dot',cx:x(0),cy:y(p0),r:6,fill:col},g);el('title',{},c).textContent=`${t.name} · Preseason coaches poll: #${p0}`}
     t.weeks.forEach((wk,i)=>{const c=el('circle',{class:'dot',cx:x(i+1),cy:y(wk.rank),r:6,fill:col},g);el('title',{},c).textContent=`${t.name} · Week ${i+1}: ${wk.pts.toFixed(2)} pts, ${wk.rec}, rank ${wk.rank}`});
-    const last=t.weeks.at(-1);el('text',{x:x(LW)+14,y:y(last.rank)+4,'font-size':12,fill:'var(--ink)'},g).textContent=`${last.rec}  ${short(t.name,20)} (${t.owner.split(/\s+/).map(w=>w[0]).join('').toUpperCase()})`;
+    const last=t.weeks.at(-1);el('text',{x:x(LW)+14,y:y(last.rank)+4,'font-size':12,fill:'var(--ink)'},g).textContent=`${last.rec}  ${short(t.name)}`;
     g.addEventListener('click',()=>toggle(t.id));g.addEventListener('mouseenter',()=>hover(t.id));g.addEventListener('mouseleave',()=>hover(null));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle(t.id)}});
     groups[t.id]=g;
   });
@@ -915,7 +947,7 @@ show(start);
     }));
     all.sort((p,q)=>q.n-p.n||(q.active-p.active)||(q.to.y-p.to.y)||(q.to.wk-p.to.wk));
     const seen=new Set(),top=[];
-    for(const s of all){top.push(s);if(top.length===3)break}
+    for(const s of all){top.push(s);if(top.length===4)break}
     if(!top.length){box.appendChild(mk('div','box','No streaks to show.'));return}
     top.forEach((s,i)=>{
       const d=mk('div','box'),sp=s.from.y===s.to.y?`${s.from.y}`:`${s.from.y}–${s.to.y}`;
