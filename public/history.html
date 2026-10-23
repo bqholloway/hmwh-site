@@ -1,0 +1,2272 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style>
+/* Embedded in hmwh.men League History tab */
+body{background:transparent!important}
+:root{padding-top:0!important;padding-bottom:0!important}
+.wrap{padding-block:0 8px!important;padding-left:0!important;padding-right:0!important;max-width:none!important}
+.wrap>header .eyebrow,.wrap>header h1,.wrap>header .lede{display:none}
+</style>
+<meta name="robots" content="noindex,nofollow">
+</head><body>
+<title>HMWHC Record Book</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Graduate&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Layout: a varsity record book. Felt championship banners hang across the top, then the all-time owner ledger, records, and a season-by-season archive. */
+:root{
+  --bg:#eceeea; --panel:#f7f8f5; --ink:#1b211e; --muted:#5a6560; --line:#cdd3cf;
+  --brass:#99691a; --felt:#6e1f2b; --on-felt:#f3e9d6; --felt-gold:#e0b456; --felt-edge:#4f141e;
+  --good:#2f6b45; --bad:#9a3a2e;
+  --display:"Graduate","Rockwell","Georgia",serif;
+  --body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  --data:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111513; --panel:#192019; --ink:#e7ebe8; --muted:#97a39c; --line:#2b3430;
+  --brass:#d4a446; --felt:#7f2633; --on-felt:#f3e9d6; --felt-edge:#57161f;
+  --good:#6fbf8c; --bad:#e08a7c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111513; --panel:#192019; --ink:#e7ebe8; --muted:#97a39c; --line:#2b3430;
+  --brass:#d4a446; --felt:#7f2633; --on-felt:#f3e9d6; --felt-edge:#57161f;
+  --good:#6fbf8c; --bad:#e08a7c; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 64px;display:grid;gap:56px}
+h1,h2{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:.01em}
+h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.05}
+h2{font-size:1.5rem;line-height:1.2}
+.eyebrow{font-family:var(--data);font-weight:600;text-transform:uppercase;letter-spacing:.14em;font-size:.82rem;color:var(--brass)}
+.lede{color:var(--muted);max-width:62ch;margin:10px 0 0}
+section{display:grid;gap:18px;min-width:0}
+.sec-head{display:grid;gap:4px}
+.sec-head p{margin:0;color:var(--muted);max-width:65ch}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:18px;font-family:var(--data);font-size:1rem;color:var(--muted)}
+.facts b{font-family:var(--display);font-weight:400;color:var(--ink);font-size:1.35rem;margin-right:6px}
+
+/* Banners */
+.rafters{display:grid;grid-template-columns:repeat(12,minmax(78px,1fr));gap:8px;border-top:3px solid var(--brass);padding-top:16px;overflow-x:auto;padding-bottom:6px}
+.banner{position:relative;background:var(--felt);color:var(--on-felt);clip-path:polygon(0 0,100% 0,100% 86%,50% 100%,0 86%);padding:12px 6px 26px;text-align:center;display:grid;gap:5px;align-content:start;min-height:170px;box-shadow:inset 0 0 0 3px var(--felt-edge)}
+.banner .yr{font-family:var(--display);font-size:1.15rem;line-height:1;color:var(--felt-gold)}
+.banner .champ{font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:.82rem;line-height:1.1;overflow-wrap:anywhere}
+.banner .tname{font-size:.7rem;opacity:.85;line-height:1.2;overflow-wrap:anywhere}
+.banner.live{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 2px var(--line);border:0}
+.banner.live .yr{color:var(--muted)}
+.hide{opacity:.6;font-style:italic}
+
+/* Tables */
+.tbl-wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;min-width:640px}
+th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child,th.l,td.l{text-align:left}
+thead th{font-family:var(--data);font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;color:var(--muted);background:var(--panel);position:sticky;top:0}
+thead th button{all:unset;cursor:pointer}
+thead th button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+thead th[aria-sort] button::after{content:" ▾";color:var(--brass)}
+thead th[aria-sort="ascending"] button::after{content:" ▴"}
+tbody tr:last-child td{border-bottom:0}
+td.num{font-family:var(--data);font-size:1.02rem}
+.trophies{color:var(--brass);letter-spacing:2px;font-size:.95rem}
+.owner-btn{all:unset;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.owner-btn::before{content:"+";font-family:var(--data);color:var(--brass);width:1ch}
+.owner-btn[aria-expanded="true"]::before{content:"−"}
+.owner-btn:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+.detail td{background:var(--bg);white-space:normal;text-align:left;padding:14px 16px}
+.history{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px 22px;font-size:.9rem}
+.history div{display:flex;gap:10px;min-width:0}
+.history .y{font-family:var(--data);font-weight:600;color:var(--muted);flex:none;width:3.2ch}
+.history .n{min-width:0;overflow-wrap:anywhere}
+.history .f{margin-left:auto;font-family:var(--data);color:var(--muted);flex:none}
+.history .f.gold{color:var(--brass);font-weight:700}
+.note{font-size:.85rem;color:var(--muted);margin:0;max-width:70ch}
+
+/* Records */
+.records{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.rec{background:var(--panel);padding:16px 18px;display:grid;gap:4px;align-content:start}
+.rec .k{font-family:var(--data);text-transform:uppercase;letter-spacing:.1em;font-size:.76rem;color:var(--muted);font-weight:600}
+.rec .v{font-family:var(--display);font-size:1.5rem;line-height:1.1}
+.rec .who{font-size:.92rem}
+.rec .who small{color:var(--muted);display:block}
+
+/* Highs list */
+.highs{list-style:none;margin:0;padding:0;display:grid;gap:0;background:var(--panel);border:1px solid var(--line);border-radius:6px}
+.highs li{display:grid;grid-template-columns:2.2rem 5.2rem 1fr auto;gap:12px;align-items:baseline;padding:10px 14px;border-bottom:1px solid var(--line)}
+.highs li:last-child{border-bottom:0}
+.highs .rk{font-family:var(--data);color:var(--muted);font-weight:600}
+.highs .pts{font-family:var(--display);font-size:1.15rem;color:var(--brass)}
+.highs .who{min-width:0}
+.highs .who small{display:block;color:var(--muted);font-size:.82rem}
+.highs .when{font-family:var(--data);color:var(--muted);text-align:right}
+@media (max-width:520px){.highs li{grid-template-columns:1.6rem 4.4rem 1fr}.highs .when{grid-column:3;text-align:left}}
+
+/* Season browser */
+.years{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.years button{font-family:var(--data);font-weight:600;font-size:1rem;padding:6px 12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:4px;cursor:pointer;flex:none}
+.years button[aria-pressed="true"]{background:var(--felt);color:var(--on-felt);border-color:var(--felt)}
+.years button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.pill{display:inline-block;font-family:var(--data);font-weight:600;font-size:.8rem;padding:1px 8px;border-radius:999px;border:1px solid currentColor;letter-spacing:.04em}
+.pill.c{color:var(--brass)} .pill.r{color:var(--muted)}
+.season-meta{color:var(--muted);font-size:.92rem;margin:0}
+footer{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:18px;display:grid;gap:6px}
+footer p{margin:0;max-width:75ch}
+@media (prefers-reduced-motion:no-preference){.banner{transition:transform .2s}.banner:hover{transform:translateY(3px)}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">ESPN League · Est. 2015</div>
+    <h1>He Man Woman Haters Club</h1>
+    <p class="lede">The official record book: every champion, every owner's all-time ledger, the biggest weeks, and the final standings from every season since 2015.</p>
+    <div class="facts" id="facts"></div>
+  </header>
+
+  <section aria-labelledby="h-banners">
+    <div class="sec-head"><div class="eyebrow">The Rafters</div><h2 id="h-banners">Champions</h2></div>
+    <div class="rafters" id="rafters"></div>
+  </section>
+
+  <section aria-labelledby="h-owners">
+    <div class="sec-head"><div class="eyebrow">All-Time Ledger</div><h2 id="h-owners">Owners</h2>
+      <p>Click an owner to see every team name and finish. Click a column header to re-sort.</p></div>
+    <div class="tbl-wrap"><table id="owners"></table></div>
+    <p class="note">Records include bonus wins and losses from 2024 on, so recent seasons count double. Co-owned seasons are listed under the pairing. The 2026 season is included through the latest standings.</p>
+  </section>
+
+  <section aria-labelledby="h-records">
+    <div class="sec-head"><div class="eyebrow">Book of Records</div><h2 id="h-records">Season Records</h2><p>Completed seasons only, 2015 through 2025.</p></div>
+    <div class="records" id="records"></div>
+  </section>
+
+  <section aria-labelledby="h-highs">
+    <div class="sec-head"><div class="eyebrow">Single-Week Highs</div><h2 id="h-highs">Biggest Weeks Ever</h2><p>Top 10 single-week team scores across all regular-season and playoff weeks.</p></div>
+    <ol class="highs" id="highs"></ol>
+  </section>
+
+  <section aria-labelledby="h-seasons">
+    <div class="sec-head"><div class="eyebrow">The Archive</div><h2 id="h-seasons">Season by Season</h2></div>
+    <div class="years" id="years" role="group" aria-label="Choose a season"></div>
+    <p class="season-meta" id="season-meta"></p>
+    <div class="tbl-wrap"><table id="season"></table></div>
+  </section>
+
+  <footer>
+    <p>Data pulled from ESPN league history. Team names change every season, so owners are tracked by franchise slot.</p>
+    <p>2015–2016 used lower-scoring settings, so point totals from those years run smaller. Bonus wins (top-5 weekly score) started in 2024.</p>
+    <p id="updated"></p>
+  </footer>
+</div>
+
+<script>
+const DATA = {
+ "seasons": [
+  {
+   "year": 2015,
+   "complete": true,
+   "bonus": false,
+   "teams": [
+    {
+     "slot": 9,
+     "owner": "Buzz Ellis",
+     "name": "Pirlo FC",
+     "w": 11,
+     "l": 2,
+     "pf": 1479,
+     "pa": 1003,
+     "seed": 1,
+     "final": 1
+    },
+    {
+     "slot": 3,
+     "owner": "Kyle Brown",
+     "name": "Jag of Belly Beans",
+     "w": 9,
+     "l": 4,
+     "pf": 1378,
+     "pa": 1158,
+     "seed": 2,
+     "final": 3
+    },
+    {
+     "slot": 8,
+     "owner": "Bradley Holloway",
+     "name": "Sassy Susan Squad",
+     "w": 10,
+     "l": 3,
+     "pf": 1132,
+     "pa": 1039,
+     "seed": 3,
+     "final": 2
+    },
+    {
+     "slot": 1,
+     "owner": "Mac Shelton",
+     "name": "My Ball Zach Ertz",
+     "w": 9,
+     "l": 4,
+     "pf": 1040,
+     "pa": 1008,
+     "seed": 4,
+     "final": 4
+    },
+    {
+     "slot": 2,
+     "owner": "Zachary Brown",
+     "name": "JUDAH SQUAD FC",
+     "w": 6,
+     "l": 7,
+     "pf": 1121,
+     "pa": 1125,
+     "seed": 5,
+     "final": 6
+    },
+    {
+     "slot": 5,
+     "owner": "Tony Moody",
+     "name": "Ripe Regina",
+     "w": 6,
+     "l": 7,
+     "pf": 1105,
+     "pa": 1148,
+     "seed": 6,
+     "final": 7
+    },
+    {
+     "slot": 7,
+     "owner": "Myles & Jason Shelton",
+     "name": "Chazz and The Whiffenpoofs",
+     "w": 5,
+     "l": 8,
+     "pf": 1173,
+     "pa": 1221,
+     "seed": 7,
+     "final": 5
+    },
+    {
+     "slot": 6,
+     "owner": "Seth Wade",
+     "name": "Mac My bud mackus",
+     "w": 4,
+     "l": 9,
+     "pf": 941,
+     "pa": 1096,
+     "seed": 8,
+     "final": 10
+    },
+    {
+     "slot": 10,
+     "owner": "Briggs Tomlinson",
+     "name": "Crusty Christy Club",
+     "w": 3,
+     "l": 10,
+     "pf": 1006,
+     "pa": 1141,
+     "seed": 9,
+     "final": 8
+    },
+    {
+     "slot": 4,
+     "owner": "Peyton Anderson",
+     "name": "Brandi's BonBons",
+     "w": 2,
+     "l": 11,
+     "pf": 978,
+     "pa": 1414,
+     "seed": 10,
+     "final": 9
+    }
+   ]
+  },
+  {
+   "year": 2016,
+   "complete": true,
+   "bonus": false,
+   "teams": [
+    {
+     "slot": 10,
+     "owner": "Briggs Tomlinson",
+     "name": "Peyton FREAKING Anderson",
+     "w": 11,
+     "l": 2,
+     "pf": 1334,
+     "pa": 1033,
+     "seed": 1,
+     "final": 2
+    },
+    {
+     "slot": 2,
+     "owner": "Zachary Brown",
+     "name": "YeeYee Waterfowl",
+     "w": 9,
+     "l": 4,
+     "pf": 1463,
+     "pa": 1194,
+     "seed": 2,
+     "final": 1
+    },
+    {
+     "slot": 9,
+     "owner": "Buzz Ellis",
+     "name": "Kirk Cousins Forever",
+     "w": 9,
+     "l": 4,
+     "pf": 1246,
+     "pa": 1158,
+     "seed": 3,
+     "final": 4
+    },
+    {
+     "slot": 7,
+     "owner": "David Showers",
+     "name": "David Is On His Period",
+     "w": 7,
+     "l": 6,
+     "pf": 1088,
+     "pa": 1144,
+     "seed": 4,
+     "final": 3
+    },
+    {
+     "slot": 5,
+     "owner": "Tony Moody",
+     "name": "Tony LOVES Seth",
+     "w": 6,
+     "l": 7,
+     "pf": 1198,
+     "pa": 1167,
+     "seed": 5,
+     "final": 6
+    },
+    {
+     "slot": 1,
+     "owner": "Mac Shelton",
+     "name": "Breshad Perriman FC",
+     "w": 5,
+     "l": 8,
+     "pf": 1083,
+     "pa": 1224,
+     "seed": 6,
+     "final": 8
+    },
+    {
+     "slot": 4,
+     "owner": "Peyton Anderson",
+     "name": "GOLDEN TATE",
+     "w": 5,
+     "l": 8,
+     "pf": 1062,
+     "pa": 1064,
+     "seed": 7,
+     "final": 5
+    },
+    {
+     "slot": 3,
+     "owner": "Kyle Brown",
+     "name": "BoomWackers FC",
+     "w": 5,
+     "l": 8,
+     "pf": 1025,
+     "pa": 1287,
+     "seed": 8,
+     "final": 10
+    },
+    {
+     "slot": 6,
+     "owner": "Seth Wade",
+     "name": "buzz i hate you so quit messing",
+     "w": 4,
+     "l": 9,
+     "pf": 1128,
+     "pa": 1208,
+     "seed": 9,
+     "final": 7
+    },
+    {
+     "slot": 8,
+     "owner": "Bradley Holloway",
+     "name": "Harambe 4 President",
+     "w": 4,
+     "l": 9,
+     "pf": 954,
+     "pa": 1102,
+     "seed": 10,
+     "final": 9
+    }
+   ]
+  },
+  {
+   "year": 2017,
+   "complete": true,
+   "bonus": false,
+   "teams": [
+    {
+     "slot": 6,
+     "owner": "Seth Wade",
+     "name": "no more bill bob Jr bud",
+     "w": 11,
+     "l": 2,
+     "pf": 1512.44,
+     "pa": 1350.81,
+     "seed": 1,
+     "final": 3
+    },
+    {
+     "slot": 5,
+     "owner": "Tony Moody",
+     "name": "COCK- a-doodle-doo",
+     "w": 11,
+     "l": 2,
+     "pf": 1531.12,
+     "pa": 1270.66,
+     "seed": 2,
+     "final": 4
+    },
+    {
+     "slot": 10,
+     "owner": "Briggs Tomlinson",
+     "name": "I R",
+     "w": 9,
+     "l": 4,
+     "pf": 1434.87,
+     "pa": 1317.61,
+     "seed": 3,
+     "final": 1
+    },
+    {
+     "slot": 1,
+     "owner": "Mac Shelton",
+     "name": "Vikings 2 The Playoffs FC",
+     "w": 7,
+     "l": 6,
+     "pf": 1512.48,
+     "pa": 1355.22,
+     "seed": 4,
+     "final": 2
+    },
+    {
+     "slot": 9,
+     "owner": "Buzz Ellis",
+     "name": "Ertzkowski FC",
+     "w": 6,
+     "l": 7,
+     "pf": 1396.21,
+     "pa": 1370.55,
+     "seed": 5,
+     "final": 8
+    },
+    {
+     "slot": 7,
+     "owner": "David Showers",
+     "name": "Guam Bomb Squad",
+     "w": 6,
+     "l": 7,
+     "pf": 1322.47,
+     "pa": 1303.38,
+     "seed": 6,
+     "final": 5
+    },
+    {
+     "slot": 8,
+     "owner": "Bradley Holloway",
+     "name": "Oppressed White Males",
+     "w": 5,
+     "l": 8,
+     "pf": 1315.63,
+     "pa": 1387.8,
+     "seed": 7,
+     "final": 6
+    },
+    {
+     "slot": 2,
+     "owner": "Zachary Brown",
+     "name": "YeeYee Waterfowl",
+     "w": 4,
+     "l": 9,
+     "pf": 1324.76,
+     "pa": 1413.36,
+     "seed": 8,
+     "final": 10
+    },
+    {
+     "slot": 3,
+     "owner": "Corey Johnson",
+     "name": "Playoff Bound Titans",
+     "w": 4,
+     "l": 9,
+     "pf": 1216.14,
+     "pa": 1402.38,
+     "seed": 9,
+     "final": 7
+    },
+    {
+     "slot": 4,
+     "owner": "Peyton Anderson",
+     "name": "Playoff Bound 1Hunnid",
+     "w": 2,
+     "l": 11,
+     "pf": 1102.09,
+     "pa": 1496.44,
+     "seed": 10,
+     "final": 9
+    }
+   ]
+  },
+  {
+   "year": 2018,
+   "complete": true,
+   "bonus": false,
+   "teams": [
+    {
+     "slot": 7,
+     "owner": "David Showers & Jack Cagle",
+     "name": "Rectum Raiders",
+     "w": 11,
+     "l": 2,
+     "pf": 1954.1,
+     "pa": 1535.4,
+     "seed": 1,
+     "final": 1
+    },
+    {
+     "slot": 2,
+     "owner": "Zachary Brown",
+     "name": "YeeYee Waterfowl",
+     "w": 11,
+     "l": 2,
+     "pf": 1816.64,
+     "pa": 1544.48,
+     "seed": 2,
+     "final": 2
+    },
+    {
+     "slot": 6,
+     "owner": "Seth Wade",
+     "name": "SETH Dog Master Wade FC",
+     "w": 11,
+     "l": 2,
+     "pf": 1834.36,
+     "pa": 1585.62,
+     "seed": 3,
+     "final": 4
+    },
+    {
+     "slot": 9,
+     "owner": "Buzz Ellis",
+     "name": "Pirlo FC",
+     "w": 6,
+     "l": 7,
+     "pf": 1643.7,
+     "pa": 1777.9,
+     "seed": 4,
+     "final": 3
+    },
+    {
+     "slot": 4,
+     "owner": "Peyton Anderson",
+     "name": "Ugandan Child Slaves",
+     "w": 6,
+     "l": 7,
+     "pf": 1616.22,
+     "pa": 1561.66,
+     "seed": 5,
+     "final": 8
+    },
+    {
+     "slot": 10,
+     "owner": "Briggs Tomlinson",
+     "name": "O ka Luna D wade i ka Seth",
+     "w": 6,
+     "l": 7,
+     "pf": 1519.6,
+     "pa": 1587.56,
+     "seed": 6,
+     "final": 6
+    },
+    {
+     "slot": 5,
+     "owner": "Tony Moody",
+     "name": "Bunghole Ash Sniffer",
+     "w": 5,
+     "l": 8,
+     "pf": 1601.86,
+     "pa": 1655.84,
+     "seed": 7,
+     "final": 5
+    },
+    {
+     "slot": 1,
+     "owner": "Mac Shelton",
+     "name": "The Third Reich",
+     "w": 4,
+     "l": 9,
+     "pf": 1601.64,
+     "pa": 1693.5,
+     "seed": 8,
+     "final": 9
+    },
+    {
+     "slot": 3,
+     "owner": "Corey Johnson",
+     "name": "remeber seths neumonia",
+     "w": 4,
+     "l": 9,
+     "pf": 1322.46,
+     "pa": 1646.44,
+     "seed": 9,
+     "final": 10
+    },
+    {
+     "slot": 8,
+     "owner": "Bradley Holloway",
+     "name": "White Male Privilege",
+     "w": 1,
+     "l": 12,
+     "pf": 1472.38,
+     "pa": 1794.56,
+     "seed": 10,
+     "final": 7
+    }
+   ]
+  },
+  {
+   "year": 2019,
+   "complete": true,
+   "bonus": false,
+   "teams": [
+    {
+     "slot": 9,
+     "owner": "Buzz Ellis",
+     "name": "My Kupp Runneth Over",
+     "w": 11,
+     "l": 3,
+     "pf": 1834.42,
+     "pa": 1672.82,
+     "seed": 1,
+     "final": 4
+    },
+    {
+     "slot": 3,
+     "owner": "Corey Johnson",
+     "name": "Minecraft S*x",
+     "w": 10,
+     "l": 4,
+     "pf": 1913.2,
+     "pa": 1714.6,
+     "seed": 2,
+     "final": 3
+    },
+    {
+     "slot": 10,
+     "owner": "Briggs Tomlinson",
+     "name": "SLUTS _2",
+     "w": 9,
+     "l": 5,
+     "pf": 1638.66,
+     "pa": 1578.82,
+     "seed": 3,
+     "final": 6
+    },
+    {
+     "slot": 8,
+     "owner": "Bradley Holloway",
+     "name": "Penetration Nation",
+     "w": 8,
+     "l": 6,
+     "pf": 1755.18,
+     "pa": 1583.92,
+     "seed": 4,
+     "final": 5
+    },
+    {
+     "slot": 2,
+     "owner": "Zachary Brown",
+     "name": "YeeYee Waterfowl",
+     "w": 8,
+     "l": 6,
+     "pf": 1919.3,
+     "pa": 1624.48,
+     "seed": 5,
+     "final": 1
+    },
+    {
+     "slot": 1,
+     "owner": "Mac Shelton",
+     "name": "Humpey dopey sat buddies",
+     "w": 6,
+     "l": 8,
+     "pf": 1715.18,
+     "pa": 1674.26,
+     "seed": 6,
+     "final": 2
+    },
+    {
+     "slot": 4,
+     "owner": "Peyton Anderson",
+     "name": "Hit It From The Back Hitler",
+     "w": 6,
+     "l": 8,
+     "pf": 1446.0,
+     "pa": 1603.62,
+     "seed": 7,
+     "final": 7
+    },
+    {
+     "slot": 7,
+     "owner": "Isaac Williams",
+     "name": "Joe Mamma",
+     "w": 4,
+     "l": 10,
+     "pf": 1649.58,
+     "pa": 1776.28,
+     "seed": 8,
+     "final": 9
+    },
+    {
+     "slot": 5,
+     "owner": "Tony Moody",
+     "name": "White Claw",
+     "w": 4,
+     "l": 10,
+     "pf": 1418.8,
+     "pa": 1589.72,
+     "seed": 9,
+     "final": 8
+    },
+    {
+     "slot": 6,
+     "owner": "Seth Wade",
+     "name": "Not cool Ahhhhhhhhh FC",
+     "w": 4,
+     "l": 10,
+     "pf": 1224.02,
+     "pa": 1695.82,
+     "seed": 10,
+     "final": 10
+    }
+   ]
+  },
+  {
+   "year": 2020,
+   "complete": true,
+   "bonus": false,
+   "teams": [
+    {
+     "slot": 6,
+     "owner": "Seth Wade",
+     "name": "Seth dog the Master Wade 😉",
+     "w": 9,
+     "l": 5,
+     "pf": 1788.24,
+     "pa": 1633.14,
+     "seed": 1,
+     "final": 4
+    },
+    {
+     "slot": 10,
+     "owner": "Briggs Tomlinson",
+     "name": "Third Reich",
+     "w": 8,
+     "l": 6,
+     "pf": 1866.2,
+     "pa": 1730.74,
+     "seed": 2,
+     "final": 3
+    },
+    {
+     "slot": 2,
+     "owner": "Zachary Brown",
+     "name": "Grinding for Babe",
+     "w": 9,
+     "l": 5,
+     "pf": 1765.06,
+     "pa": 1600.42,
+     "seed": 3,
+     "final": 5
+    },
+    {
+     "slot": 8,
+     "owner": "Bradley Holloway",
+     "name": "Covid Cocks",
+     "w": 8,
+     "l": 6,
+     "pf": 1738.56,
+     "pa": 1613.38,
+     "seed": 4,
+     "final": 2
+    },
+    {
+     "slot": 7,
+     "owner": "Isaac Williams",
+     "name": "George Floyd's Lungs",
+     "w": 7,
+     "l": 7,
+     "pf": 1716.64,
+     "pa": 1776.72,
+     "seed": 5,
+     "final": 6
+    },
+    {
+     "slot": 4,
+     "owner": "Peyton Anderson",
+     "name": "Beirut Bomb Squad",
+     "w": 7,
+     "l": 7,
+     "pf": 1709.44,
+     "pa": 1637.02,
+     "seed": 6,
+     "final": 1
+    },
+    {
+     "slot": 5,
+     "owner": "Tony Moody",
+     "name": "Morningwood Hustlerz",
+     "w": 7,
+     "l": 7,
+     "pf": 1514.28,
+     "pa": 1709.18,
+     "seed": 7,
+     "final": 7
+    },
+    {
+     "slot": 3,
+     "owner": "Corey Johnson",
+     "name": "حياة السود مهمة RIPFloyd",
+     "w": 6,
+     "l": 8,
+     "pf": 1597.72,
+     "pa": 1607.9,
+     "seed": 8,
+     "final": 8
+    },
+    {
+     "slot": 9,
+     "owner": "Buzz Ellis",
+     "name": "jason shelton best basketbal",
+     "w": 5,
+     "l": 9,
+     "pf": 1389.06,
+     "pa": 1676.64,
+     "seed": 9,
+     "final": 10
+    },
+    {
+     "slot": 1,
+     "owner": "Mac Shelton",
+     "name": "Henderson Tinger Team",
+     "w": 4,
+     "l": 10,
+     "pf": 1550.02,
+     "pa": 1650.08,
+     "seed": 10,
+     "final": 9
+    }
+   ]
+  },
+  {
+   "year": 2021,
+   "complete": true,
+   "bonus": false,
+   "teams": [
+    {
+     "slot": 2,
+     "owner": "Zachary Brown",
+     "name": "Last Dance F.C.",
+     "w": 10,
+     "l": 5,
+     "pf": 1861.74,
+     "pa": 1716.58,
+     "seed": 1,
+     "final": 2
+    },
+    {
+     "slot": 5,
+     "owner": "Tony Moody",
+     "name": "B-B-B-Briggs Tomlinson",
+     "w": 10,
+     "l": 5,
+     "pf": 1829.56,
+     "pa": 1543.82,
+     "seed": 2,
+     "final": 4
+    },
+    {
+     "slot": 10,
+     "owner": "Briggs Tomlinson",
+     "name": "Dropout FC",
+     "w": 9,
+     "l": 6,
+     "pf": 2088.7,
+     "pa": 1860.5,
+     "seed": 3,
+     "final": 1
+    },
+    {
+     "slot": 1,
+     "owner": "Mac Shelton",
+     "name": "Built Like FC",
+     "w": 9,
+     "l": 6,
+     "pf": 1978.0,
+     "pa": 1842.94,
+     "seed": 4,
+     "final": 3
+    },
+    {
+     "slot": 7,
+     "owner": "Isaac Williams",
+     "name": "For Micah",
+     "w": 7,
+     "l": 8,
+     "pf": 1881.02,
+     "pa": 1946.56,
+     "seed": 5,
+     "final": 6
+    },
+    {
+     "slot": 9,
+     "owner": "Buzz Ellis",
+     "name": "American Venom",
+     "w": 7,
+     "l": 8,
+     "pf": 1860.8,
+     "pa": 1830.6,
+     "seed": 6,
+     "final": 5
+    },
+    {
+     "slot": 3,
+     "owner": "Corey Johnson",
+     "name": "Stiff Armed And Dangerous",
+     "w": 6,
+     "l": 9,
+     "pf": 1748.6,
+     "pa": 1841.74,
+     "seed": 7,
+     "final": 7
+    },
+    {
+     "slot": 4,
+     "owner": "Peyton Anderson",
+     "name": "C-umback Commanders",
+     "w": 6,
+     "l": 9,
+     "pf": 1635.38,
+     "pa": 1876.42,
+     "seed": 8,
+     "final": 8
+    },
+    {
+     "slot": 6,
+     "owner": "Seth Wade",
+     "name": "Montezuma Peace Quiet town.",
+     "w": 6,
+     "l": 9,
+     "pf": 1546.82,
+     "pa": 1724.8,
+     "seed": 9,
+     "final": 9
+    },
+    {
+     "slot": 8,
+     "owner": "Bradley Holloway",
+     "name": "Vagene Tales",
+     "w": 5,
+     "l": 10,
+     "pf": 1561.96,
+     "pa": 1808.62,
+     "seed": 10,
+     "final": 10
+    }
+   ]
+  },
+  {
+   "year": 2022,
+   "complete": true,
+   "bonus": false,
+   "teams": [
+    {
+     "slot": 8,
+     "owner": "Bradley Holloway",
+     "name": "Monkey Pox Warriors",
+     "w": 10,
+     "l": 4,
+     "pf": 1786.92,
+     "pa": 1653.5,
+     "seed": 1,
+     "final": 4
+    },
+    {
+     "slot": 9,
+     "owner": "Buzz Ellis",
+     "name": "American Venom",
+     "w": 7,
+     "l": 7,
+     "pf": 1711.06,
+     "pa": 1687.02,
+     "seed": 2,
+     "final": 3
+    },
+    {
+     "slot": 1,
+     "owner": "Mac Shelton",
+     "name": "TJ Hockenson Football Club",
+     "w": 8,
+     "l": 6,
+     "pf": 1721.88,
+     "pa": 1662.58,
+     "seed": 3,
+     "final": 2
+    },
+    {
+     "slot": 6,
+     "owner": "Seth Wade",
+     "name": "\"DON'T LET ME CROSS OVER.\"",
+     "w": 7,
+     "l": 7,
+     "pf": 1713.42,
+     "pa": 1579.84,
+     "seed": 4,
+     "final": 1
+    },
+    {
+     "slot": 7,
+     "owner": "Isaac Williams",
+     "name": "I Am Thinking",
+     "w": 7,
+     "l": 7,
+     "pf": 1606.28,
+     "pa": 1592.0,
+     "seed": 5,
+     "final": 8
+    },
+    {
+     "slot": 4,
+     "owner": "Peyton Anderson",
+     "name": "Mr. Your Big Daddy",
+     "w": 7,
+     "l": 7,
+     "pf": 1584.96,
+     "pa": 1556.76,
+     "seed": 6,
+     "final": 5
+    },
+    {
+     "slot": 3,
+     "owner": "Corey Johnson",
+     "name": "Henry-Mixon Empire",
+     "w": 7,
+     "l": 7,
+     "pf": 1552.34,
+     "pa": 1725.16,
+     "seed": 7,
+     "final": 9
+    },
+    {
+     "slot": 5,
+     "owner": "Tony Moody",
+     "name": "ToMo Presets",
+     "w": 7,
+     "l": 7,
+     "pf": 1574.46,
+     "pa": 1707.56,
+     "seed": 8,
+     "final": 6
+    },
+    {
+     "slot": 2,
+     "owner": "Zachary Brown",
+     "name": "YeeYee Waterfowl",
+     "w": 5,
+     "l": 9,
+     "pf": 1668.7,
+     "pa": 1683.12,
+     "seed": 9,
+     "final": 7
+    },
+    {
+     "slot": 10,
+     "owner": "Briggs Tomlinson",
+     "name": "Henry Ruggs Corvette",
+     "w": 5,
+     "l": 9,
+     "pf": 1730.1,
+     "pa": 1802.58,
+     "seed": 10,
+     "final": 10
+    }
+   ]
+  },
+  {
+   "year": 2023,
+   "complete": true,
+   "bonus": false,
+   "teams": [
+    {
+     "slot": 9,
+     "owner": "Buzz Ellis",
+     "name": "American Venom",
+     "w": 12,
+     "l": 1,
+     "pf": 1793.12,
+     "pa": 1358.38,
+     "seed": 1,
+     "final": 1
+    },
+    {
+     "slot": 6,
+     "owner": "Seth Wade",
+     "name": "\"SethDogMasterWade.\"",
+     "w": 9,
+     "l": 4,
+     "pf": 1569.8,
+     "pa": 1446.22,
+     "seed": 2,
+     "final": 4
+    },
+    {
+     "slot": 3,
+     "owner": "Myles Shelton",
+     "name": "James Arnold's Goons",
+     "w": 8,
+     "l": 5,
+     "pf": 1633.92,
+     "pa": 1352.42,
+     "seed": 3,
+     "final": 2
+    },
+    {
+     "slot": 1,
+     "owner": "Mac Shelton",
+     "name": "Is He Back?",
+     "w": 8,
+     "l": 5,
+     "pf": 1592.26,
+     "pa": 1533.76,
+     "seed": 4,
+     "final": 3
+    },
+    {
+     "slot": 10,
+     "owner": "Briggs Tomlinson",
+     "name": "Ray J's Magic Rocks",
+     "w": 7,
+     "l": 6,
+     "pf": 1616.62,
+     "pa": 1643.08,
+     "seed": 5,
+     "final": 5
+    },
+    {
+     "slot": 5,
+     "owner": "Tony Moody",
+     "name": "the BREAST milkers",
+     "w": 5,
+     "l": 8,
+     "pf": 1548.9,
+     "pa": 1565.36,
+     "seed": 6,
+     "final": 7
+    },
+    {
+     "slot": 2,
+     "owner": "Zachary Brown",
+     "name": "YeeYee Waterfowl",
+     "w": 5,
+     "l": 8,
+     "pf": 1517.1,
+     "pa": 1601.24,
+     "seed": 7,
+     "final": 6
+    },
+    {
+     "slot": 8,
+     "owner": "Bradley Holloway",
+     "name": "NO MEMES FC",
+     "w": 4,
+     "l": 9,
+     "pf": 1364.12,
+     "pa": 1565.82,
+     "seed": 8,
+     "final": 9
+    },
+    {
+     "slot": 7,
+     "owner": "Isaac Williams",
+     "name": "Tar Monkey Troglodytes",
+     "w": 4,
+     "l": 9,
+     "pf": 1299.16,
+     "pa": 1599.24,
+     "seed": 9,
+     "final": 8
+    },
+    {
+     "slot": 4,
+     "owner": "Peyton Anderson",
+     "name": "CeeDeez 0 Wins",
+     "w": 3,
+     "l": 10,
+     "pf": 1419.08,
+     "pa": 1688.56,
+     "seed": 10,
+     "final": 10
+    }
+   ]
+  },
+  {
+   "year": 2024,
+   "complete": true,
+   "bonus": true,
+   "teams": [
+    {
+     "slot": 5,
+     "owner": "Tony Moody",
+     "name": "Zynbabwe",
+     "w": 22,
+     "l": 4,
+     "pf": 1705.28,
+     "pa": 1365.68,
+     "seed": 1,
+     "final": 4
+    },
+    {
+     "slot": 6,
+     "owner": "Seth Wade",
+     "name": "The Life Of New Beginnings LG.",
+     "w": 18,
+     "l": 8,
+     "pf": 1443.44,
+     "pa": 1355.48,
+     "seed": 2,
+     "final": 2
+    },
+    {
+     "slot": 7,
+     "owner": "Isaac Williams",
+     "name": "She Jared On My Goff Til We Off",
+     "w": 17,
+     "l": 9,
+     "pf": 1549.58,
+     "pa": 1440.6,
+     "seed": 3,
+     "final": 3
+    },
+    {
+     "slot": 3,
+     "owner": "Myles Shelton",
+     "name": "James Arnold's Goons",
+     "w": 15,
+     "l": 11,
+     "pf": 1470.4,
+     "pa": 1440.54,
+     "seed": 4,
+     "final": 1
+    },
+    {
+     "slot": 2,
+     "owner": "Zachary Brown",
+     "name": "YeeYee Waterfowl",
+     "w": 12,
+     "l": 14,
+     "pf": 1427.38,
+     "pa": 1397.64,
+     "seed": 5,
+     "final": 7
+    },
+    {
+     "slot": 1,
+     "owner": "Mac Shelton",
+     "name": "Trade, or Die",
+     "w": 11,
+     "l": 15,
+     "pf": 1409.16,
+     "pa": 1411.28,
+     "seed": 6,
+     "final": 5
+    },
+    {
+     "slot": 9,
+     "owner": "Buzz Ellis",
+     "name": "Brackin's Brawlers",
+     "w": 11,
+     "l": 15,
+     "pf": 1476.0,
+     "pa": 1613.76,
+     "seed": 7,
+     "final": 6
+    },
+    {
+     "slot": 8,
+     "owner": "Bradley Holloway",
+     "name": "Never Forget",
+     "w": 9,
+     "l": 17,
+     "pf": 1310.88,
+     "pa": 1363.08,
+     "seed": 8,
+     "final": 9
+    },
+    {
+     "slot": 4,
+     "owner": "Peyton Anderson",
+     "name": "SKOL!!",
+     "w": 8,
+     "l": 18,
+     "pf": 1216.72,
+     "pa": 1480.88,
+     "seed": 9,
+     "final": 10
+    },
+    {
+     "slot": 10,
+     "owner": "Briggs Tomlinson",
+     "name": "I GOT YOU NEPH",
+     "w": 7,
+     "l": 19,
+     "pf": 1329.2,
+     "pa": 1469.1,
+     "seed": 10,
+     "final": 8
+    }
+   ]
+  },
+  {
+   "year": 2025,
+   "complete": true,
+   "bonus": true,
+   "teams": [
+    {
+     "slot": 6,
+     "owner": "Seth Wade",
+     "name": "\"\"\"",
+     "w": 17,
+     "l": 7,
+     "pf": 1468.1,
+     "pa": 1252.94,
+     "seed": 1,
+     "final": 1
+    },
+    {
+     "slot": 2,
+     "owner": "Zachary Brown",
+     "name": "The Prodigal Sons",
+     "w": 16,
+     "l": 8,
+     "pf": 1389.62,
+     "pa": 1359.36,
+     "seed": 2,
+     "final": 4
+    },
+    {
+     "slot": 1,
+     "owner": "Mac Shelton",
+     "name": "The Curse of The Bambino",
+     "w": 14,
+     "l": 10,
+     "pf": 1397.98,
+     "pa": 1221.56,
+     "seed": 3,
+     "final": 2
+    },
+    {
+     "slot": 10,
+     "owner": "Briggs Tomlinson",
+     "name": "Donut Season",
+     "w": 13,
+     "l": 11,
+     "pf": 1294.1,
+     "pa": 1354.42,
+     "seed": 4,
+     "final": 3
+    },
+    {
+     "slot": 8,
+     "owner": "Bradley Holloway",
+     "name": "Licensed Gooners",
+     "w": 12,
+     "l": 12,
+     "pf": 1368.88,
+     "pa": 1438.28,
+     "seed": 5,
+     "final": 5
+    },
+    {
+     "slot": 9,
+     "owner": "Buzz Ellis",
+     "name": "I trusted you",
+     "w": 12,
+     "l": 12,
+     "pf": 1333.44,
+     "pa": 1318.58,
+     "seed": 6,
+     "final": 10
+    },
+    {
+     "slot": 4,
+     "owner": "Peyton Anderson",
+     "name": "Judkins fuhh Benson Boone",
+     "w": 12,
+     "l": 12,
+     "pf": 1304.86,
+     "pa": 1118.1,
+     "seed": 7,
+     "final": 9
+    },
+    {
+     "slot": 7,
+     "owner": "Isaac Williams",
+     "name": "LADIESMAN217",
+     "w": 9,
+     "l": 15,
+     "pf": 1190.1,
+     "pa": 1357.98,
+     "seed": 8,
+     "final": 7
+    },
+    {
+     "slot": 3,
+     "owner": "Myles Shelton",
+     "name": "FOURTH HOLE",
+     "w": 8,
+     "l": 16,
+     "pf": 1186.9,
+     "pa": 1314.94,
+     "seed": 9,
+     "final": 8
+    },
+    {
+     "slot": 5,
+     "owner": "Tony Moody",
+     "name": "The DEW Dooers",
+     "w": 7,
+     "l": 17,
+     "pf": 1197.08,
+     "pa": 1394.9,
+     "seed": 10,
+     "final": 6
+    }
+   ]
+  },
+  {
+   "year": 2026,
+   "complete": false,
+   "bonus": true,
+   "teams": [
+    {
+     "slot": 10,
+     "owner": "Briggs Tomlinson",
+     "name": "Donut Season II",
+     "w": 8,
+     "l": 2,
+     "pf": 712.18,
+     "pa": 505.7,
+     "seed": 1,
+     "final": null
+    },
+    {
+     "slot": 8,
+     "owner": "Bradley Holloway",
+     "name": "Michael Bolton Did It",
+     "w": 8,
+     "l": 2,
+     "pf": 604.62,
+     "pa": 542.72,
+     "seed": 2,
+     "final": null
+    },
+    {
+     "slot": 4,
+     "owner": "Peyton Anderson",
+     "name": "To Gibbs Or Not To Gibbs?",
+     "w": 7,
+     "l": 3,
+     "pf": 678.26,
+     "pa": 523.82,
+     "seed": 3,
+     "final": null
+    },
+    {
+     "slot": 9,
+     "owner": "Buzz Ellis",
+     "name": "American Venom",
+     "w": 7,
+     "l": 3,
+     "pf": 614.52,
+     "pa": 619.06,
+     "seed": 4,
+     "final": null
+    },
+    {
+     "slot": 7,
+     "owner": "Isaac Williams",
+     "name": "El Scorcho",
+     "w": 5,
+     "l": 5,
+     "pf": 592.84,
+     "pa": 567.08,
+     "seed": 5,
+     "final": null
+    },
+    {
+     "slot": 3,
+     "owner": "Myles Shelton",
+     "name": "FOURTH HOLE",
+     "w": 4,
+     "l": 6,
+     "pf": 524.32,
+     "pa": 554.68,
+     "seed": 6,
+     "final": null
+    },
+    {
+     "slot": 6,
+     "owner": "Seth Wade",
+     "name": "\"THE LIFE OF SCARED CAT ALL TIM",
+     "w": 4,
+     "l": 6,
+     "pf": 500.18,
+     "pa": 560.8,
+     "seed": 7,
+     "final": null
+    },
+    {
+     "slot": 1,
+     "owner": "Mac Shelton",
+     "name": "Let's Get Suh-Deeky",
+     "w": 3,
+     "l": 7,
+     "pf": 522.66,
+     "pa": 552.48,
+     "seed": 8,
+     "final": null
+    },
+    {
+     "slot": 5,
+     "owner": "Tony Moody",
+     "name": "Margot's Dad",
+     "w": 2,
+     "l": 8,
+     "pf": 534.66,
+     "pa": 665.42,
+     "seed": 9,
+     "final": null
+    },
+    {
+     "slot": 2,
+     "owner": "Zachary Brown",
+     "name": "YeeYeeWaterfowl",
+     "w": 2,
+     "l": 8,
+     "pf": 444.22,
+     "pa": 636.7,
+     "seed": 10,
+     "final": null
+    }
+   ]
+  }
+ ],
+ "owners": [
+  {
+   "owner": "Buzz Ellis",
+   "seasons": 12,
+   "w": 104,
+   "l": 78,
+   "pf": 17777.33,
+   "titles": [
+    2015,
+    2023
+   ],
+   "runnerups": [],
+   "podiums": 4,
+   "top_seeds": [
+    2015,
+    2019,
+    2023
+   ],
+   "lasts": [
+    2020,
+    2025
+   ],
+   "best": null,
+   "worst": null,
+   "slots": [
+    9
+   ],
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "pct": 0.571
+  },
+  {
+   "owner": "Seth Wade",
+   "seasons": 12,
+   "w": 104,
+   "l": 78,
+   "pf": 16669.82,
+   "titles": [
+    2022,
+    2025
+   ],
+   "runnerups": [
+    2024
+   ],
+   "podiums": 4,
+   "top_seeds": [
+    2017,
+    2020,
+    2025
+   ],
+   "lasts": [
+    2015,
+    2019
+   ],
+   "best": null,
+   "worst": null,
+   "slots": [
+    6
+   ],
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "pct": 0.571
+  },
+  {
+   "owner": "Zachary Brown",
+   "seasons": 12,
+   "w": 97,
+   "l": 85,
+   "pf": 17718.52,
+   "titles": [
+    2016,
+    2019
+   ],
+   "runnerups": [
+    2018,
+    2021
+   ],
+   "podiums": 4,
+   "top_seeds": [
+    2021
+   ],
+   "lasts": [
+    2017
+   ],
+   "best": null,
+   "worst": null,
+   "slots": [
+    2
+   ],
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "pct": 0.533
+  },
+  {
+   "owner": "Briggs Tomlinson",
+   "seasons": 12,
+   "w": 95,
+   "l": 87,
+   "pf": 17570.23,
+   "titles": [
+    2017,
+    2021
+   ],
+   "runnerups": [
+    2016
+   ],
+   "podiums": 5,
+   "top_seeds": [
+    2016
+   ],
+   "lasts": [
+    2022
+   ],
+   "best": null,
+   "worst": null,
+   "slots": [
+    10
+   ],
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "pct": 0.522
+  },
+  {
+   "owner": "David Showers & Jack Cagle",
+   "seasons": 1,
+   "w": 11,
+   "l": 2,
+   "pf": 1954.1,
+   "titles": [
+    2018
+   ],
+   "runnerups": [],
+   "podiums": 1,
+   "top_seeds": [
+    2018
+   ],
+   "lasts": [],
+   "best": null,
+   "worst": null,
+   "slots": [
+    7
+   ],
+   "years": [
+    2018
+   ],
+   "pct": 0.846
+  },
+  {
+   "owner": "Myles Shelton",
+   "seasons": 4,
+   "w": 35,
+   "l": 38,
+   "pf": 4815.54,
+   "titles": [
+    2024
+   ],
+   "runnerups": [
+    2023
+   ],
+   "podiums": 2,
+   "top_seeds": [],
+   "lasts": [],
+   "best": null,
+   "worst": null,
+   "slots": [
+    3
+   ],
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "pct": 0.479
+  },
+  {
+   "owner": "Peyton Anderson",
+   "seasons": 12,
+   "w": 71,
+   "l": 111,
+   "pf": 15753.01,
+   "titles": [
+    2020
+   ],
+   "runnerups": [],
+   "podiums": 1,
+   "top_seeds": [],
+   "lasts": [
+    2023,
+    2024
+   ],
+   "best": null,
+   "worst": null,
+   "slots": [
+    4
+   ],
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "pct": 0.39
+  },
+  {
+   "owner": "Kyle Brown",
+   "seasons": 2,
+   "w": 14,
+   "l": 12,
+   "pf": 2403,
+   "titles": [],
+   "runnerups": [],
+   "podiums": 1,
+   "top_seeds": [],
+   "lasts": [
+    2016
+   ],
+   "best": null,
+   "worst": null,
+   "slots": [
+    3
+   ],
+   "years": [
+    2015,
+    2016
+   ],
+   "pct": 0.538
+  },
+  {
+   "owner": "Tony Moody",
+   "seasons": 12,
+   "w": 92,
+   "l": 90,
+   "pf": 16759.0,
+   "titles": [],
+   "runnerups": [],
+   "podiums": 0,
+   "top_seeds": [
+    2024
+   ],
+   "lasts": [],
+   "best": null,
+   "worst": null,
+   "slots": [
+    5
+   ],
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "pct": 0.505
+  },
+  {
+   "owner": "David Showers",
+   "seasons": 2,
+   "w": 13,
+   "l": 13,
+   "pf": 2410.47,
+   "titles": [],
+   "runnerups": [],
+   "podiums": 1,
+   "top_seeds": [],
+   "lasts": [],
+   "best": null,
+   "worst": null,
+   "slots": [
+    7
+   ],
+   "years": [
+    2016,
+    2017
+   ],
+   "pct": 0.5
+  },
+  {
+   "owner": "Mac Shelton",
+   "seasons": 12,
+   "w": 88,
+   "l": 94,
+   "pf": 17124.26,
+   "titles": [],
+   "runnerups": [
+    2017,
+    2019,
+    2022,
+    2025
+   ],
+   "podiums": 6,
+   "top_seeds": [],
+   "lasts": [],
+   "best": null,
+   "worst": null,
+   "slots": [
+    1
+   ],
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "pct": 0.484
+  },
+  {
+   "owner": "Bradley Holloway",
+   "seasons": 12,
+   "w": 84,
+   "l": 98,
+   "pf": 16365.13,
+   "titles": [],
+   "runnerups": [
+    2015,
+    2020
+   ],
+   "podiums": 2,
+   "top_seeds": [
+    2022
+   ],
+   "lasts": [
+    2021
+   ],
+   "best": null,
+   "worst": null,
+   "slots": [
+    8
+   ],
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "pct": 0.462
+  },
+  {
+   "owner": "Isaac Williams",
+   "seasons": 8,
+   "w": 60,
+   "l": 70,
+   "pf": 11485.2,
+   "titles": [],
+   "runnerups": [],
+   "podiums": 1,
+   "top_seeds": [],
+   "lasts": [],
+   "best": null,
+   "worst": null,
+   "slots": [
+    7
+   ],
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "pct": 0.462
+  },
+  {
+   "owner": "Corey Johnson",
+   "seasons": 6,
+   "w": 37,
+   "l": 46,
+   "pf": 9350.46,
+   "titles": [],
+   "runnerups": [],
+   "podiums": 1,
+   "top_seeds": [],
+   "lasts": [
+    2018
+   ],
+   "best": null,
+   "worst": null,
+   "slots": [
+    3
+   ],
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ],
+   "pct": 0.446
+  },
+  {
+   "owner": "Myles & Jason Shelton",
+   "seasons": 1,
+   "w": 5,
+   "l": 8,
+   "pf": 1173,
+   "titles": [],
+   "runnerups": [],
+   "podiums": 0,
+   "top_seeds": [],
+   "lasts": [],
+   "best": null,
+   "worst": null,
+   "slots": [
+    7
+   ],
+   "years": [
+    2015
+   ],
+   "pct": 0.385
+  }
+ ],
+ "highs": [
+  {
+   "pts": 190.92,
+   "name": "Third Reich",
+   "owner": "Briggs Tomlinson",
+   "year": 2020,
+   "week": 2,
+   "opp": "Morningwood Hustlerz",
+   "opp_pts": 124.06
+  },
+  {
+   "pts": 190.92,
+   "name": "Seth dog the Master Wade FC 😉",
+   "owner": "Seth Wade",
+   "year": 2020,
+   "week": 12,
+   "opp": "Grinding for Babe",
+   "opp_pts": 132.44
+  },
+  {
+   "pts": 189.9,
+   "name": "To Gibbs Or Not To Gibbs?",
+   "owner": "Peyton Anderson",
+   "year": 2026,
+   "week": 5,
+   "opp": "Margot's Dad",
+   "opp_pts": 119.84
+  },
+  {
+   "pts": 189.62,
+   "name": "YeeYee Waterfowl",
+   "owner": "Zachary Brown",
+   "year": 2018,
+   "week": 10,
+   "opp": "remeber seths neumonia",
+   "opp_pts": 115.24
+  },
+  {
+   "pts": 189.56,
+   "name": "James Arnold's Goons",
+   "owner": "Myles Shelton",
+   "year": 2023,
+   "week": 13,
+   "opp": "CeeDeez 0 Wins",
+   "opp_pts": 0.0
+  },
+  {
+   "pts": 187.16,
+   "name": "Joe Mamma",
+   "owner": "Isaac Williams",
+   "year": 2019,
+   "week": 5,
+   "opp": "White Claw",
+   "opp_pts": 129.34
+  },
+  {
+   "pts": 185.78,
+   "name": "Monkey Pox Warriors",
+   "owner": "Bradley Holloway",
+   "year": 2022,
+   "week": 2,
+   "opp": "American Venom",
+   "opp_pts": 92.06
+  },
+  {
+   "pts": 184.46,
+   "name": "\"DON'T LET ME CROSS OVER.\"",
+   "owner": "Seth Wade",
+   "year": 2022,
+   "week": 11,
+   "opp": "Henry-Mixon Empire",
+   "opp_pts": 86.36
+  },
+  {
+   "pts": 184.36,
+   "name": "Is He Back?",
+   "owner": "Mac Shelton",
+   "year": 2023,
+   "week": 4,
+   "opp": "Ray J's Magic Rocks",
+   "opp_pts": 133.32
+  },
+  {
+   "pts": 183.8,
+   "name": "Third Reich",
+   "owner": "Briggs Tomlinson",
+   "year": 2020,
+   "week": 12,
+   "opp": "Covid Cocks",
+   "opp_pts": 104.44
+  }
+ ]
+};
+const UPDATED = "Updated October 15, 2026, through Week 5 of the 2026 season.";
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const nm = n => n == null ? '–' : `<bdi>${esc(n)}</bdi>`;
+const fmt = (n, d=2) => Number(n).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct = p => p.toFixed(3).replace(/^0/,"");
+const done = DATA.seasons.filter(s => s.complete);
+const live = DATA.seasons.find(s => !s.complete);
+
+// Facts
+const champs = new Set(done.map(s => s.teams.find(t => t.final===1).owner));
+$("#facts").innerHTML = [
+  [DATA.seasons.length, "seasons"], [10, "franchises"], [done.length, "champions crowned"], [champs.size, "different winners"]
+].map(([n,l]) => `<span><b>${n}</b>${l}</span>`).join("");
+
+// Banners
+$("#rafters").innerHTML = done.map(s => {
+  const c = s.teams.find(t => t.final===1);
+  return `<div class="banner"><div class="yr">${s.year}</div><div class="champ">${esc(c.owner)}</div><div class="tname">${nm(c.name)}</div></div>`;
+}).join("") + (live ? `<div class="banner live"><div class="yr">${live.year}</div><div class="champ">TBD</div><div class="tname">In progress</div></div>` : "");
+
+// Owners table
+const cols = [
+  {k:"owner", l:"Owner", cls:"l"}, {k:"seasons", l:"Seasons"}, {k:"rec", l:"Record", sort:"w"}, {k:"pct", l:"Win %"},
+  {k:"titles", l:"Titles", sort:"nt"}, {k:"finals", l:"Finals"}, {k:"podiums", l:"Top 3"}, {k:"seeds", l:"#1 Seeds", sort:"ns"},
+  {k:"lasts", l:"Last Place", sort:"nl"}, {k:"pf", l:"Points For"}
+];
+const owners = DATA.owners.map(o => ({...o, nt:o.titles.length, finals:o.titles.length+o.runnerups.length, ns:o.top_seeds.length, nl:o.lasts.length}));
+let sortKey = "nt", sortDir = -1, open = new Set();
+function ownerHistory(name){
+  const rows = [];
+  for (const s of DATA.seasons) for (const t of s.teams) if (t.owner===name){
+    const f = t.final ? (t.final===1 ? "Champion" : t.final===2 ? "Runner-up" : ordinal(t.final)) : `${t.w}-${t.l}, in progress`;
+    rows.push(`<div><span class="y">${String(s.year).slice(2).padStart(3,"’")}</span><span class="n">${nm(t.name)}</span><span class="f ${t.final===1?'gold':''}">${f}</span></div>`);
+  }
+  return `<div class="history">${rows.join("")}</div>`;
+}
+function ordinal(n){const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
+function renderOwners(){
+  const sorted = [...owners].sort((a,b) => {
+    const x=a[sortKey], y=b[sortKey];
+    if (typeof x==="string") return sortDir*x.localeCompare(y);
+    return sortDir*(x-y) || (b.nt-a.nt) || (b.pct-a.pct) || (b.finals-a.finals);
+  });
+  const head = `<thead><tr>${cols.map(c => {
+    const key = c.sort||c.k, active = key===sortKey;
+    return `<th class="${c.cls||''}" ${active?`aria-sort="${sortDir<0?'descending':'ascending'}"`:''}><button data-k="${key}">${c.l}</button></th>`;
+  }).join("")}</tr></thead>`;
+  const body = sorted.map(o => {
+    const id = "o-"+o.owner.replace(/\W+/g,"");
+    const row = `<tr><td class="l"><button class="owner-btn" aria-expanded="${open.has(o.owner)}" aria-controls="${id}" data-o="${esc(o.owner)}">${esc(o.owner)}</button></td>
+      <td class="num">${o.seasons}</td><td class="num">${o.w}-${o.l}</td><td class="num">${pct(o.pct)}</td>
+      <td class="num">${o.nt ? `<span class="trophies" title="${o.titles.join(', ')}">${"★".repeat(o.nt)}</span>` : "–"}</td>
+      <td class="num">${o.finals||"–"}</td><td class="num">${o.podiums||"–"}</td><td class="num">${o.ns||"–"}</td><td class="num">${o.nl||"–"}</td>
+      <td class="num">${fmt(o.pf)}</td></tr>`;
+    const det = open.has(o.owner) ? `<tr class="detail" id="${id}"><td colspan="${cols.length}">${ownerHistory(o.owner)}</td></tr>` : "";
+    return row+det;
+  }).join("");
+  $("#owners").innerHTML = head + `<tbody>${body}</tbody>`;
+}
+$("#owners").addEventListener("click", e => {
+  const h = e.target.closest("th button");
+  if (h){ const k=h.dataset.k; if (k===sortKey) sortDir*=-1; else {sortKey=k; sortDir = k==="owner"?1:-1;} renderOwners(); return; }
+  const ob = e.target.closest(".owner-btn");
+  if (ob){ const o=ob.dataset.o; open.has(o)?open.delete(o):open.add(o); renderOwners(); document.querySelector(`.owner-btn[data-o="${CSS.escape(o)}"]`)?.focus(); }
+});
+renderOwners();
+
+// Records
+const all = done.flatMap(s => s.teams.map(t => ({...t, year:s.year, pctv:t.w/(t.w+t.l)})));
+const pick = (arr, f) => arr.reduce((a,b) => f(b) > f(a) ? b : a);
+const best = pick(all, t => t.pctv), worst = pick(all, t => -t.pctv);
+const mostPF = pick(all, t => t.pf);
+const champsAll = all.filter(t => t.final===1);
+const lowSeed = pick(champsAll, t => t.seed);
+const topSeedWins = champsAll.filter(t => t.seed===1).length;
+const ruNoTitle = [...owners].filter(o=>o.nt===0).sort((a,b)=>b.runnerups.length-a.runnerups.length)[0];
+const droughts = owners.filter(o => o.seasons>=12 && o.nt===0).map(o=>o.owner);
+const who = (t, extra="") => `<div class="who">${esc(t.owner)}<small>${t.year} · ${nm(t.name)}${extra}</small></div>`;
+$("#records").innerHTML = [
+  ["Best regular season", `${best.w}-${best.l}`, who(best)],
+  ["Worst regular season", `${worst.w}-${worst.l}`, who(worst)],
+  ["Most points in a season", fmt(mostPF.pf), who(mostPF)],
+  ["Lowest seed to win it all", `No. ${lowSeed.seed} seed`, who(lowSeed)],
+  ["No. 1 seeds who won the title", `${topSeedWins} of ${done.length}`, `<div class="who"><small>The regular-season crown has meant a title less than half the time.</small></div>`],
+  ["Most runner-ups, no title", `${ruNoTitle.runnerups.length}`, `<div class="who">${esc(ruNoTitle.owner)}<small>${ruNoTitle.runnerups.join(", ")}</small></div>`],
+  ["Still chasing a first title", `${droughts.length} owners`, `<div class="who">${droughts.map(esc).join(", ")}<small>Every season since 2015, no banner yet</small></div>`],
+  ["Most titles", `${owners[0].nt}`, `<div class="who">${owners.filter(o=>o.nt===owners[0].nt).map(o=>esc(o.owner)).join(", ")}</div>`],
+].map(([k,v,w]) => `<div class="rec"><div class="k">${k}</div><div class="v">${v}</div>${w}</div>`).join("");
+
+// Highs
+$("#highs").innerHTML = DATA.highs.map((h,i) => `<li><span class="rk">${i+1}</span><span class="pts">${fmt(h.pts)}</span>
+  <span class="who">${esc(h.owner)}<small>${nm(h.name)} · beat ${nm(h.opp)}, ${fmt(h.opp_pts)}</small></span><span class="when">${h.year} · Wk ${h.week}</span></li>`).join("");
+
+// Season browser
+let year = done[done.length-1].year;
+try { const s = localStorage.getItem("hmwhc-year"); if (s && DATA.seasons.some(x=>x.year==s)) year = +s; } catch(e){}
+function renderYears(){
+  $("#years").innerHTML = DATA.seasons.map(s => `<button data-y="${s.year}" aria-pressed="${s.year===year}">${s.year}</button>`).join("");
+}
+function renderSeason(){
+  const s = DATA.seasons.find(x => x.year===year);
+  const c = s.teams.find(t=>t.final===1);
+  $("#season-meta").textContent = s.complete
+    ? `Champion: ${c.owner}. Rows are in regular-season order; Finish is the final placing after the playoffs.${s.bonus?" Records include bonus wins.":""}`
+    : `In progress. Standings through the latest week, including bonus wins.`;
+  const rows = s.teams.map(t => `<tr><td class="num">${t.seed}</td><td class="l">${nm(t.name)}</td><td class="l">${esc(t.owner)}</td>
+    <td class="num">${t.w}-${t.l}</td><td class="num">${fmt(t.pf)}</td><td class="num">${fmt(t.pa)}</td>
+    <td class="num">${t.final===1?'<span class="pill c">Champion</span>':t.final===2?'<span class="pill r">Runner-up</span>':t.final?ordinal(t.final):'–'}</td></tr>`).join("");
+  $("#season").innerHTML = `<thead><tr><th>Seed</th><th class="l">Team</th><th class="l">Owner</th><th>Record</th><th>Points For</th><th>Points Against</th><th>Finish</th></tr></thead><tbody>${rows}</tbody>`;
+}
+$("#years").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  year = +b.dataset.y; try{localStorage.setItem("hmwhc-year", year)}catch(e){}
+  renderYears(); renderSeason();
+});
+renderYears(); renderSeason();
+$("#updated").textContent = UPDATED;
+</script>
+
+</body></html>

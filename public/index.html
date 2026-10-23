@@ -192,6 +192,7 @@ section{display:grid;gap:14px;min-width:0}
 .tr-how{padding:16px 18px;display:grid;gap:8px}
 .tr-how ul{margin:0;padding-left:18px;color:var(--muted);font-size:.88rem;display:grid;gap:6px;max-width:80ch}
 @media (max-width:600px){.trade .sides{grid-template-columns:1fr}}
+.hist-frame{display:block;width:100%;border:0;min-height:600px;background:transparent;color-scheme:normal}
 /* Trophy case */
 .trophies{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
 .trophy{display:grid;gap:10px;padding:14px;align-content:start;min-width:0}
@@ -484,13 +485,9 @@ table.lb{min-width:0}
 
   <!-- LEAGUE HISTORY -->
   <div class="view" id="v-history" hidden>
-    <div><div class="eyebrow">Already built</div><h1>League History</h1>
-      <p class="lede">Your existing Record Book moves in as this tab, unchanged except for the shared header.</p></div>
-    <div class="box existing">
-      <ul><li>Championship banners, 2015 to now</li><li>All-time owner ledger with expandable team-name history</li><li>Season records and the top 10 single-week scores</li><li>Season-by-season archive</li></ul>
-      <a href="https://claude.ai/code/artifact/3a07c408-e501-442f-b9c1-9b8214baa548" target="_blank" rel="noopener">Open the current Record Book ↗</a>
-    </div>
-    <p class="note">Auto-update: the Tuesday run refreshes the 2026 row, the owner totals and the top 10 highs.</p>
+    <div><h1>League History</h1>
+      <p class="lede">Every champion, every owner's all-time ledger, the biggest weeks and the final standings from every season since 2015.</p></div>
+    <iframe id="hist-frame" class="hist-frame" title="League record book" loading="lazy" scrolling="no"></iframe>
 
     <section aria-labelledby="h-bowls">
       <div class="head"><div class="eyebrow">Trophy case · since 2025</div><h2 id="h-bowls">Bowl Games</h2>
@@ -636,6 +633,18 @@ show(start);
   // mini matchups
   const mm=document.getElementById('minimu');
   D.wk7.forEach(([a,b,pa,pb],i)=>{const d=mk('div',i===GOTW?'gold':'');if(i===GOTW)d.title='2× Game of the Week';d.append(mk('span',null,T[a].name),mk('span',null,pa.toFixed(1)),mk('span',null,T[b].name),mk('span',null,pb.toFixed(1)));mm.appendChild(d)});
+})();
+
+/* ---------- League History (Record Book page, same origin) ---------- */
+(function(){
+  const f=document.getElementById('hist-frame');let ro=null,loaded=false;
+  const size=()=>{try{const d=f.contentDocument;if(!d)return;const h=Math.max(d.documentElement.scrollHeight,d.body?d.body.scrollHeight:0);if(h)f.style.height=h+'px'}catch(e){}};
+  f.addEventListener('load',()=>{size();try{ro&&ro.disconnect();ro=new ResizeObserver(size);ro.observe(f.contentDocument.body)}catch(e){}});
+  const load=()=>{if(!loaded){loaded=true;f.src='history.html'}};
+  const v=document.getElementById('v-history');
+  new MutationObserver(()=>{if(!v.hidden){load();setTimeout(size,50)}}).observe(v,{attributes:true,attributeFilter:['hidden']});
+  if(!v.hidden) load();
+  window.addEventListener('resize',size);
 })();
 
 /* ---------- Bowl games ---------- */
